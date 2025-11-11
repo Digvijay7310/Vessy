@@ -48,3 +48,17 @@ export const logout = asyncHandler(async (req, res) => {
     res.cookie("token", "", {expires: new Date(0)})
     res.json({message: "Logout successfully"})
 })
+
+export const getMyProfile = asyncHandler(async (req, res) => {
+  if(!req.user){
+    return res.status(401).json({message: "Not authorized"})
+  }
+
+  res.json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role,
+    createdAt: req.user.createdAt,
+  });
+});
