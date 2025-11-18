@@ -48,7 +48,7 @@ function Footer() {
             <input
               type="text"
               placeholder="Enter your email"
-              className="p-2 rounded-l-lg border border-gray-300 outline-none flex-1"
+              className="p-2 rounded-l-lg border border-gray-300 focus-within:bg-white outline-none flex-1"
             />
             <button className="bg-red-600 text-white p-2 rounded-r-lg font-semibold text-xl hover:bg-red-700 transition-colors">
               Subscribe

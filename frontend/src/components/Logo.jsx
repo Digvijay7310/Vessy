@@ -6,7 +6,7 @@ function Logo() {
 
   return (
     <div className='hover:cursor-pointer' onClick={() => navigate("/")}>
-        <h2 className='bg-red-700 text-yellow-300 font-medium rounded-t-4xl rounded-l-full p-1'>Vessy</h2>
+        <h2 className='bg-red-700 text-3xl text-yellow-300 font-bold rounded-l-full rounded-b-full p-2'>Vessy</h2>
     </div>
   )
 }
