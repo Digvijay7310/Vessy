@@ -3,6 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import {User} from '../models/user.model.js'
+import jwt from 'jsonwebtoken'
 
 export const adminRegister = asyncHandler(async(req, res) => {
     const {email, fullName, password} = req.body;
@@ -246,9 +247,9 @@ export const toggleBlockUser = asyncHandler(async(req, res) => {
 })
 
 export const adminStats = asyncHandler(async(req, res) => {
-    const [totalAdmins, totalUsers] = Promise.all(
-        await User.countDocuments(),
-        await Admin.countDocuments()
+    const [totalAdmins, totalUsers] = await Promise.all(
+         User.countDocuments(),
+         Admin.countDocuments()
     )
 
     res.status(200).json(

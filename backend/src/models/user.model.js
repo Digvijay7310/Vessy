@@ -40,12 +40,6 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    cart: [
-        {
-            product: {type: mongoose.Schema.Types.ObjectId, ref: "Product"},
-            quantity: {type: Number, default: 1}
-        }
-    ],
     wishlist: [
         {type: mongoose.Schema.Types.ObjectId, ref: "Product"}
     ]

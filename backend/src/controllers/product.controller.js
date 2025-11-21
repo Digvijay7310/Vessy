@@ -97,8 +97,6 @@ export const getProductsByCategories = asyncHandler(async(req, res) => {
     res.status(200).json(new apiResponse(200, products, "Category products fetched"))
 })
 
-
-
 export const getSingleProduct = asyncHandler(async(req, res) => {
     const {productId} = req.params;
 
