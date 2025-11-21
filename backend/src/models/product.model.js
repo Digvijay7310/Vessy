@@ -4,19 +4,19 @@ const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        min: 3,
+        minLength: 3,
         index: true,
         trim: true,
     },
     price: {
         type: Number,
-        requyired: true,
+        required: true,
         default: 9,
     },
     description: {
         type: String,
         required: true,
-        min: 3,
+        minLength: 3,
         index: true,
         trim: true,
     },
@@ -24,7 +24,7 @@ const productSchema = mongoose.Schema({
         {
             type: String,
             required: true,
-            min: 1,
+            minLength: 1,
         },
     ],
     category: [
@@ -32,6 +32,6 @@ const productSchema = mongoose.Schema({
     ],
 }, {timestamps: true})
 
-productSchema.index({name: 'true', category: 'true', description: 'true'})
+productSchema.index({name: 1, category: 1, description: 1})
 
 export const Product = mongoose.model("Product", productSchema)

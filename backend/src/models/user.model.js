@@ -19,17 +19,43 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "user",
     },
+    isBlocked: {
+        type: Boolean,
+        default: false
+    },
     password: {
         type: String,
         required: true,
         trim: true,
-    }
+    },
+    address: [
+        {
+            street: String,
+            city: String,
+            pinCode: Number,
+            country: String
+        }
+    ],
+    phone: {
+        type: String,
+        required: true,
+    },
+    cart: [
+        {
+            product: {type: mongoose.Schema.Types.ObjectId, ref: "Product"},
+            quantity: {type: Number, default: 1}
+        }
+    ],
+    wishlist: [
+        {type: mongoose.Schema.Types.ObjectId, ref: "Product"}
+    ]
 }, {timestamps: true})
 
 userSchema.pre("save", async function(next){
     if(!this.isModified("password")) return next()
 
     this.password = await bcrypt.hash(this.password, 10)
+    next()
 })
 
 userSchema.methods.isPasswordCorrect = async function(password) {
