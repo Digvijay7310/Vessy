@@ -4,13 +4,15 @@ import { FaSearch } from 'react-icons/fa';
 function Searchbar() {
   return (
     <div className="w-full">
-      <div className="flex items-center bg-gray-50 rounded-full border border-gray-300 p-2">
+      <div className="flex items-center bg-gray-100 rounded-full border border-gray-300 p-2">
         <input
           type="text"
           placeholder="Search here"
-          className="flex-1 outline-none p-2 bg-transparent"
+          className="flex-1 outline-none px-3 py-2 bg-transparent"
         />
-        <button className="p-2 text-gray-600"><FaSearch size={18} /></button>
+        <button className="p-2 text-gray-600">
+          <FaSearch size={18} />
+        </button>
       </div>
     </div>
   );

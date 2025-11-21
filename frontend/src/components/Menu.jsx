@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaCut } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import Logo from './Logo';
 
 function Menu({ toggleMenu }) {
@@ -9,10 +9,10 @@ function Menu({ toggleMenu }) {
       <div className="flex justify-between items-center mb-8">
         <Logo />
         <button onClick={toggleMenu} className="p-2 bg-gray-200 rounded">
-          <FaCut />
+          <FaTimes />
         </button>
       </div>
-      <ul className="flex flex-col gap-6 text-xl font-medium">
+      <ul className="flex flex-col gap-6 text-lg font-medium">
         <li><Link to="/sale" onClick={toggleMenu}>Sale</Link></li>
         <li><Link to="/mens" onClick={toggleMenu}>Mens</Link></li>
         <li><Link to="/womens" onClick={toggleMenu}>Womens</Link></li>

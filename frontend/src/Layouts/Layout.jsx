@@ -7,7 +7,7 @@ function Layout() {
   return (
     <>
     <Header />
-    <main className='my-0 md:my-4'>
+    <main>
         <Outlet />
     </main>
     <Footer />

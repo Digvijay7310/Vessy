@@ -81,6 +81,25 @@ export const adminLogin = asyncHandler(async(req, res) => {
     )
 })
 
+export const getMyProfile = asyncHandler(async (req, res) => {
+    const loggedInAdmin = req.user;
+
+    const admin = await Admin.findOne({email: loggedInAdmin.email})
+    if(!admin) {
+        throw new apiError(404, "Amin not found")
+    }
+    res.status(200).json(
+        new apiResponse(200, admin, "Admin found")
+    )
+})
+
+export const totalUsers = asyncHandler(async (req, res) => {
+    const [usersCount] = await Promise.all([
+        User.countDocuments()
+    ])
+    res.status(200).json(new apiResponse(200, usersCount, "User counts fetched"))
+})
+
 export const searchUsers = asyncHandler(async (req, res) => {
     const {email} = req.query;
 

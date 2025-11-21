@@ -1,17 +1,22 @@
-import React from 'react'
-import Logo from './Logo'
-import { LuCross } from 'react-icons/lu'
+import React from 'react';
+import Logo from './Logo';
+import { FaTimes } from 'react-icons/fa';
 
-function Cart({toggleCart}) {
+function Cart({ toggleCart }) {
   return (
-    <div className='absolute top-0 right-0 w-[300px] min-h-screen bg-white shadow-lg z-50 p-4'>
-        <div className='flex justify-between items-center mb-8'>
-            <Logo />
-            <button onClick={toggleCart} className='bg-gray-200 p-2 rounded'><LuCross /></button>
-        </div>
-        <div className='flex justify-between gap-2 p-1 rounded'></div>
+    <div className="flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <Logo />
+        <button onClick={toggleCart} className="p-2 bg-gray-200 rounded">
+          <FaTimes />
+        </button>
+      </div>
+      <div className="flex flex-col gap-2">
+        {/* Cart items go here */}
+        <p className="text-gray-500 text-center">Cart is empty</p>
+      </div>
     </div>
-  )
+  );
 }
 
-export default Cart
+export default Cart;

@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <footer className="bg-zinc-200 p-6 mt-10">
+    <footer className="bg-zinc-200 p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {/* Quick Links */}
         <div>
@@ -48,7 +48,7 @@ function Footer() {
             <input
               type="text"
               placeholder="Enter your email"
-              className="p-2 rounded-l-lg border border-gray-300 focus-within:bg-white outline-none flex-1"
+              className="p-2 rounded-lg border border-red-600 bg-white  outline-none flex-1"
             />
             <button className="bg-red-600 text-white p-2 rounded-r-lg font-semibold text-xl hover:bg-red-700 transition-colors">
               Subscribe

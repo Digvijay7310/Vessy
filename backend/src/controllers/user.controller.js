@@ -81,6 +81,18 @@ export const userLogin = asyncHandler(async(req, res) => {
     )
 })
 
+export const getMyprofile = asyncHandler(async (req, res) => {
+    const looggedIn = req.user;
+
+    const user = await User.findOne({email: looggedIn.email})
+    if(!user) {
+        throw new apiError(404, "User not found")
+    }
+    res.status(200).json(
+        new apiResponse(200, user, "user found successfully")
+    )
+})
+
 export const userLogout = asyncHandler(async (req, res) => {
     res.clearCookie("refreshToken", {
         httpOnly: true,
