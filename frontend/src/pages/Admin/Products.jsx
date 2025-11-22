@@ -14,6 +14,17 @@ export default function Products() {
     loadProducts();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      await deleteProduct(id);
+      toast.success("Product deleted successfully!");
+      loadProducts();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete product");
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl mb-4">Products</h1>
@@ -24,7 +35,6 @@ export default function Products() {
             <th className="p-3">Image</th>
             <th className="p-3">Name</th>
             <th className="p-3">Price</th>
-            <th className="p-3">Stock</th>
             <th className="p-3">Actions</th>
           </tr>
         </thead>
@@ -41,7 +51,6 @@ export default function Products() {
               </td>
               <td className="p-3">{p.name}</td>
               <td className="p-3">${p.price}</td>
-              <td className="p-3">{p.stock}</td>
               <td className="p-3 flex gap-3">
                 <Link
                   to={`/products/edit/${p._id}`}
@@ -51,7 +60,7 @@ export default function Products() {
                 </Link>
 
                 <button
-                  onClick={() => deleteProduct(p._id).then(loadProducts)}
+                  onClick={() => handleDelete(p._id)}
                   className="px-3 py-1 rounded bg-red-600 text-white"
                 >
                   Delete
@@ -60,7 +69,6 @@ export default function Products() {
             </tr>
           ))}
         </tbody>
-
       </table>
     </div>
   );

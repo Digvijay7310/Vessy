@@ -15,7 +15,7 @@ function ProtectedAdmin({ children }) {
   const { admin, loading } = useAuth();
 
   if (loading) return <p>Loading...</p>;
-  if (!admin) return <Navigate to="/admin/login" />;
+  if (!admin) return <Navigate to="/admins/login" />;
 
   return children;
 }
@@ -24,14 +24,13 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Redirect root */}
+        {/* Root redirect */}
         <Route path="/" element={<Navigate to="/admins/login" replace />} />
-        
-        {/* Admin Login */}
+
+        {/* Admin login */}
         <Route path="/admins/login" element={<AdminLogin />} />
 
-        {/* Admin Panel */}
+        {/* Admin dashboard & users */}
         <Route
           path="/admins"
           element={
@@ -43,11 +42,32 @@ export default function AppRouter() {
           <Route index element={<Dashboard />} />
           <Route path="users" element={<Users />} />
         </Route>
-        
-        {/* Producrs  */}
-                  <Route path="products" element={<Products />} />
-          <Route path="products/add" element={<AddProduct />} />
-          <Route path="products/edit/:id" element={<EditProduct />} />
+
+        {/* Products routes - outside /admins */}
+        <Route
+          path="/products"
+          element={
+            <ProtectedAdmin>
+                <Products />
+            </ProtectedAdmin>
+          }
+        />
+        <Route
+          path="/products/add"
+          element={
+            <ProtectedAdmin>
+                <AddProduct />
+            </ProtectedAdmin>
+          }
+        />
+        <Route
+          path="/products/edit/:id"
+          element={
+            <ProtectedAdmin>
+                <EditProduct />
+            </ProtectedAdmin>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

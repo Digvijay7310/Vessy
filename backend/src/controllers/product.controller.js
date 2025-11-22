@@ -202,31 +202,34 @@ export const deleteProductImages = asyncHandler(async(req, res) => {
 })
 
 export const deleteProduct = asyncHandler(async (req, res) => {
-    if(req.user.role !== 'admin'){
-        throw new apiError(403, "Only admin can delete products")
-    }
-    
-    const {productId} = req.params;
-
-    const product = await Product.findById(productId)
-    if(!product){
-        throw new apiError(404, "Product not found")
+    // Only admin
+    if (req.user.role !== 'admin') {
+        throw new apiError(403, "Only admin can delete products");
     }
 
-    if(product.images && product.images.length > 0){
+    const { productId } = req.params;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+        throw new apiError(404, "Product not found");
+    }
+
+    // Delete images from Cloudinary if any
+    if (product.images && product.images.length > 0) {
         const deletePromises = product.images.map((url) => {
-            const parts = url.split("/")
-            const filename = parts[parts.length -1];
+            const parts = url.split("/");
+            const filename = parts[parts.length - 1];
             const public_id = filename.split(".")[0];
-            return cloudinary.uploader.destroy(public_id)
-        })
-        await Promise.all(deletePromises)
+            return cloudinary.uploader.destroy(public_id);
+        });
+        await Promise.all(deletePromises);
     }
 
-    await Product.findByIdAndDelete(productId)
+    // Delete product
+    await Product.findByIdAndDelete(productId);
 
     res.status(200).json(
-        new apiResponse(200, product, "Product deleted successfull")
-    )
-})
+        new apiResponse(200, product, "Product deleted successfully")
+    );
+});
  

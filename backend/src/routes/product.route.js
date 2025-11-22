@@ -17,9 +17,9 @@ router.get("/:productId", getSingleProduct)
 
 // Admin actions
 router.put("/:productId", verifyAdmin, editProduct)
-router.put("/:productId/images", verifyUser, verifyAdmin, upload.array("images", 5), addProductImages)
-router.delete("/:productId/images/:imageId", verifyUser, verifyAdmin, deleteProductImages)
-router.delete("/:productId", verifyUser, verifyAdmin, deleteProduct)
+router.put("/:productId/images", verifyAdmin, upload.array("images", 5), addProductImages)
+router.delete("/:productId/images/:imageId", verifyAdmin, deleteProductImages)
+router.delete("/:productId", verifyAdmin, deleteProduct)
 
 
 export default router
