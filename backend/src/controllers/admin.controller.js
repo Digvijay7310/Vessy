@@ -247,10 +247,10 @@ export const toggleBlockUser = asyncHandler(async(req, res) => {
 })
 
 export const adminStats = asyncHandler(async(req, res) => {
-    const [totalAdmins, totalUsers] = await Promise.all(
+    const [totalAdmins, totalUsers] = await Promise.all([
          User.countDocuments(),
          Admin.countDocuments()
-    )
+    ])
 
     res.status(200).json(
         new apiResponse(200, {totalUsers, totalAdmins},"Dashboard stats")

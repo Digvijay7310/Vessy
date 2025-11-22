@@ -7,16 +7,16 @@ import jwt from "jsonwebtoken";
 
 // ------------------------ REGISTER USER ------------------------
 export const userRegister = asyncHandler(async (req, res) => {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, phone } = req.body;
 
-    if (!fullName || !email || !password) {
+    if (!fullName || !email || !password || !phone) {
         throw new apiError(400, "All fields are required");
     }
 
     const exists = await User.findOne({ email });
     if (exists) throw new apiError(409, "User already exists");
 
-    const user = await User.create({ fullName, email, password });
+    const user = await User.create({ fullName, email, password, phone });
 
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();

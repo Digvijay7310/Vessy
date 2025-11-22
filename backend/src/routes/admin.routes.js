@@ -30,7 +30,7 @@ router.post("/logout", verifyAdmin, adminLogout);
 router.get("/refresh-token", refreshAccessToken);
 
 // Profile
-router.post("/me", verifyAdmin, getMyProfile);
+router.get("/me", verifyAdmin, getMyProfile);
 router.put("/me/update", verifyAdmin, updateAdminProfile);
 router.put("/me/change-password", verifyAdmin, changeAdminPassword);
 

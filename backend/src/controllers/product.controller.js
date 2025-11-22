@@ -7,36 +7,50 @@ import fs from 'fs'
 import {v2 as cloudinary} from 'cloudinary'
 
 export const createProduct = asyncHandler(async (req, res) => {
-    if(req.user.role !== 'admin'){
-        throw new apiError(403, "Only admin can create products")
-    }
-    const {name, price, description, category} = req.body;
-    if(!name || !price || !description || !category) {
-        throw new apiError(401, "All fields are required")
+    // Only admin
+    if (req.user.role !== 'admin') {
+        throw new apiError(403, "Only admin can create products");
     }
 
-    // upload images
-    let imagesUrls = []
-    if(req.files && req.files.length > 0) {
+    const { name, price, description, category } = req.body;
+
+    if (!name || !price || !description || !category) {
+        throw new apiError(400, "All fields are required");
+    }
+
+    // Upload images to Cloudinary
+    let imagesUrls = [];
+    if (req.files && req.files.length > 0) {
         imagesUrls = await Promise.all(
             req.files.map(async (file) => {
-                if(!fs.existsSync(file.path)) return null;
-                const upload = await uploadOnCloudinary(file.path)
-                return upload?.secure_url;
+                try {
+                    const url = await uploadOnCloudinary(file.path);
+                    return url;
+                } catch (err) {
+                    console.error(`Failed to upload ${file.originalname} to Cloudinary`, err);
+                    return null;
+                }
             })
         );
+
+        // Filter out any failed uploads
+        imagesUrls = imagesUrls.filter(url => url !== null);
+    }
+
+    if (!imagesUrls || imagesUrls.length === 0) {
+        throw new apiError(400, "At least one valid product image is required");
     }
 
     const product = await Product.create({
         name,
         price,
         description,
-        category,
+        category: [category], // assuming category is single string
         images: imagesUrls
-    })
+    });
 
-    return res.status(201).json(new apiResponse(201, product, "product created successfull"))
-})
+    return res.status(201).json(new apiResponse(201, product, "Product created successfully"));
+});
 
 export const getAllProducts = asyncHandler(async (req, res) => {
     const {page=1, limit=20, category, search} = req.query;
@@ -128,7 +142,7 @@ export const editProduct = asyncHandler(async(req, res) => {
     if(description) product.description = description
     if(category) product.category = category
 
-    await product.sace()
+    await product.save()
 
     res.status(200).json(
         new apiResponse(200, product, "Product updated")
