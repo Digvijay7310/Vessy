@@ -25,7 +25,7 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/admins/login" replace />} />
+        <Route path="/" element={<Navigate to="/users/login" replace />} />
 
         {/* Admin login */}
         <Route path="/admins/login" element={<AdminLogin />} />
