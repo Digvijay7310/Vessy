@@ -1,70 +1,68 @@
-import { useEffect, useState } from "react";
-import { getAllProducts } from "../../api/productApi"; // ya tumhare productApi me jo function hai
+import React from "react";
+import { addToCart, increaseQuantity, decreaseQuantity, removeFromCart } from "../../api/cartApi";
+import { useToast } from "../../hooks/useToast";
 
-export default function UserProducts() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+export default function ProductCard({ product, cartItems, setCartItems }) {
+  const { toast } = useToast();
 
- useEffect(() => {
-  getAllProducts()
-    .then((res) => {
-      const allProducts = res.data.data.products || [];
-      setProducts(allProducts);
+  const cartItem = cartItems?.items?.find(item => item.productId._id === product._id);
 
-      const uniqueCategories = [
-        ...new Set(allProducts.map((p) => p.category)),
-      ];
-      setCategories(uniqueCategories);
-    })
-    .catch(() => setProducts([]));
-}, []);
+  const handleAddToCart = async () => {
+    try {
+      const res = await addToCart({ productId: product._id, quantity: 1 });
+      setCartItems(res.data.data);
+      toast.success("Added to cart!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add to cart");
+    }
+  };
 
+  const handleIncrease = async () => {
+    try {
+      const res = await increaseQuantity(product._id);
+      setCartItems(res.data.data);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to increase quantity");
+    }
+  };
 
-  // Filter products by selected category
-  const filteredProducts = selectedCategory
-    ? products.filter((p) => p.category === selectedCategory)
-    : products;
+  const handleDecrease = async () => {
+    try {
+      const res = await decreaseQuantity(product._id);
+      setCartItems(res.data.data);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to decrease quantity");
+    }
+  };
+
+  const handleRemove = async () => {
+    try {
+      const res = await removeFromCart(product._id);
+      setCartItems(res.data.data);
+      toast.success("Removed from cart!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to remove");
+    }
+  };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
+    <div className="border p-4 rounded shadow">
+      <img src={product.images?.[0]} alt={product.name} className="h-40 w-full object-cover mb-2" />
+      <h2 className="font-bold">{product.name}</h2>
+      <p>${product.price}</p>
 
-      {/* Category Filter */}
-      <div className="mb-4">
-        <select
-          className="border p-2 rounded"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {categories.map((cat, idx) => (
-            <option key={idx} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {filteredProducts.map((p) => (
-          <div
-            key={p._id}
-            className="border rounded p-3 shadow hover:shadow-lg cursor-pointer"
-          >
-            <img
-              src={p.images?.[0]}
-              alt={p.name}
-              className="w-full h-40 object-cover rounded"
-            />
-            <h3 className="font-semibold mt-2">{p.name}</h3>
-            <p className="text-gray-600">${p.price}</p>
-
-            {/* ❌ USER ke liye Edit/Delete buttons nahi */}
-          </div>
-        ))}
-      </div>
+      {cartItem ? (
+        <div className="flex items-center gap-2 mt-2">
+          <button onClick={handleDecrease} className="bg-gray-300 px-2 rounded">-</button>
+          <span>{cartItem.quantity}</span>
+          <button onClick={handleIncrease} className="bg-gray-300 px-2 rounded">+</button>
+          <button onClick={handleRemove} className="bg-red-500 px-2 text-white rounded">Remove</button>
+        </div>
+      ) : (
+        <button onClick={handleAddToCart} className="mt-2 bg-blue-600 text-white px-4 py-1 rounded">
+          Add to Cart
+        </button>
+      )}
     </div>
   );
 }

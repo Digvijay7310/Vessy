@@ -1,9 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
 import { useUserAuth } from "../hooks/userUserAuth";
 
-export default function Navbar() {
+export default function Navbar({ cart }) { // cart state prop pass karo
   const { user, logout } = useUserAuth();
+
+  const totalItems = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
@@ -20,8 +21,8 @@ export default function Navbar() {
         <NavLink to="/products" className={({ isActive }) => isActive ? "underline" : ""}>
           Products
         </NavLink>
-        <NavLink to="/carts" className={({ isActive }) => isActive ? "underline" : ""}>
-          Cart
+        <NavLink to="/cart" className={({ isActive }) => isActive ? "underline" : ""}>
+          Cart: {totalItems} {/* show total items */}
         </NavLink>
         <NavLink to="/orders" className={({ isActive }) => isActive ? "underline" : ""}>
           Orders

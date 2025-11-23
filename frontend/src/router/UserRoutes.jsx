@@ -1,11 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Outlet, Navigate, Routes, Route } from 'react-router-dom';
+import { useUserAuth } from "../hooks/userUserAuth";
 import { useAuth } from "../hooks/useAuth";
 
-import UserLayout from "../layouts/userLayout";
-
-// Pages
+// Layouts & Pages
+import UserLayout from "../layouts/UserLayout";
 import Home from "../pages/Home";
-import Products from "../pages/Admin/Products";
+import UserProducts from "../pages/UserProducts";
 import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
@@ -13,67 +13,41 @@ import Orders from "../pages/Orders";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import { useUserAuth } from "../hooks/userUserAuth";
 
-function ProtectedUser({ children }) {
-  const { user, loading } = useUserAuth();
+export function ProtectedRoute({ children }) {
+  const { admin, loading: adminLoading } = useAuth();
+  const { user, loading: userLoading } = useUserAuth();
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <Navigate to="/login" />; // agar login nahi hai
+  if (adminLoading || userLoading) return <p>Loading...</p>;
+  if (admin || user) return children;
 
-  return children;
+  return <Navigate to="/users/login" replace />;
 }
 
 export default function UserRouter() {
   return (
-    <BrowserRouter>
+    <>
+      {/* Public routes */}
       <Routes>
-        {/* Public routes */}
-        <Route path="/users/login" element={<Login />} />
-        <Route path="/users/register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
 
-        {/* All user routes wrapped in layout */}
+        {/* User layout wrapper */}
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
-          <Route path="products" element={<Products />} />
+          <Route path="products" element={<UserProducts />} />
           <Route path="products/:id" element={<ProductDetails />} />
-          <Route
-            path="carts"
-            element={
-              <ProtectedUser>
-                <Cart />
-              </ProtectedUser>
-            }
-          />
-          <Route
-            path="checkout"
-            element={
-              <ProtectedUser>
-                <Checkout />
-              </ProtectedUser>
-            }
-          />
-          <Route
-            path="orders"
-            element={
-              <ProtectedUser>
-                <Orders />
-              </ProtectedUser>
-            }
-          />
-          <Route
-            path="profile"
-            element={
-              <ProtectedUser>
-                <Profile />
-              </ProtectedUser>
-            }
-          />
+
+          {/* Protected routes */}
+          <Route path="cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path="checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path="orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+          <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Route>
 
-        {/* Default redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="login" replace />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }

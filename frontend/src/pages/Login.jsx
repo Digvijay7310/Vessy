@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { userLogin } from "../api/userApi";
 import { useToast } from "../hooks/useToast";
@@ -25,7 +25,7 @@ export default function Login() {
         try {
             const res = await userLogin(form);
             toast.success("Login successful!");
-            navigate("/"); // redirect to home page after login
+            navigate("/users/products"); // redirect to home page after login
         } catch (error) {
             console.error(error);
             toast.error(error?.response?.data?.message || "Login failed");
