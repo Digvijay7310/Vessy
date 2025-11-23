@@ -3,11 +3,14 @@ import './index.css'
 import App from './App.jsx'
 import AuthProvider from './context/AuthContext.jsx'
 import ToastProvider from './context/ToastContext.jsx'
+import UserAuthProvider from './context/UserAuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <AuthProvider>
-    <ToastProvider>
+  <ToastProvider>
+    <AuthProvider>
+    <UserAuthProvider>
       <App />
-    </ToastProvider>
-  </AuthProvider>,
+    </UserAuthProvider>
+  </AuthProvider>
+  </ToastProvider>,
 )

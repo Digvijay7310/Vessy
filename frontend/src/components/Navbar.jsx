@@ -1,8 +1,9 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { useUserAuth } from "../hooks/userUserAuth";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user, logout } = useUserAuth();
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
@@ -19,7 +20,7 @@ export default function Navbar() {
         <NavLink to="/products" className={({ isActive }) => isActive ? "underline" : ""}>
           Products
         </NavLink>
-        <NavLink to="/cart" className={({ isActive }) => isActive ? "underline" : ""}>
+        <NavLink to="/carts" className={({ isActive }) => isActive ? "underline" : ""}>
           Cart
         </NavLink>
         <NavLink to="/orders" className={({ isActive }) => isActive ? "underline" : ""}>
@@ -36,8 +37,8 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/users/login">Login</NavLink>
+            <NavLink to="/users/register">Register</NavLink>
           </>
         )}
       </div>

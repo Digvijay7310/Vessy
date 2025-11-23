@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
     return (
         <div
             className="border rounded shadow hover:shadow-lg p-4 cursor-pointer"
-            onClick={() => navigate(`/product/${product._id}`)}
+            onClick={() => navigate(`/products/${product._id}`)}
         >
             <img
                 src={product.images[0]}

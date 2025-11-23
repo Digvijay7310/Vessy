@@ -13,9 +13,10 @@ import Orders from "../pages/Orders";
 import Profile from "../pages/Profile";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import { useUserAuth } from "../hooks/userUserAuth";
 
 function ProtectedUser({ children }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useUserAuth();
 
   if (loading) return <p>Loading...</p>;
   if (!user) return <Navigate to="/login" />; // agar login nahi hai
@@ -37,7 +38,7 @@ export default function UserRouter() {
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<ProductDetails />} />
           <Route
-            path="cart"
+            path="carts"
             element={
               <ProtectedUser>
                 <Cart />
