@@ -1,63 +1,41 @@
-import React, { useState } from "react";
-import { addToCart, increaseQuantity, decreaseQuantity } from "../api/cartApi";
-import { useToast } from "../hooks/useToast";
+import React from "react";
 
-export default function ProductCard({ product, cart, setCart, isAdmin }) {
-  const { toast } = useToast();
-  const cartItem = cart.items.find((i) => i.productId === product._id);
-  const [quantity, setQuantity] = useState(cartItem ? cartItem.quantity : 1);
-
-  const handleAddToCart = async () => {
-    try {
-      const res = await addToCart({ productId: product._id, quantity });
-      setCart(res.data.data); // update cart state
-      toast.success("Product added to cart");
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to add to cart");
-    }
-  };
-
-  const handleIncrease = async () => {
-    try {
-      const res = await increaseQuantity(product._id);
-      setCart(res.data.data);
-      setQuantity((q) => q + 1);
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to increase quantity");
-    }
-  };
-
-  const handleDecrease = async () => {
-    if (quantity === 1) return;
-    try {
-      const res = await decreaseQuantity(product._id);
-      setCart(res.data.data);
-      setQuantity((q) => q - 1);
-    } catch (err) {
-      toast.error(err?.response?.data?.message || "Failed to decrease quantity");
-    }
-  };
-
+function ProductCard({ 
+  image = "https://picsum.photos/400/300", 
+  title = "Sample Product Title", 
+  description = "This is a short description of the product that gives customers an overview and entices them to buy.", 
+  buttonText = "Add to Cart" 
+}) {
   return (
-    <div className="border p-4 rounded">
-      <img src={product.images[0]} alt={product.name} className="w-full h-48 object-cover mb-2" />
-      <h3 className="font-bold">{product.name}</h3>
-      <p>${product.price}</p>
-
-      {cartItem ? (
-        <div className="flex items-center gap-2 mt-2">
-          <button onClick={handleDecrease} className="px-2 py-1 border">-</button>
-          <span>{quantity}</span>
-          <button onClick={handleIncrease} className="px-2 py-1 border">+</button>
-        </div>
-      ) : (
-        <button
-          onClick={handleAddToCart}
-          className="bg-blue-600 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700"
-        >
-          Add to Cart
+    <div className="flex flex-col bg-white rounded-lg overflow-hidden shadow hover:shadow-lg transition-shadow duration-300">
+      
+      {/* Product Image */}
+      <div className="w-full h-48 md:h-60 flex items-center justify-center bg-gray-100">
+        <img 
+          src={image} 
+          alt={title} 
+          className="object-contain w-full h-full p-2"
+        />
+      </div>
+      
+      {/* Product Info */}
+      <div className="p-3 flex flex-col gap-2 flex-1">
+        <h3 className="font-semibold text-sm md:text-base line-clamp-2 md:line-clamp-3">
+          {title}
+        </h3>
+        <p className="text-xs text-gray-600 line-clamp-2 md:line-clamp-3">
+          {description}
+        </p>
+      </div>
+      
+      {/* Button */}
+      <div className="p-3 border-t border-gray-200">
+        <button className="w-full bg-red-500 hover:bg-red-600 text-white text-sm md:text-base font-medium py-2 rounded transition-colors duration-200">
+          {buttonText}
         </button>
-      )}
+      </div>
     </div>
   );
 }
+
+export default ProductCard;

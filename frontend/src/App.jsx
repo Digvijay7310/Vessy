@@ -1,21 +1,27 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import UserRouter from './router/UserRoutes';
-import AppRouter from './router/AppRouter';
+import React from "react";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import ProductCard from "./components/ProductCard";
 
 function App() {
+  const products = new Array(12).fill()
   return (
-    <Routes>
-      {/* User routes */}
-      <Route path="/users/*" element={<UserRouter />} />
-
-      {/* Admin routes */}
-      <Route path="/admins/*" element={<AppRouter />} />
-
-      {/* Default redirect */}
-      <Route path="*" element={<Navigate to="/users/login" replace />} />
-    </Routes>
-  );
+    <>
+    <Header />
+    <section className="max-w-7xl mx-auto md:p-4">
+      <Hero />
+      <h2 className="text-2xl font-bold mb-4">Featured Products</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-0.5">
+        {products.map((_, id) => (
+        <div id={id} className="">
+          <ProductCard />
+        </div>
+      ))}
+      </div>
+    </section>
+    </>
+  )
 }
+
 
 export default App;

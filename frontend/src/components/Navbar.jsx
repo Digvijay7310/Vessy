@@ -1,48 +1,71 @@
-import { Link, NavLink } from "react-router-dom";
-import { useUserAuth } from "../hooks/userUserAuth";
+import React, { useState } from "react";
+import { FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
 
-export default function Navbar({ cart }) { // cart state prop pass karo
-  const { user, logout } = useUserAuth();
+const Navbar = () => {
+  const [cartCount, setCartCount] = useState(2);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const totalItems = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <nav className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-      {/* Logo */}
-      <Link to="/" className="font-bold text-xl">
-        MyShop
-      </Link>
+    <nav className="bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0 text-2xl font-bold text-gray-800 cursor-pointer">
+            Vessy
+          </div>
 
-      {/* Links */}
-      <div className="space-x-4">
-        <NavLink to="/" className={({ isActive }) => isActive ? "underline" : ""}>
-          Home
-        </NavLink>
-        <NavLink to="/products" className={({ isActive }) => isActive ? "underline" : ""}>
-          Products
-        </NavLink>
-        <NavLink to="/cart" className={({ isActive }) => isActive ? "underline" : ""}>
-          Cart: {totalItems} {/* show total items */}
-        </NavLink>
-        <NavLink to="/orders" className={({ isActive }) => isActive ? "underline" : ""}>
-          Orders
-        </NavLink>
-        {user ? (
-          <>
-            <NavLink to="/profile" className={({ isActive }) => isActive ? "underline" : ""}>
-              Profile
-            </NavLink>
-            <button onClick={logout} className="ml-2 bg-red-500 px-3 py-1 rounded">
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <NavLink to="/users/login">Login</NavLink>
-            <NavLink to="/users/register">Register</NavLink>
-          </>
+          {/* Desktop Links */}
+          <div className="hidden md:flex space-x-6">
+            <a href="#" className="text-gray-700 hover:text-pink-600 font-medium">Home</a>
+            <a href="#" className="text-gray-700 hover:text-pink-600 font-medium">Shop</a>
+            <a href="#" className="text-gray-700 hover:text-pink-600 font-medium">Categories</a>
+            <a href="#" className="text-gray-700 hover:text-pink-600 font-medium">About Us</a>
+            <a href="#" className="text-gray-700 hover:text-pink-600 font-medium">Contact</a>
+          </div>
+
+          {/* Search + Icons */}
+          <div className="flex items-center space-x-4">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="hidden sm:block px-3 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-600"
+            />
+            <div className="relative text-gray-700 cursor-pointer">
+              <FaShoppingCart size={20} />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-pink-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+            <div className="text-gray-700 cursor-pointer">
+              <FaUser size={20} />
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden text-gray-700 cursor-pointer" onClick={toggleMobileMenu}>
+              <FaBars size={20} />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden mt-2 space-y-2 pb-4">
+            <a href="#" className="block text-gray-700 hover:text-pink-600">Home</a>
+            <a href="#" className="block text-gray-700 hover:text-pink-600">Shop</a>
+            <a href="#" className="block text-gray-700 hover:text-pink-600">Categories</a>
+            <a href="#" className="block text-gray-700 hover:text-pink-600">About Us</a>
+            <a href="#" className="block text-gray-700 hover:text-pink-600">Contact</a>
+          </div>
         )}
       </div>
     </nav>
   );
-}
+};
+
+export default Navbar;
