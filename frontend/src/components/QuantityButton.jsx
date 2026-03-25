@@ -27,9 +27,9 @@ function QuantityButton({ onChange }) {
         </button>
       ) : (
         <div className="flex items-center gap-2">
-          <button onClick={decrease} className="text-lg font-bold bg-red-500 text-white px-2 hover:cursor-pointer rounded">-</button>
-          <span className="">{count}</span>
-          <button onClick={increase} className="text-lg font-bold bg-red-500 text-white px-2 hover:cursor-pointer rounded">+</button>
+          <button onClick={decrease} className="text-lg font-bold bg-red-500 text-white px-4 hover:cursor-pointer rounded">-</button>
+          <span className="px-3">{count}</span>
+          <button onClick={increase} className="text-lg font-bold bg-red-500 text-white px-4 hover:cursor-pointer rounded">+</button>
         </div>
       )}
     </div>

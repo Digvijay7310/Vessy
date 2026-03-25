@@ -10,13 +10,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 text-2xl font-bold text-gray-800 cursor-pointer">
-            Vessy
-          </div>
+  
 
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-6">
@@ -29,11 +26,7 @@ const Navbar = () => {
 
           {/* Search + Icons */}
           <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="hidden sm:block px-3 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-600"
-            />
+            
             <div className="relative text-gray-700 cursor-pointer">
               <FaShoppingCart size={20} />
               {cartCount > 0 && (

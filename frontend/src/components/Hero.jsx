@@ -38,7 +38,7 @@ const Hero = () => {
           <img
             src={url}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover p-1"
+            className="w-full h-full object-cover aspect-video p-1"
           />
         </div>
       ))}
