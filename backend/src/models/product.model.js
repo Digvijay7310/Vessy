@@ -4,34 +4,43 @@ const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
-        minLength: 3,
-        index: true,
+        minlength: 3,
         trim: true,
     },
     price: {
         type: Number,
         required: true,
-        default: 9,
+    },
+    stock: {
+        type: Number,
+        required: true,
+        default: 0,
     },
     description: {
         type: String,
         required: true,
-        minLength: 3,
-        index: true,
         trim: true,
     },
     images: [
         {
-            type: String,
-            required: true,
-            minLength: 1,
+            original: String,
+            optimized: String,
+            avif: String,
+            public_id: String,
         },
     ],
-    category: [
-        {type: String, required: true, min: 1, default: 'All'}
-    ],
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        required: true,
+    },
+    subCategory: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubCategory",
+        required: true,
+    }
 }, {timestamps: true})
 
-productSchema.index({name: 1, category: 1, description: 1})
+productSchema.index({name: "text", description: "text"});
 
 export const Product = mongoose.model("Product", productSchema)

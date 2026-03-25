@@ -15,12 +15,35 @@ export const uploadOnCloudinary = async(localfilePath) => {
     
         const response = await cloudinary.uploader.upload(localfilePath, {
             resource_type: 'image',
-            quality: 'auto',
-            fetch_format: 'auto'
         })
+
+        // Optamize URL (auto AVIF)
+        const optimizedUrl = cloudinary.url(response.public_id, {
+            transformation: [
+                {width: 1000, crop: "scale"},
+                {quality: "auto:eco"},
+                {fetch_format: "auto"}
+            ]
+        });
+
+        // Force for avif
+        const avifUrl = cloudinary.url(response.public_id, {
+            transformation: [
+                {quality: "auto"},
+                {fetch_format: "avif"}
+            ]
+        });
+
+
         fs.unlinkSync(localfilePath)
-        console.log("media upload on cloudinary ",response.secure_url)
-        return response.secure_url
+
+        return {
+            original: response.secure_url,
+            optimized: optimizedUrl,
+            avif: avifUrl,
+            public_id: response.public_id
+        };
+
     } catch (error) {
         if(localfilePath && fs.existsSync(localfilePath)){
             fs.unlinkSync(localfilePath)

@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
 import adminRoutes from './src/routes/admin.routes.js'
+import categoryRoutes from './src/routes/categoryAndSubCategory.routes.js'
 import productRoutes from './src/routes/product.route.js'
 import userRoutes from './src/routes/user.routes.js'
 import cartRoutes from './src/routes/cart.routes.js'
@@ -21,6 +22,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 
 app.use("/api/admins", adminRoutes)
+app.use("/api/categories", categoryRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/carts", cartRoutes)

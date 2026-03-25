@@ -19,10 +19,6 @@ const userSchema = mongoose.Schema({
         type: String,
         default: "user",
     },
-    isBlocked: {
-        type: Boolean,
-        default: false
-    },
     password: {
         type: String,
         required: true,

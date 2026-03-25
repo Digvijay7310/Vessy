@@ -17,10 +17,7 @@ export const verifyAdmin = asyncHandler(async(req, res, next) => {
     
         const admin = await Admin.findById(decoded._id).select("-password")
         if(!admin){
-            throw new apiError(404, "admin with this id not found")
-        }
-        if(admin.role !== 'admin'){
-            throw new apiError(403, "Admin only")
+            throw new apiError(404, "admin not found") 
         }
         req.user = admin;
         next()
@@ -46,10 +43,7 @@ export const verifyUser = asyncHandler(async(req, res, next) => {
     
         const user = await User.findById(decoded._id).select("-password")
         if(!user){
-            throw new apiError(404, "admin with this id not found")
-        }
-        if(user.role !== 'user'){
-            throw new apiError(403, "User only")
+            throw new apiError(404, "user not found")
         }
         req.user = user;
         next()

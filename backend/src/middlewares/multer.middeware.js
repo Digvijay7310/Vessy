@@ -5,10 +5,10 @@ const tempDir = path.join(process.cwd(), "src", "public", "temp")
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, tempDir)
+        cb(null, "./public/temp");
     },
     filename: function(req, file, cb){
-        cb(null, file.originalname)
+        cb(null, Date.now() + "-" + file.originalname);
     }
 })
 
