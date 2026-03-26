@@ -2,9 +2,32 @@ import { Category } from "../models/category.model.js";
 import { SubCategory } from "../models/subCategory.model.js";
 import apiError from "../utils/apiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import apiResponse from "../utils/apiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
+export const totalCategoryAndSubCategory = asyncHandler(async(req, res) => {
+    const category = await Category.find().select("name")
+    const subCategory = await SubCategory.find().select("name")
+
+    if(!category.length){
+        throw new apiError(404, "No Category found")
+    }
+    if(!subCategory.length){
+        throw new apiError(404, "No SubCategory")
+    }
+
+    const responseData = {
+        totalCategories: category.length,
+        totalSubCategory: subCategory.length,
+        categoryName: category.map(cat => cat.name),
+        subCategoryName: subCategory.map(cat => cat.name)
+    }
+
+    res.status(200).json(
+        new apiResponse(200, responseData, "Fetched Success"  )
+    )
+})
 
 export const createCategory = asyncHandler(async(req, res) => {
     const {name} = req.body;
