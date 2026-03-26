@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axios";
+import { useAuth } from "../context/AuthContext";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {setAdmin} = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +18,7 @@ const AdminLogin = () => {
       const res = await axiosInstance.post("/admins/login", { email, password }, { withCredentials: true });
 
       // Backend sets cookies, frontend doesn't need to store tokens
+      setAdmin(res.data.data)
       alert("Login successful!");
       navigate("/admin/dashboard"); // redirect to dashboard
     } catch (err) {
