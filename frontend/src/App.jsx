@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import Layout from "./layout/Layout";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./context/ProtectedRoute";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <AdminDashboard />
           </ProtectedRoute>
         } />
+        <Route path="/product-detail" element={<ProductDetail />} />
       </Route>
     </Routes>
     </AuthProvider>

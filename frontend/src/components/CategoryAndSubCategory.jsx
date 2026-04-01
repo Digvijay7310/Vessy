@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../utils/axios";
-import AddCategoryOrSubCategory from "./AddCategoryOrSubCategory";
+import AddCategory from "./AddCategory";
+import AddSubCategory from "./AddSubCategory";
 
 function CategoryAndSubCategory() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
 
-  const [showForm, setShowForm] = useState(null); // "category" | "sub"
+
 
   const fetchData = async () => {
     try {
@@ -16,6 +17,7 @@ function CategoryAndSubCategory() {
 
       setCategories(res.data.data.categoryName);
       setSubCategories(res.data.data.subCategoryName);
+      // console.log(res.data.data.subCategoryName)
 
     } catch (error) {
       console.log(error);
@@ -26,25 +28,25 @@ function CategoryAndSubCategory() {
     fetchData();
   }, []);
 
-  // ✅ DELETE CATEGORY
-  const deleteCategory = async (id) => {
+  const deleteCategory = async(id) => {
     try {
-      await axiosInstance.delete(`/category/${id}`);
-      fetchData();
+      await axiosInstance.delete(`/categories/category/${id}`, {withCredentials: true})
+      fetchData()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
-  // ✅ DELETE SUBCATEGORY
-  const deleteSubCategory = async (id) => {
+  const deleteSubCategory = async(id) => {
     try {
-      await axiosInstance.delete(`/subcategory/${id}`);
-      fetchData();
+      await axiosInstance.delete(`/categories/subcategory/${id}`, {withCredentials: true})
+      fetchData()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
+
+
 
   return (
     <div className="mt-3 space-y-4">
@@ -53,28 +55,24 @@ function CategoryAndSubCategory() {
       <div className="grid md:grid-cols-2 gap-4">
 
         {/* CATEGORY */}
-        <div className="p-3 border rounded bg-yellow-50">
+        <div className="p-3 border rounded bg-yellow-50 max-h-40 overflow-y-auto">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-semibold">Categories</h3>
-            <button
-              onClick={() => setShowForm("category")}
-              className="bg-red-500 text-white px-2 py-1 rounded text-sm"
-            >
-              + Add
-            </button>
+
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-0.5">
             {categories.map((cat, idx) => (
+              
               <div
                 key={idx}
-                className="flex justify-between items-center bg-white border px-2 py-1 rounded"
+                className="flex justify-between items-center bg-white p-1 rounded"
               >
-                <span>{cat}</span>
+                <span className="text-xs">{cat.name}</span>
 
                 <button
                   onClick={() => deleteCategory(cat._id)}
-                  className="text-xs bg-black text-white px-2 py-1 rounded"
+                  className="text-xs bg-black text-white p-1 rounded"
                 >
                   Delete
                 </button>
@@ -84,38 +82,24 @@ function CategoryAndSubCategory() {
         </div>
 
         {/* SUBCATEGORY */}
-        <div className="p-3 border rounded bg-yellow-50">
+        <div className="p-3 border rounded bg-yellow-50 max-h-40 overflow-y-auto">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-semibold">SubCategories</h3>
-            <button
-              onClick={() => setShowForm("sub")}
-              className="bg-red-500 text-white px-2 py-1 rounded text-sm"
-            >
-              + Add
-            </button>
+
           </div>
 
           <div className="space-y-2">
-            {subCategories.map((sub) => (
+            {subCategories.map((sub, idx) => (
               <div
-                key={sub._id}
-                className="flex items-center justify-between bg-white border px-2 py-1 rounded"
+                key={idx}
+                className="flex items-center justify-between bg-white rounded"
               >
-                <div className="flex items-center gap-2">
-                  <img
-                    src={sub.image}
-                    alt={sub.name}
-                    className="w-10 h-10 object-cover rounded"
-                  />
-                  <span>{sub.name}</span>
-                </div>
-
-                <button
+                  <img src={sub.image?.optimized} alt={sub.name} className="w-10 border rounded object-contain" />
+                  <span className="text-xs">{sub.name}</span>
+                  <button
                   onClick={() => deleteSubCategory(sub._id)}
-                  className="text-xs bg-black text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
+                  className="bg-red-500  p-1 text-white rounded">Delete</button>
+                
               </div>
             ))}
           </div>
@@ -123,15 +107,9 @@ function CategoryAndSubCategory() {
 
       </div>
 
-      {/* FORM AREA */}
-      {showForm && (
-        <AddCategoryOrSubCategory
-          type={showForm}
-          categories={categories}
-          refresh={fetchData}
-          close={() => setShowForm(null)}
-        />
-      )}
+        {/* Add Category */}
+       <AddCategory refreshCategories={fetchData} />
+       <AddSubCategory refreshCategories={fetchData} /> 
 
     </div>
   );

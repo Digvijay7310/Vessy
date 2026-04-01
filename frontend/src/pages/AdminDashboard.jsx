@@ -5,7 +5,6 @@ import ProtectedRoute from '../context/ProtectedRoute'
 import Sidebar from '../components/Sidebar'
 import AdminStatsCard from '../components/AdminStatsCard'
 import CategoryAndSubCategory from '../components/CategoryAndSubCategory'
-import AddCategoryOrSubCategory from '../components/AddCategoryOrSubCategory'
 
 function AdminDashboard() {
   const [stats, setStats] = useState(null)
@@ -48,7 +47,6 @@ function AdminDashboard() {
             <div className="mt-5 border">
               <h3 className="font-bold text-lg">Category & SubCategory</h3>
               <CategoryAndSubCategory />
-              <AddCategoryOrSubCategory />
             </div>
           </div>
         </div>
