@@ -18,17 +18,17 @@ app.get("/", (req, res) => {
 })
 
 // Routes
-// import adminRoutes from "./routes/admin.routes.js"
-// import cartRoutes from "./routes/cart.routes.js"
-// import categoryRoues from "./routes/category.routes.js"
-// import customerRoutes from "./routes/customer.routes.js"
-// import productRoutes from "./routes/product.routes.js"
+import adminRoutes from "./routes/admin.routes.js"
+import cartRoutes from "./routes/cart.routes.js"
+import categoryRoues from "./routes/category.routes.js"
+import customerRoutes from "./routes/customer.routes.js"
+import productRoutes from "./routes/product.routes.js"
 
-// app.use("/api/v1/admins", adminRoutes)
-// app.use("/api/v1/cart", cartRoutes)
-// app.use("/api/v1/categories", categoryRoues)
-// app.use("/api/v1/customer", customerRoutes)
-// app.use("/api/v1/products", productRoutes)
+app.use("/api/admins", adminRoutes)
+app.use("/api/cart", cartRoutes)
+app.use("/api/categories", categoryRoues)
+app.use("/api/customer", customerRoutes)
+app.use("/api/products", productRoutes)
 
 
 export {app}

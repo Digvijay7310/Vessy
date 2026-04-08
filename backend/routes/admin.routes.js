@@ -1,8 +1,12 @@
-import express from "express"
+import express from "express";
+import { adminLogin, adminLogout, adminRegistration } from "../controllers/admin.controller.js";
+import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js";
 
-const router = express.Router()
+const router = express.Router();
 
 
+router.post("/register", adminRegistration);
+router.post("/login", adminLogin);
+router.post("/logout", verifyAdmin, isAdmin, adminLogout);
 
-
-export default router
+export default router;
