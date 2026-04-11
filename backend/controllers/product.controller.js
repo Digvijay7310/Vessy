@@ -8,6 +8,142 @@ import { Category, SubCategory } from '../models/category.model.js';
 import { v2 as cloudinary } from "cloudinary";
 
 
+export const getProducts = asyncHandler(async (req, res) => {
+    const products = await Product.find().sort({ createdAt: -1 });
+
+    const totalProducts = await Product.countDocuments()
+
+    if (products.length === 0) {
+        throw new apiError(404, "Products not found");
+    }
+
+    res.status(200).json({
+        products,
+        totalProducts
+    });
+});
+
+export const searchProducts = asyncHandler(async (req, res) => {
+    let { keyword = "", page = 1, limit = 10 } = req.query;
+
+    page = parseInt(page);
+    limit = parseInt(limit);
+    const skip = (page - 1) * limit;
+
+    const matchStage = keyword
+        ? {
+              $or: [
+                  { name: { $regex: keyword, $options: "i" } },
+                  { "categoryData.name": { $regex: keyword, $options: "i" } },
+                  { "subCategoryData.name": { $regex: keyword, $options: "i" } }
+              ]
+          }
+        : {};
+
+    const products = await Product.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryData"
+            }
+        },
+        { $unwind: "$categoryData" },
+        {
+            $lookup: {
+                from: "subcategories",
+                localField: "subCategory",
+                foreignField: "_id",
+                as: "subCategoryData"
+            }
+        },
+        { $unwind: "$subCategoryData" },
+        { $match: matchStage },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: limit }
+    ]);
+
+    const totalProducts = products.length;
+
+    if (products.length === 0) {
+        throw new apiError(404, "No matching products found");
+    }
+
+    res.status(200).json({
+        totalProducts,
+        currentPage: page,
+        totalPages: Math.ceil(totalProducts / limit),
+        products
+    });
+});
+
+export const getProductById = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        throw new apiError(404, "Invalid Id")
+    }
+
+    const product = await Product.findById(id)
+    
+    if(!product)throw new apiError(404, "Product not found")
+    
+    res.status(200).json(product)
+})
+
+export const getProductsByCategoryName = asyncHandler(async (req, res) => {
+    const { categoryName, page = 1, limit = 10 } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    const products = await Product.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryData"
+            }
+        },
+        { $unwind: "$categoryData" },
+        {
+            $match: {
+                "categoryData.name": { $regex: categoryName, $options: "i" }
+            }
+        },
+        { $sort: { createdAt: -1 } },
+        { $skip: skip },
+        { $limit: parseInt(limit) }
+    ]);
+
+    const totalProducts = await Product.aggregate([
+        {
+            $lookup: {
+                from: "categories",
+                localField: "category",
+                foreignField: "_id",
+                as: "categoryData"
+            }
+        },
+        { $unwind: "$categoryData" },
+        {
+            $match: {
+                "categoryData.name": { $regex: categoryName, $options: "i" }
+            }
+        },
+        { $count: "total" }
+    ]);
+
+    res.status(200).json({
+        totalProducts: totalProducts[0]?.total || 0,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil((totalProducts[0]?.total || 0) / limit),
+        products
+    });
+});
+
 export const createProduct = asyncHandler(async (req, res) => {
     const { name, price, description, category, subCategory } = req.body;
 
