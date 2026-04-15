@@ -23,13 +23,15 @@ export const adminRegistration = asyncHandler(async (req, res) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax"
+        sameSite: "lax",
+        withCredentials: true
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax"
+        sameSite: "lax",
+        withCredentials: true
     });
 
     res.status(201).json({
@@ -59,10 +61,16 @@ export const adminLogin = asyncHandler(async (req, res) => {
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        withCredentials: true
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        withCredentials: true
     });
 
     return res.status(200).json({
@@ -71,6 +79,10 @@ export const adminLogin = asyncHandler(async (req, res) => {
     });
 });
 
+
+export const getMyProfile = asyncHandler(async (req, res) => {
+    
+})
 
 export const adminLogout = asyncHandler(async (req, res) => {
     res.clearCookie("accessToken");

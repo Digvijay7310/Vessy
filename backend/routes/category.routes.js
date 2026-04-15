@@ -12,6 +12,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
 
+
 router.get('/all-category', verifyAdmin, isAdmin, allCategory)
 router.post("/", verifyAdmin, isAdmin, createCategory);
 router.delete("/:id", verifyAdmin, isAdmin, deleteCategory);

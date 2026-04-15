@@ -11,12 +11,14 @@ import mongoose from "mongoose";
 
 export const allCategory = asyncHandler(async(req, res) => {
     const category = await Category.find()
-    res.json(category)
+    const categoryCount = await Category.countDocuments()
+    res.json({category, categoryCount})
 })
 
 export const allSubCategory = asyncHandler(async(req, res) => {
     const subcategory = await SubCategory.find().populate("parentCategory", "id name")
-    res.json(subcategory)
+    const subcategoryCount = await SubCategory.countDocuments()
+    res.json({subcategory, subcategoryCount})
 })
 
 export const createCategory = asyncHandler(async (req, res) => {
@@ -33,7 +35,7 @@ export const createCategory = asyncHandler(async (req, res) => {
         createdBy: req.user._id,
     });
 
-    res.json(category);
+    res.status(201).json(category);
 });
 
 
