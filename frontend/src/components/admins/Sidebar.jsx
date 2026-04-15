@@ -22,7 +22,7 @@ function Sidebar() {
   }
 
   return (
-    <div className='w-56 p-4 bg-white flex flex-col justify-between shadow h-screen'>
+    <div className='w-xs p-4 bg-white flex flex-col justify-between shadow h-screen'>
     <div className='flex flex-col gap-3' >
       <h2 className='text-lg font-bold text-center'>Admin</h2>
 

@@ -17,14 +17,14 @@ export default function AllCategory({refresh}) {
   }, [refresh])
 
   return (
-    <div className='bg-white p-3 rounded shadow'>
+    <div className='bg-white p-3 w-xs rounded shadow border'>
       <h1 className='font-semibold mb-2'>
         Total Category: {count}
       </h1>
 
       <div className="h-32 overflow-y-auto">
         {category.map((item) => (
-          <p key={item._id} className="text-sm">
+          <p key={item._id} className="text-xs border-b p-1 hover:bg-yellow-100 transition-colors duration-150">
             {item.name}
           </p>
         ))}

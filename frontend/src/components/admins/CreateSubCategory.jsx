@@ -37,12 +37,12 @@ export default function CreateSubCategory({refresh}) {
         }
     } 
   return (
-    <form onSubmit={handleCreate} className="flex flex-col gap-2 mb-3">
+    <form onSubmit={handleCreate} className="flex flex-col p-2 border bg-gray-100 gap-2 mb-3">
         <input type="text"
         placeholder='SubCategory Name'
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className='border p-2 rounded'
+        className='border outline-0 p-2 rounded'
         />
 
         <select value={parentCategory}

@@ -5,6 +5,8 @@ import Sidebar from '../../components/admins/Sidebar'
 import CreateCategory from '../../components/admins/CreateCategory'
 import CreateSubCategory from '../../components/admins/CreateSubCategory'
 import ProductList from '../../components/admins/ProductList'
+import Header from '../../components/admins/Header'
+import AddProduct from '../../components/admins/AddProduct'
 
 
 export default function Dashboard() {
@@ -14,27 +16,43 @@ export default function Dashboard() {
     setRefresh(!refresh)
   }
   return (
-    <div className='bg-gray-200'>
-        <section className='flex gap-2'>
-            <Sidebar />
-            <div className="bg-gray-100 p-4 w-sm">
-                <h3 className="text-xl font-semibold text-center mb-3">Category & SubCategory</h3>
-                
-                <div className="flex flex-col gap-3 md:flex-row ">
-                  <div className="flex flex-col gap-2">
-                  {/* Create */}
-                <CreateCategory />
-                <CreateSubCategory />
-                
-                {/* List */}
-                <AllCategory refresh={refresh} />
-                <AllSubCategory refresh={refresh} />
-                </div>
+    <div className='bg-zinc-300 shadow-lg shadow-amber-600 w-full'>
+        <div className="flex gap-2">
+          <Sidebar />
+          <div className="flex flex-col gap-4">
+            <Header />
 
-                <ProductList />
-                </div>
+          <div className="flex flex-wrap">
+              {/* Create Category & Sub Category */}
+            <div className=" flex flex-col gap-2 md:flex-row mb-2">
+              <div className=" p-2 border">
+                <h4>Create Category</h4>
+                <CreateCategory/>
+              </div>
+              <div className=" p-2 border">
+                <h4>Create Sub Category</h4>
+                <CreateSubCategory/>
+              </div>
             </div>
-        </section>
+
+            {/* All Category & Sub Category List */}
+            <div className="flex flex-col gap-2 md:flex-row mb-2">
+              <div className="border p-2">
+                <AllCategory />
+              </div>
+              <div className="border p-2">
+                <AllSubCategory />
+              </div>
+            </div>
+
+            {/* Create Product */}
+            <div className="flex flex-col md:flex-row gap-2 p-2">
+              <AddProduct />
+              <ProductList/>
+            </div>
+          </div>
+          </div>
+        </div>
 
     </div>
   )

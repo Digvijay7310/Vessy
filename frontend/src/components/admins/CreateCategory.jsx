@@ -21,16 +21,16 @@ export default function CreateCategory({refresh}) {
         
     } 
   return (
-    <form onSubmit={handleCreate} className="flex gap-2 mb-3">
+    <form onSubmit={handleCreate} className="flex mb-3 border rounded-lg bg-white">
         <input 
            type="text"
            placeholder='New Category'
            value={name}
            onChange={(e) => setName(e.target.value)}
-           className='border p-2 rounded w-full'
+           className='border-0 outline-0 p-2 rounded w-full'
         />
 
-        <button className="bg-blue-500 text-white px-3 rounded">
+        <button className="bg-green-500 text-white px-3">
             {loading ? "...": "Add"}
         </button>
     </form>

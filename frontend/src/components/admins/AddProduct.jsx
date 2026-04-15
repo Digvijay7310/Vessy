@@ -66,7 +66,7 @@ export default function AddProduct({ refresh }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow flex flex-col gap-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-xs p-2 border rounded-lg bg-white">
 
       <input placeholder="Name" value={form.name}
         onChange={(e)=>setForm({...form, name:e.target.value})}
