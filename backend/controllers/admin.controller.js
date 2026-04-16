@@ -81,7 +81,14 @@ export const adminLogin = asyncHandler(async (req, res) => {
 
 
 export const getMyProfile = asyncHandler(async (req, res) => {
-    
+    const admin = await Admin.findById(req.user._id).select(
+        "fullName email role createdAt updatedAt"
+    )
+
+    if(!admin) {
+        throw new apiError(404, "Admin not found")
+    }
+    res.status(200).json(admin)
 })
 
 export const adminLogout = asyncHandler(async (req, res) => {

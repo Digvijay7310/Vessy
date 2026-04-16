@@ -198,9 +198,7 @@ export const createProduct = asyncHandler(async (req, res) => {
         createdBy: req.user._id, // ✅ FIXED
     });
 
-    res.status(201).json(
-        new apiResponse(201, product, "Product created")
-    );
+    res.status(201).json(product);
 });
 
 
