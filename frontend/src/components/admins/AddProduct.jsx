@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import axiosInstance from "../../utils/axiosInstance"
 
 export default function AddProduct({ refresh }) {
+
+  const [loading, setLoading] = useState(false)
+
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -14,43 +17,50 @@ export default function AddProduct({ refresh }) {
   const [categories, setCategories] = useState([])
   const [subCategories, setSubCategories] = useState([])
 
+  // ---------------- FETCH CATEGORIES ----------------
   useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await axiosInstance.get("/categories/all-category")
+      setCategories(res.data.category)
+    }
+
     fetchCategories()
   }, [])
 
-  const fetchCategories = async () => {
-    const res = await axiosInstance.get("/categories/all-category")
-    setCategories(res.data.category)
-  }
-
-  const fetchSubCategories = async () => {
-    const res = await axiosInstance.get("/categories/all-sub-category")
-    setSubCategories(res.data.subcategory)
-  }
-
+  // ---------------- FETCH ALL SUBCATEGORIES ONCE ----------------
   useEffect(() => {
-    if (form.category) {
-      fetchSubCategories()
+    const fetchSubCategories = async () => {
+      const res = await axiosInstance.get("/categories/all-sub-category")
+      setSubCategories(res.data.subcategory)
     }
-  }, [form.category])
 
-  const filteredSub = subCategories.filter(
-    (sub) => sub.parentCategory === form.category
-  )
+    fetchSubCategories()
+  }, [])
 
+  // ---------------- SUBMIT ----------------
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    if (!form.name || !form.price || !form.category || !form.subCategory) {
+      return alert("All fields required")
+    }
+
     if (!image) return alert("Image required")
 
-    const data = new FormData()
-    Object.keys(form).forEach((key) => data.append(key, form[key]))
-    data.append("image", image)
-
     try {
-      await axiosInstance.post("/products/create-product", data)
-      refresh()
+      setLoading(true)
 
+      const data = new FormData()
+      data.append("name", form.name)
+      data.append("price", form.price)
+      data.append("description", form.description)
+      data.append("category", form.category)
+      data.append("subCategory", form.subCategory)
+      data.append("image", image)
+
+      await axiosInstance.post("/products/create-product", data)
+
+      // reset
       setForm({
         name: "",
         price: "",
@@ -58,55 +68,93 @@ export default function AddProduct({ refresh }) {
         category: "",
         subCategory: "",
       })
+
       setImage(null)
 
+      if (refresh) refresh()
+
     } catch (err) {
-      console.log(err.response?.data)
+      console.log(err.response?.data || err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
+  // ---------------- UI ----------------
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-xs p-2 border rounded-lg bg-white">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-2 p-3 border rounded bg-white"
+    >
 
-      <input placeholder="Name" value={form.name}
-        onChange={(e)=>setForm({...form, name:e.target.value})}
-        className="border p-2"/>
+      <input
+        placeholder="Product Name"
+        value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        className="border p-2"
+      />
 
-      <input placeholder="Price" value={form.price}
-        onChange={(e)=>setForm({...form, price:e.target.value})}
-        className="border p-2"/>
+      <input
+        placeholder="Price"
+        type="number"
+        value={form.price}
+        onChange={(e) => setForm({ ...form, price: e.target.value })}
+        className="border p-2"
+      />
 
-      <textarea placeholder="Description"
+      <textarea
+        placeholder="Description"
         value={form.description}
-        onChange={(e)=>setForm({...form, description:e.target.value})}
-        className="border p-2"/>
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+        className="border p-2"
+      />
 
+      {/* CATEGORY */}
       <select
         value={form.category}
-        onChange={(e)=>setForm({...form, category:e.target.value})}
+        onChange={(e) =>
+          setForm({ ...form, category: e.target.value })
+        }
         className="border p-2"
       >
         <option value="">Select Category</option>
-        {categories.map(c => (
-          <option key={c._id} value={c._id}>{c.name}</option>
+        {categories.map((c) => (
+          <option key={c._id} value={c._id}>
+            {c.name}
+          </option>
         ))}
       </select>
 
+      {/* SUBCATEGORY (NO FILTER, SIMPLE LIKE POSTMAN) */}
       <select
         value={form.subCategory}
-        onChange={(e)=>setForm({...form, subCategory:e.target.value})}
+        onChange={(e) =>
+          setForm({ ...form, subCategory: e.target.value })
+        }
         className="border p-2"
       >
         <option value="">Select SubCategory</option>
-        {filteredSub.map(s => (
-          <option key={s._id} value={s._id}>{s.name}</option>
+        {subCategories.map((s) => (
+          <option key={s._id} value={s._id}>
+            {s.name}
+          </option>
         ))}
       </select>
 
-      <input type="file" onChange={(e)=>setImage(e.target.files[0])}/>
+      {/* IMAGE */}
+      <input
+        type="file"
+        onChange={(e) => setImage(e.target.files[0])}
+      />
 
-      <button className="bg-blue-500 text-white py-2 rounded">
-        Add Product
+      {/* BUTTON */}
+      <button
+        disabled={loading}
+        className={`py-2 text-white rounded ${
+          loading ? "bg-gray-400" : "bg-blue-500"
+        }`}
+      >
+        {loading ? "Creating..." : "Add Product"}
       </button>
     </form>
   )

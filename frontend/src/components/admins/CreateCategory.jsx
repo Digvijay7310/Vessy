@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 
-export default function CreateCategory({refresh}) {
+export default function CreateCategory({onSuccess}) {
     const [name, setName] = useState("")
     const [loading, setLoading] = useState(false)
 
@@ -12,7 +12,7 @@ export default function CreateCategory({refresh}) {
             setLoading(true)
             await axiosInstance.post("/categories/", {name})
             setName("")
-            refresh() // Refresh parent data when new category created
+            if(onSuccess) onSuccess() // Refresh parent data when new category created
         } catch (error) {
             console.log("Error in create category")
         } finally {

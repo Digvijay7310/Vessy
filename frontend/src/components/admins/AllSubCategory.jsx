@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 
-export default function AllSubCategory(refresh) {
+export default function AllSubCategory({refresh}) {
   const [subcategory, setSubCategory] = useState([])
   const [count, setCount] = useState(0)
 
@@ -18,7 +18,7 @@ export default function AllSubCategory(refresh) {
   }, [refresh])
 
   return (
-    <div className='bg-white p-3 w-xs rounded shadow border'>
+    <div className='bg-white p-3 rounded shadow border'>
       <h1 className='font-semibold mb-2'>
         Total Sub Category: {count}
       </h1>

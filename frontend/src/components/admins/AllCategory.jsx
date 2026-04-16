@@ -17,7 +17,7 @@ export default function AllCategory({refresh}) {
   }, [refresh])
 
   return (
-    <div className='bg-white p-3 w-xs rounded shadow border'>
+    <div className='bg-white p-3 rounded shadow border'>
       <h1 className='font-semibold mb-2'>
         Total Category: {count}
       </h1>

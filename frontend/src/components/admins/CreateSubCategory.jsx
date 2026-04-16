@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axiosInstance'
 
-export default function CreateSubCategory({refresh}) {
+export default function CreateSubCategory({onSuccess}) {
     const [name, setName] = useState("")
     const [image, setImage] = useState(null)
     const [categories, setCategories] = useState([])
     const [parentCategory, setParentCategory] = useState("")
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchCategories = async() => {
@@ -19,6 +20,7 @@ export default function CreateSubCategory({refresh}) {
         e.preventDefault()
         if(!name || !parentCategory || !image){
             alert("All Fields are required")
+            return
         }
 
         const formData = new FormData()
@@ -27,13 +29,16 @@ export default function CreateSubCategory({refresh}) {
         formData.append("image", image)
 
         try {
+            setLoading(true)
             await axiosInstance.post("/categories/sub", formData)
 
             setName("")
             setImage(null)
-            refresh()
+            if (onSuccess) onSuccess()
         } catch (error) {
             console.log(":Error creating subcategory")
+        } finally {
+            setLoading(false)
         }
     } 
   return (
@@ -61,7 +66,7 @@ export default function CreateSubCategory({refresh}) {
         onChange={(e) => setImage(e.target.files[0])}
         />
 
-        <button className="bg-green-500 text-white py-2 rounded">Add SubCategory</button>
+        <button className="bg-green-500 text-white py-2 rounded">{loading ? "Creating...." : "Add SubCategory"}</button>
     </form>
   )
 }

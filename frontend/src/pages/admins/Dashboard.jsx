@@ -13,47 +13,63 @@ export default function Dashboard() {
   const [refresh, setRefresh] = useState(false)
 
   const triggerRefresh = () => {
-    setRefresh(!refresh)
+    setRefresh(prev => !prev)
   }
+
   return (
-    <div className='bg-zinc-300 shadow-lg shadow-amber-600 w-full'>
-        <div className="flex gap-2">
-          <Sidebar />
-          <div className="flex flex-col gap-4">
-            <Header />
+    <div className="bg-zinc-100 min-h-screen w-full flex">
 
-          <div className="flex flex-wrap">
-              {/* Create Category & Sub Category */}
-            <div className=" flex flex-col gap-2 md:flex-row mb-2">
-              <div className=" p-2 border">
-                <h4>Create Category</h4>
-                <CreateCategory/>
-              </div>
-              <div className=" p-2 border">
-                <h4>Create Sub Category</h4>
-                <CreateSubCategory/>
-              </div>
+      {/* SIDEBAR */}
+      <Sidebar />
+
+      {/* MAIN AREA */}
+      <div className="flex-1 flex flex-col">
+
+        <Header />
+
+        <div className="p-4 space-y-6">
+
+          {/* TOP SECTION: CREATE FORMS */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+            <div className="bg-white p-4 rounded shadow">
+              <h4 className="font-semibold mb-2">Create Category</h4>
+              <CreateCategory onSuccess={triggerRefresh} />
             </div>
 
-            {/* All Category & Sub Category List */}
-            <div className="flex flex-col gap-2 md:flex-row mb-2">
-              <div className="border p-2">
-                <AllCategory />
-              </div>
-              <div className="border p-2">
-                <AllSubCategory />
-              </div>
+            <div className="bg-white p-4 rounded shadow">
+              <h4 className="font-semibold mb-2">Create Sub Category</h4>
+              <CreateSubCategory onSuccess={triggerRefresh} />
             </div>
 
-            {/* Create Product */}
-            <div className="flex flex-col md:flex-row gap-2 p-2">
-              <AddProduct />
-              <ProductList/>
+            <div className="bg-white p-4 rounded shadow">
+              <h4 className="font-semibold text-center">Create Product</h4>
+              <AddProduct refresh={triggerRefresh} />
             </div>
+
           </div>
+
+          {/* MIDDLE SECTION: LISTS */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <div className="bg-white p-4 rounded shadow">
+              <AllCategory refresh={refresh} />
+            </div>
+
+            <div className="bg-white p-4 rounded shadow">
+              <AllSubCategory refresh={refresh} />
+            </div>
+
+            <div className="bg-white p-4 rounded shadow">
+              <ProductList refresh={refresh} />
+            </div>
+
           </div>
+
+    
+
         </div>
-
+      </div>
     </div>
   )
 }

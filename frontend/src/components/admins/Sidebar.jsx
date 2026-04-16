@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
+import Profile from './Profile'
 
 function Sidebar() {
   const navigate = useNavigate()
@@ -12,6 +13,7 @@ function Sidebar() {
     { path: "/sub", name: "Sub Categories" },
   ]
 
+
   const handleLogout = async()=>{
     try {
       await axiosInstance.post("/admins/logout")
@@ -21,10 +23,15 @@ function Sidebar() {
     }
   }
 
+  
+
   return (
-    <div className='w-xs p-4 bg-white flex flex-col justify-between shadow h-screen'>
+    <div className='w-xs p-4 bg-white'>
+      <div className="flex flex-col justify-between gap-3">
+        <h2 className='text-lg font-bold text-center'>Admin</h2>
+      {/* Profile */}
+      <Profile />
     <div className='flex flex-col gap-3' >
-      <h2 className='text-lg font-bold text-center'>Admin</h2>
 
       {routes.map((route) => (
         <NavLink
@@ -36,10 +43,11 @@ function Sidebar() {
         </NavLink>
       ))}
     </div>
+      </div>
 
     <button onClick={handleLogout}
      type='button'
-     className='bg-red-500 text-white py-2 rounded mt-5 hover:bg-red-600 hover:cursor-pointer hover:scale-110'
+     className='bg-red-500 text-white py-2 w-full rounded mt-5 hover:bg-red-600 hover:cursor-pointer hover:scale-110'
      >Logout</button>
      </div>
   )
