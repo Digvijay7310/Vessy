@@ -4,6 +4,9 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import Dashboard from './pages/admins/Dashboard'
 import AddProduct from './components/admins/AddProduct'
+import CategoryWithSubCategory from './components/CategoryWithSubCategory'
+import SubCategoriesProduct from './pages/SubCategoriesProduct'
+import Layout from './layout/layout'
 
 function App() {
 
@@ -11,10 +14,12 @@ function App() {
     <>
     <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Home />} />
+      <Route path='/' element={<Layout />} >
       <Route path='/login' element={<Login />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/create-product' element={<AddProduct />} />
+      <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
     </BrowserRouter>

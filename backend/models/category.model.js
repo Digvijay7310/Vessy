@@ -13,6 +13,7 @@ const categorySchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
+
 const Category = new mongoose.model("Category", categorySchema)
 export {Category};
 

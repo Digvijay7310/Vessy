@@ -123,3 +123,37 @@ export const deleteSubCategory = asyncHandler(async (req, res) => {
 
     res.json({ message: "Deleted successfully" });
 });
+
+
+
+export const categoryWithSubCategory = asyncHandler(async (req, res) => {
+    const category = await Category.find().select("name id")
+
+    const result = await Promise.all(
+        category.map(async (cat) => {
+            const subs = await SubCategory.find({
+                parentCategory: cat._id
+            }).select("name image id")
+            return {
+                categoryName: cat.name,
+                subCategories: subs
+            }
+        })
+    )
+    
+
+    res.status(200).json(result)
+})
+
+
+export const productsWithSubCategories = asyncHandler(async (req, res) => {
+    const {id} = req.params;
+
+    const products = await Product.find({subCategory: id})
+
+    if(!products || products.length == 0){
+        throw new apiError(404, "No product found")
+    }
+
+    res.status(200).json(products)
+})
