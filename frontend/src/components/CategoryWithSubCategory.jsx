@@ -25,7 +25,7 @@ export default function CategoryWithSubCategory() {
         fetchCatAndSub()
     }, [])
     return (
-  <div className="bg-white p-4">
+  <div className="bg-white p-4 md:mx-30">
   {data.map((cat, index) => (
     <div key={index} className="mb-6">
       
@@ -35,17 +35,17 @@ export default function CategoryWithSubCategory() {
       </h2>
 
       {/* Subcategories Grid */}
-      <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {cat.subCategories.map((sub, i) => (
           <div
             key={i}
-            className="cursor-pointer bg-gray-500 hover:shadow-md p-3 rounded-lg flex flex-col items-center transition"
+            className="cursor-pointer bg-gray-100 hover:shadow-md p-1 rounded-lg flex flex-col items-center transition"
             onClick={() => navigate(`/sub-category/${sub._id}`)}
           >
             <img
               src={sub.image}
               alt={sub.name}
-              className="h-12 w-12 object-contain mb-2"
+              className="h-15 w-15 object-contain mb-2"
             />
             <p className="text-sm text-center font-medium">
               {sub.name}

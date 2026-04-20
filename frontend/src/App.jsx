@@ -7,6 +7,7 @@ import AddProduct from './components/admins/AddProduct'
 import CategoryWithSubCategory from './components/CategoryWithSubCategory'
 import SubCategoriesProduct from './pages/SubCategoriesProduct'
 import Layout from './layout/layout'
+import ProductDetails from './pages/ProductDetails'
 
 function App() {
 
@@ -15,10 +16,12 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path='/' element={<Layout />} >
+      <Route index element={<Home />} />
       <Route path='/login' element={<Login />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/create-product' element={<AddProduct />} />
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
+      <Route path='/products/product/:id' element={<ProductDetails />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

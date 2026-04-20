@@ -10,14 +10,13 @@ export default function Layout() {
       </div>
 
       {/* Page Content */}
-      <div className="p-4">
+      <div>
         <Outlet />
       </div>
 
       {/* Example Footer */}
-      <div className="bg-gray-200 p-4 text-center">
+      <hr />
         <Footer />
-      </div>
     </div>
   )
 }

@@ -20,7 +20,7 @@ export default function Footer() {
   ]
 
   return (
-    <div className='bg-gray-50 px-1 py-3 flex flex-wrap gap-2'>
+    <div className='bg-gray-200 px-1 py-3 md:py-10 gap-2'>
       <div className="flex flex-col gap-2">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
 

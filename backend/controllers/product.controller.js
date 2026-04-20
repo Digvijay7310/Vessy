@@ -88,8 +88,9 @@ export const getProductById = asyncHandler(async (req, res) => {
 
     const product = await Product.findById(id)
     
-    if(!product)throw new apiError(404, "Product not found")
-    
+    if(!product){
+        throw new apiError(404, "Product not found") 
+    }   
     res.status(200).json(product)
 })
 
