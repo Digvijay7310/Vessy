@@ -1,5 +1,5 @@
 import React from 'react'
-import Footer from '../components/Footer'
+import Footer from '../layout/Footer'
 import CategoryWithSubCategory from '../components/CategoryWithSubCategory'
 import HomeImageSlider from '../components/HomeImageSlider'
 

@@ -8,6 +8,7 @@ import CategoryWithSubCategory from './components/CategoryWithSubCategory'
 import SubCategoriesProduct from './pages/SubCategoriesProduct'
 import Layout from './layout/layout'
 import ProductDetails from './pages/ProductDetails'
+import SearchResult from './pages/SearchResult'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
       <Route path='/create-product' element={<AddProduct />} />
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
       <Route path='/products/product/:id' element={<ProductDetails />} />
+      <Route path='/search' element={<SearchResult />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

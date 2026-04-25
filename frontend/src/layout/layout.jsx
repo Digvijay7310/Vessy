@@ -1,16 +1,14 @@
 import { Outlet } from "react-router-dom"
-import Footer from "../components/Footer"
+import Footer from "./Footer"
+import Header from "./Header"
 
 export default function Layout() {
   return (
     <div>
-      {/* Example Navbar */}
-      <div className="bg-black text-white p-4">
-        <h1>My Store</h1>
-      </div>
+      <Header />
 
       {/* Page Content */}
-      <div>
+      <div className="min-h-screen">
         <Outlet />
       </div>
 

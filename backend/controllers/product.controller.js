@@ -24,21 +24,23 @@ export const getProducts = asyncHandler(async (req, res) => {
 });
 
 export const searchProducts = asyncHandler(async (req, res) => {
-    let { keyword = "", page = 1, limit = 10 } = req.query;
+    let { search = "", page = 1, limit = 10 } = req.query;
 
     page = parseInt(page);
     limit = parseInt(limit);
     const skip = (page - 1) * limit;
 
-    const matchStage = keyword
+    const matchStage = search.trim()
         ? {
               $or: [
-                  { name: { $regex: keyword, $options: "i" } },
-                  { "categoryData.name": { $regex: keyword, $options: "i" } },
-                  { "subCategoryData.name": { $regex: keyword, $options: "i" } }
+                  { name: { $regex: search, $options: "i" } },
+                  { description: { $regex: search, $options: "i" } }
               ]
           }
         : {};
+
+    // COUNT total products FIRST (important fix)
+    const totalProducts = await Product.countDocuments(matchStage);
 
     const products = await Product.aggregate([
         {
@@ -49,7 +51,6 @@ export const searchProducts = asyncHandler(async (req, res) => {
                 as: "categoryData"
             }
         },
-        { $unwind: "$categoryData" },
         {
             $lookup: {
                 from: "subcategories",
@@ -58,17 +59,29 @@ export const searchProducts = asyncHandler(async (req, res) => {
                 as: "subCategoryData"
             }
         },
-        { $unwind: "$subCategoryData" },
-        { $match: matchStage },
+
+        // safer than unwind (prevents missing data loss)
+        {
+            $addFields: {
+                categoryData: { $arrayElemAt: ["$categoryData", 0] },
+                subCategoryData: { $arrayElemAt: ["$subCategoryData", 0] }
+            }
+        },
+
+        ...(search.trim() ? [{ $match: matchStage }] : []),
+
         { $sort: { createdAt: -1 } },
         { $skip: skip },
         { $limit: limit }
     ]);
 
-    const totalProducts = products.length;
-
-    if (products.length === 0) {
-        throw new apiError(404, "No matching products found");
+    if (!products.length) {
+        return res.status(200).json({
+            totalProducts: 0,
+            currentPage: page,
+            totalPages: 0,
+            products: []
+        });
     }
 
     res.status(200).json({
