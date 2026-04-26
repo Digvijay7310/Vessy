@@ -9,6 +9,7 @@ import SubCategoriesProduct from './pages/SubCategoriesProduct'
 import Layout from './layout/layout'
 import ProductDetails from './pages/ProductDetails'
 import SearchResult from './pages/SearchResult'
+import Cart from './pages/Cart'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
       <Route path='/products/product/:id' element={<ProductDetails />} />
       <Route path='/search' element={<SearchResult />} />
+      <Route path='/cart' element={<Cart />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

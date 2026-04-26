@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import axiosInstance from '../utils/axiosInstance'
+import ProductList from '../components/ProductList'
+import OtherProducts from '../components/OtherProducts'
+import OtherCategoryProducts from '../components/OtherCategoryProducts'
+import { useCart } from '../context/CartContext'
 
 export default function ProductDetails() {
+    const {fetchCart} = useCart()
+
+
     const { id } = useParams()
     const [product, setProduct] = useState(null)
+    const [otherProducts, setOtherProducts] = useState(null)
+    const [otherCategoryProducts, setOtherCategoryProducts] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const fetchProduct = async () => {
         try {
             setLoading(true)
             const res = await axiosInstance.get(`/products/product/${id}`)
-            setProduct(res.data)
+            setProduct(res.data.product)
+            setOtherProducts(res.data.otherProducts)
+            setOtherCategoryProducts(res.data.otherCategoryProducts)
         } catch (error) {
             console.log(error)
         } finally {
@@ -31,16 +42,23 @@ export default function ProductDetails() {
         return <div className="text-center mt-10">No Product Found</div>
     }
 
+    const addToCart = async()=> {
+        await axiosInstance.post('/cart/add', {
+            productId: product._id
+        })
+        fetchCart()
+    }
+
     return (
         <div className="max-w-6xl mx-auto p-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
                 {/* Image Section */}
                 <div className="w-full">
                     <img
                         src={product.image?.[0]}
                         alt={product.name}
-                        className="w-full h-64 md:h-96 object-fit rounded-xl shadow"
+                        className="w-full h-64 md:h-96 object-contain rounded-xl shadow"
                     />
                 </div>
 
@@ -60,7 +78,9 @@ export default function ProductDetails() {
 
                     {/* Buttons */}
                     <div className="flex gap-3 mt-4">
-                        <button className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition">
+                        <button 
+                        onClick={addToCart}
+                        className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition">
                             Add to Cart
                         </button>
 
@@ -70,6 +90,11 @@ export default function ProductDetails() {
                     </div>
                 </div>
             </div>
+
+
+            <OtherProducts otherProducts={otherProducts} />
+            <div className="my-2 border-b-2"></div>
+            <OtherCategoryProducts otherCategoryProducts={otherCategoryProducts} />
         </div>
     )
 }

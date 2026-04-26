@@ -5,6 +5,8 @@ import Logo from '../components/Logo'
 import CartItems from '../components/CartItems'
 import { BiCloset, BiSearch } from 'react-icons/bi'
 import { IoMdClose } from 'react-icons/io'
+import YourOrders from '../components/YourOrders'
+import { GiHamburgerMenu  } from 'react-icons/gi'
 
 export default function Header() {
   const [showNav, setShowNav] = useState(false)
@@ -14,7 +16,7 @@ export default function Header() {
     <header className="bg-emerald-600 px-3 py-2 relative shadow-md">
 
       {/* Top Row */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-1">
 
         <Logo />
 
@@ -23,7 +25,7 @@ export default function Header() {
           <Searchbar />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-0.5">
           <CartItems />
 
           {/* Mobile Search Toggle */}
@@ -34,12 +36,16 @@ export default function Header() {
            {showSearch ? <IoMdClose /> : <BiSearch />}
           </button>
 
+          
+           <YourOrders />
+        
+
           {/* Menu */}
           <button
             onClick={() => setShowNav(prev => !prev)}
-            className="bg-black text-white px-2 py-1 md:hidden rounded"
+            className="bg-emerald-900 text-white p-1 rounded"
           >
-            ☰
+            <GiHamburgerMenu  />
           </button>
         </div>
       </div>
@@ -51,9 +57,10 @@ export default function Header() {
         </div>
       )}
 
+
       {/* Navbar */}
       {showNav && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-lg z-50 md:hidden">
+        <div className="absolute top-full right-0 w-full bg-white shadow-lg z-50">
           <Navbar />
         </div>
       )}

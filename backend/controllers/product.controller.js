@@ -100,11 +100,17 @@ export const getProductById = asyncHandler(async (req, res) => {
     }
 
     const product = await Product.findById(id)
+    const otherProducts = await Product.find({category: product.category}).limit(10)
+    const otherCategoryProducts = await Product.find({category: {$ne: product.category}}).limit(10)
     
     if(!product){
         throw new apiError(404, "Product not found") 
     }   
-    res.status(200).json(product)
+    res.status(200).json({
+        product,
+        otherProducts,
+        otherCategoryProducts
+    })
 })
 
 export const getProductsByCategoryName = asyncHandler(async (req, res) => {
