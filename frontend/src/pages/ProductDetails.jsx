@@ -4,10 +4,10 @@ import axiosInstance from '../utils/axiosInstance'
 import ProductList from '../components/ProductList'
 import OtherProducts from '../components/OtherProducts'
 import OtherCategoryProducts from '../components/OtherCategoryProducts'
-import { useCart } from '../context/CartContext'
+// import { useCart } from '../context/CartContext'
 
 export default function ProductDetails() {
-    const {fetchCart} = useCart()
+    // const {fetchCart} = useCart()
 
 
     const { id } = useParams()

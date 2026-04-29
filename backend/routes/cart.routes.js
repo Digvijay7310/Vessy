@@ -5,7 +5,7 @@ import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 
 const router = express.Router()
 
-router.get("/", isAdmin, getCart)
+router.get("/", getCart)
 
 
 export default router
