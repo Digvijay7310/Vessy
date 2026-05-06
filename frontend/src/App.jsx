@@ -10,6 +10,8 @@ import Layout from './layout/layout'
 import ProductDetails from './pages/ProductDetails'
 import SearchResult from './pages/SearchResult'
 import Cart from './pages/Cart'
+import Register from './pages/customers/Register'
+import CustomerLogin from './pages/customers/CustomerLogin'
 
 function App() {
 
@@ -26,6 +28,10 @@ function App() {
       <Route path='/products/product/:id' element={<ProductDetails />} />
       <Route path='/search' element={<SearchResult />} />
       <Route path='/cart' element={<Cart />} />
+
+      {/* Customer */}
+      <Route path='/customer/login' element={<CustomerLogin />} />
+      <Route path='/customer/register' element={<Register />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

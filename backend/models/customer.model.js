@@ -27,6 +27,9 @@ const customerSchema = new mongoose.Schema({
         enum: ["admin", "users"],
         default: "users",
     },
+    refreshToken: {
+        type: String,
+    },
 }, {timestamps: true})
 
 
@@ -34,7 +37,6 @@ customerSchema.pre("save", async function(next) {
     if(!this.isModified("password")) return next
 
     this.password = await bcrypt.hash(this.password, 10)
-    next()
 })
 
 customerSchema.methods.matchedPassword = async function(enteredPassword){

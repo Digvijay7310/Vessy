@@ -26,14 +26,14 @@ export const customerRegistration = asyncHandler(async (req, res) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: lax,
+        sameSite: "lax",
         withCredentials: true
     })
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: lax,
+        sameSite: "lax",
         withCredentials: true
     })
 
@@ -51,7 +51,7 @@ export const customerLogin = asyncHandler(async (req, res) => {
     }
 
     const customer = await Customer.findOne({email})
-    if(!existing) {
+    if(!customer) {
         throw new apiError(404, "Invalid password")
     }
 
@@ -62,18 +62,21 @@ export const customerLogin = asyncHandler(async (req, res) => {
     
     const accessToken = customer.generateAccessToken()
     const refreshToken = customer.generateRefreshToken()
+    
+    customer.refreshToken = refreshToken
+    await customer.save({validateBeforeSave: false})
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: lax,
+        sameSite: "lax",
         withCredentials: true
     })
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: lax,
+        sameSite: "lax",
         withCredentials: true
     })
 
@@ -84,6 +87,11 @@ export const customerLogin = asyncHandler(async (req, res) => {
 
 
 export const customerLogout = asyncHandler(async (req, res) => {
+
+    const user = await Customer.findById(req.user._id)
+    user.refreshToken = null
+    await user.save({validateBeforeSave: false})
+
     res.clearCookie("accessToken")
     res.clearCookie("refreshToken")
 

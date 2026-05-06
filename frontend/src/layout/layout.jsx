@@ -8,7 +8,7 @@ export default function Layout() {
       <Header />
 
       {/* Page Content */}
-      <div className="min-h-screen">
+      <div className="">
         <Outlet />
       </div>
 

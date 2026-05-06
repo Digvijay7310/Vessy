@@ -21,7 +21,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gray-100 mt-10 border-t">
+    <footer className="bg-gray-100 border-t">
 
       {/* Top Grid */}
       <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8">

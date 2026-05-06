@@ -25,7 +25,7 @@ export default function Header() {
           <Searchbar />
         </div>
 
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           <CartItems />
 
           {/* Mobile Search Toggle */}

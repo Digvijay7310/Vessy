@@ -1,11 +1,15 @@
 import express from "express"
-import { getCart } from "../controllers/cart.controller.js"
-import { isUser } from "../middlewares/isUser.middleware.js"
+import { addToCart, decreaseQty, getCart, removeFromCart } from "../controllers/cart.controller.js"
+import { isUser, verifyCustomer } from "../middlewares/isUser.middleware.js"
 import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 
 const router = express.Router()
 
 router.get("/", getCart)
+router.post("/add-cart", verifyCustomer, addToCart)
+router.post("/decrease-cart", verifyCustomer, decreaseQty)
+router.post("/remove-cart", verifyCustomer, removeFromCart)
+
 
 
 export default router

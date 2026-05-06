@@ -45,7 +45,7 @@ export default function SubCategoriesProduct() {
             )}
 
             {/* Product Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
                 {products.map((product) => (
                     <ProductList key={product._id} product={product} />
                 ))}

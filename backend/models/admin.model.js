@@ -21,7 +21,10 @@ const adminSchemea = new mongoose.Schema({
         type: String,
         enum: ["admin"],
         default: "admin"
-    }
+    },
+    refreshToken: {
+        type: String,
+    },
 }, {timestamps: true});
 
 

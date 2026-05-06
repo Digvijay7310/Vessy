@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import AddCart from './AddCart'
 
 export default function ProductList({product}) {
     const navigate = useNavigate()
@@ -25,7 +26,9 @@ export default function ProductList({product}) {
 
 
          <p className="text-xs font-bold text-green-600">Rs. {product.price}</p>
+         <AddCart />
         </div>
+        
   
   )
 }

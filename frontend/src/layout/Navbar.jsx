@@ -11,6 +11,8 @@ export default function Navbar({ horizontal }) {
     { name: "Cart", path: "/cart" },
     { name: "About", path: "/about" },
     { name: "Join Us", path: "/join" },
+    { name: "Login", path: "/customer/login" },
+    { name: "Register", path: "/customer/register" },
   ]
 
   return (

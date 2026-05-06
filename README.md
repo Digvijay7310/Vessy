@@ -3,6 +3,33 @@
 Vessy is a full-stack ecommerce web application built using the MERN stack (MongoDB, Express, React, Node.js).
 It allows users to browse products, view details, and purchase items online.
 
+
+ecommerce-app/
+│
+├── backend/
+│   ├── src/
+│   ├── models/
+│   ├── controllers/
+│   ├── routes/
+│   ├── middlewares/
+│   ├── utils/
+│   ├── app.js
+│   ├── server.js
+│   └── .env
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── utils/
+│   │   └── App.jsx
+│   └── package.json
+│
+├── .gitignore
+├── README.md
+
+
 ---
 
 ## 🚀 Features
