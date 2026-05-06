@@ -5,7 +5,7 @@ import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 
 const router = express.Router()
 
-router.get("/", getCart)
+router.get("/", verifyCustomer, getCart)
 router.post("/add-cart", verifyCustomer, addToCart)
 router.post("/decrease-cart", verifyCustomer, decreaseQty)
 router.post("/remove-cart", verifyCustomer, removeFromCart)

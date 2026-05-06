@@ -12,6 +12,7 @@ import SearchResult from './pages/SearchResult'
 import Cart from './pages/Cart'
 import Register from './pages/customers/Register'
 import CustomerLogin from './pages/customers/CustomerLogin'
+import CartPage from './pages/CartPage'
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
       {/* Customer */}
       <Route path='/customer/login' element={<CustomerLogin />} />
       <Route path='/customer/register' element={<Register />} />
+      <Route path='/my-cart' element={<CartPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

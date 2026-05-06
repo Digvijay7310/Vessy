@@ -26,7 +26,7 @@ export default function ProductList({product}) {
 
 
          <p className="text-xs font-bold text-green-600">Rs. {product.price}</p>
-         <AddCart />
+         <AddCart productId={product._id} />
         </div>
         
   

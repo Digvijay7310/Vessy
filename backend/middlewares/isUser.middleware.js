@@ -2,6 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import { Customer } from "../models/customer.model.js";
+import jwt from 'jsonwebtoken'
 
 
 const isUser = asyncHandler(async(req, res, next) => {

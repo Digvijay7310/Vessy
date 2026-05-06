@@ -4,6 +4,7 @@ import axiosInstance from '../utils/axiosInstance'
 import ProductList from '../components/ProductList'
 import OtherProducts from '../components/OtherProducts'
 import OtherCategoryProducts from '../components/OtherCategoryProducts'
+import AddCart from '../components/AddCart'
 // import { useCart } from '../context/CartContext'
 
 export default function ProductDetails() {
@@ -78,11 +79,7 @@ export default function ProductDetails() {
 
                     {/* Buttons */}
                     <div className="flex gap-3 mt-4">
-                        <button 
-                        onClick={addToCart}
-                        className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition">
-                            Add to Cart
-                        </button>
+                        <AddCart productId={product._id} />
 
                         <button className="border border-green-500 text-green-600 px-5 py-2 rounded-lg hover:bg-green-50 transition">
                             Buy Now
