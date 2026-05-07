@@ -11,9 +11,7 @@ export default function ProductRemoveButton({ productId }) {
         e.stopPropagation()
         remove(productId)
       }}
-      className="p-1 flex items-center justify-center 
-             bg-red-500 hover:bg-red-600 text-white
-                 active:scale-90 transition"
+      className="px-2 py-1 rounded-4xl font-medium flex items-center justify-center bg-red-500 hover:bg-red-600 text-white"
     >
       Remove
     </button>

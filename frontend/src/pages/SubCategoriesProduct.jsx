@@ -26,7 +26,7 @@ export default function SubCategoriesProduct() {
     }, [id])
 
     return (
-        <div className="bg-gray-50 p-1 md:p-6">
+        <div className="py-2">
             
             {/* Title */}
             <h2 className="text-2xl font-semibold mb-5">Products</h2>

@@ -41,7 +41,7 @@ export default function CartPage() {
               <img
                 src={item.product.image?.[0]}
                 alt={item.product.name}
-                className="h-20 w-20 object-contain bg-gray-100 rounded p-1"
+                className="h-20 w-20 object-contain bg-gray-100 rounded-xl p-1"
               />
 
               <div className="flex flex-col justify-between">
@@ -50,13 +50,13 @@ export default function CartPage() {
                 </p>
 
                 <p className="text-green-600 font-semibold text-sm mt-1">
-                  ₹{item.product.price}
+                  Rs. {item.product.price}
                 </p>
               </div>
             </div>
 
             {/* 🔹 Row 2: Buttons */}
-            <div className="flex items-center justify-between mt-3 bg-amber-100 rounded-4xl">
+            <div className="flex items-center justify-between mt-3 rounded-4xl">
 
               {/* Quantity */}
               <div className="flex items-center gap-3 border rounded-full px-3 py-1">
@@ -80,11 +80,11 @@ export default function CartPage() {
         <div>
           <p className="text-xs text-gray-500">Total</p>
           <p className="text-lg font-bold text-green-600">
-            ₹{totalPrice}
+            Rs. {totalPrice}
           </p>
         </div>
 
-        <button className="bg-orange-500 text-white px-5 py-2 rounded-md hover:bg-orange-600 transition">
+        <button className="bg-red-500 font-semibold text-white px-5 py-2 rounded-md hover:bg-orange-600 transition">
           Place Order
         </button>
       </div>

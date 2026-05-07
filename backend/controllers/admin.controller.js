@@ -20,7 +20,9 @@ export const adminRegistration = asyncHandler(async (req, res) => {
     const accessToken = admin.generateAccessToken();
     const refreshToken = admin.generateRefreshToken();
 
-
+    admin.refreshToken = refreshToken
+    await admin.save({validateBeforeSave: false})
+    
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false,

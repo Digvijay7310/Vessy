@@ -18,7 +18,7 @@ export default function AddCart({ productId }) {
           e.stopPropagation()
           add(productId)
         }}
-        className="w-full py-1.5 text-sm font-medium 
+        className="w-full px-3 py-1 text-sm font-medium 
                    bg-red-500 text-white rounded-md 
                    hover:bg-red-600 active:scale-95 transition"
       >
@@ -31,11 +31,11 @@ export default function AddCart({ productId }) {
     <div
       className="w-full flex items-center justify-between 
                  bg-white border border-gray-300 
-                 rounded-full px-3 py-1 shadow-sm"
+                 rounded-full shadow-sm"
     >
       <ProductDecreaseButton productId={productId} />
 
-      <span className="text-sm font-medium text-gray-800">
+      <span className="text-sm font-medium px-2">
         {qty}
       </span>
 

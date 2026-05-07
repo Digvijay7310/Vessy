@@ -65,7 +65,7 @@ export default function ProductDetails() {
 
                 {/* Details Section */}
                 <div className="flex flex-col gap-4">
-                    <h1 className="text-sm md:text-xl font-semibold">
+                    <h1 className="text-sm md:text-xl font-semibold line-clamp-2">
                         {product.name}
                     </h1>
 
@@ -74,7 +74,7 @@ export default function ProductDetails() {
                     </p>
 
                     <div className="text-green-600 text-lg md:text-2xl font-bold">
-                        ₹{product.price}
+                        Rs. {product.price}
                     </div>
 
                     {/* Buttons */}

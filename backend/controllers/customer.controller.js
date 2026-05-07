@@ -23,6 +23,9 @@ export const customerRegistration = asyncHandler(async (req, res) => {
     const accessToken = customer.generateAccessToken()
     const refreshToken = customer.generateRefreshToken()
 
+    customer.refreshToken = refreshToken
+    await customer.save({validateBeforeSave: false})
+
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,
@@ -80,8 +83,8 @@ export const customerLogin = asyncHandler(async (req, res) => {
         withCredentials: true
     })
 
-    return res.status(201).json(
-        new apiResponse(201, customer, "Customer created")
+    return res.status(200).json(
+        new apiResponse(200, customer, "Login successfull")
     )
 })
 

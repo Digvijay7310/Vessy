@@ -1,70 +1,94 @@
-import React, { useState } from 'react'
-import Navbar from './Navbar'
-import Searchbar from '../components/Searchbar'
-import Logo from '../components/Logo'
-import CartItems from '../components/CartItems'
-import { BiCloset, BiSearch } from 'react-icons/bi'
-import { IoMdClose } from 'react-icons/io'
-import YourOrders from '../components/YourOrders'
-import { GiHamburgerMenu  } from 'react-icons/gi'
+import React, { useEffect, useRef, useState } from "react";
+import Navbar from "./Navbar";
+import Searchbar from "../components/Searchbar";
+import Logo from "../components/Logo";
+import CartItems from "../components/CartItems";
+import YourOrders from "../components/YourOrders";
+import { BiSearch } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export default function Header() {
-  const [showNav, setShowNav] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
+  const [showNav, setShowNav] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+
+  const navRef = useRef();
+  const searchRef = useRef();
+
+  // Close on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setShowNav(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setShowSearch(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <header className="bg-emerald-600 px-3 py-2 relative shadow-md">
+    <header className="bg-white shadow-md sticky top-0 z-50">
 
-      {/* Top Row */}
-      <div className="flex items-center justify-between gap-1">
+      {/* MAIN BAR */}
+      <div className="flex items-center justify-between px-4 py-3">
 
         <Logo />
 
         {/* Desktop Search */}
-        <div className="hidden sm:flex flex-1 justify-center">
+        <div className="hidden sm:flex flex-1 max-w-xl mx-6">
           <Searchbar />
         </div>
 
-        <div className="flex items-center gap-1">
+        {/* Right Icons */}
+        <div className="flex items-center gap-4">
+
+          <YourOrders />
+
           <CartItems />
 
-          {/* Mobile Search Toggle */}
+          {/* Mobile Search */}
           <button
-            onClick={() => setShowSearch(prev => !prev)}
-            className="sm:hidden text-white text-xl"
+            onClick={() => setShowSearch((p) => !p)}
+            className="sm:hidden text-xl text-gray-700"
           >
-           {showSearch ? <IoMdClose /> : <BiSearch />}
+            {showSearch ? <IoMdClose /> : <BiSearch />}
           </button>
-
-          
-           <YourOrders />
-        
 
           {/* Menu */}
           <button
-            onClick={() => setShowNav(prev => !prev)}
-            className="bg-emerald-900 text-white p-1 rounded"
+            onClick={() => setShowNav((p) => !p)}
+            className="text-2xl text-gray-700"
           >
-            <GiHamburgerMenu  />
+            <GiHamburgerMenu />
           </button>
+
         </div>
       </div>
 
-      {/* Mobile Searchbar */}
-      {showSearch && (
-        <div className="mt-2 sm:hidden">
-          <Searchbar />
-        </div>
-      )}
+      {/* MOBILE SEARCH */}
+      <div
+        ref={searchRef}
+        className={`sm:hidden px-4 pb-3 transition-all duration-300 ${
+          showSearch ? "block opacity-100" : "hidden opacity-0"
+        }`}
+      >
+        <Searchbar />
+      </div>
 
-
-      {/* Navbar */}
+      {/* MOBILE NAV */}
       {showNav && (
-        <div className="absolute top-full right-0 w-full bg-white shadow-lg z-50">
+        <div
+          ref={navRef}
+          className="absolute top-full left-0 w-full bg-white shadow-lg border-t animate-fadeIn"
+        >
           <Navbar />
         </div>
       )}
 
     </header>
-  )
+  );
 }
