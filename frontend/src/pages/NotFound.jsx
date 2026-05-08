@@ -1,39 +1,45 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function NotFound() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
 
-      <div className="text-center bg-white p-8 rounded-2xl shadow-lg max-w-md w-full">
+      <div className="text-center bg-white/10 backdrop-blur-xl border border-white/20 p-10 rounded-2xl shadow-2xl max-w-md w-full text-white">
 
-        {/* Big 404 */}
-        <h1 className="text-6xl font-bold text-red-500">404</h1>
+        {/* ICON */}
+        <div className="text-6xl mb-4">🚧</div>
 
-        <h2 className="text-xl font-semibold mt-2">
-          Page Not Found
+        {/* 404 */}
+        <h1 className="text-7xl font-extrabold text-red-400 tracking-tight">
+          404
+        </h1>
+
+        {/* TITLE */}
+        <h2 className="text-xl font-semibold mt-3">
+          Page not found
         </h2>
 
-        <p className="text-sm text-gray-500 mt-2 mb-6">
-          The page you are looking for doesn’t exist or has been moved.
+        {/* DESCRIPTION */}
+        <p className="text-sm text-gray-300 mt-3 mb-8">
+          The page you are looking for doesn’t exist, was removed, or the link is broken.
         </p>
 
-        <div className="flex gap-3 justify-center">
+        {/* BUTTONS */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
 
-          {/* Home */}
           <button
             onClick={() => navigate("/")}
-            className="bg-emerald-600 px-4 py-2 rounded-lg text-white hover:bg-emerald-700 transition"
+            className="bg-emerald-600 px-5 py-2 rounded-lg text-white font-medium hover:bg-emerald-700 transition"
           >
-            Home
+            Go Home
           </button>
 
-          {/* Back */}
           <button
             onClick={() => navigate(-1)}
-            className="bg-gray-500 px-4 py-2 rounded-lg text-white hover:bg-gray-600 transition"
+            className="bg-white/10 border border-white/20 px-5 py-2 rounded-lg text-white hover:bg-white/20 transition"
           >
             Go Back
           </button>
@@ -41,7 +47,6 @@ export default function NotFound() {
         </div>
 
       </div>
-
     </div>
-  )
+  );
 }

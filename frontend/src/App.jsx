@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
@@ -13,8 +14,25 @@ import Cart from './pages/Cart'
 import Register from './pages/customers/Register'
 import CustomerLogin from './pages/customers/CustomerLogin'
 import CartPage from './pages/CartPage'
+import { useEffect } from 'react'
+import Lenis from "lenis"
+
 
 function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      smooth: true,
+      smoothTouch: true,
+    })
+
+    function raf(time){
+      lenis.raf(time);
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+    return () => lenis.destroy()
+  }, [])
 
   return (
     <>

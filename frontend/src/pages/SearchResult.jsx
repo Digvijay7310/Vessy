@@ -1,46 +1,104 @@
-import { useLocation } from "react-router-dom"
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import AddCart from "../components/AddCart";
 
 export default function SearchResult() {
-  const location = useLocation()
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const products = location.state?.products || []
-  const total = location.state?.total || 0
+  const products = location.state?.products || [];
+  const total = location.state?.total || 0;
+
+  const handleNavigate = (id) => {
+    navigate(`/products/product/${id}`);
+  };
 
   return (
-    <div className="p-1 md:px-6">
-      
-      <h2 className="text-lg font-semibold mb-3">
-        Search Results ({total})
-      </h2>
+    <div className="max-w-7xl mx-auto px-4 py-6">
 
+      {/* HEADER */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">
+          Search Results
+        </h2>
+        <p className="text-sm text-gray-500 mt-1">
+          {total} products found
+        </p>
+      </div>
+
+      {/* EMPTY STATE */}
       {products.length === 0 ? (
-        <p>No products found</p>
+        <div className="flex flex-col items-center justify-center py-24 text-gray-500">
+          <div className="text-5xl mb-3">🔍</div>
+          <p className="text-lg font-semibold">No products found</p>
+          <p className="text-sm text-gray-400">
+            Try searching with different keywords
+          </p>
+        </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2">
-          {products.map((item) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+
+          {products.map((product) => (
             <div
-              key={item._id}
-              className="bg-white p-3 shadow rounded"
+              key={product._id}
+              onClick={() => handleNavigate(product._id)}
+              className="
+                bg-white border border-gray-100 rounded-xl
+                shadow-sm hover:shadow-lg
+                transition duration-200
+                cursor-pointer group
+                overflow-hidden
+              "
             >
-              <img
-                src={item.image?.[0]}
-                alt={item.name}
-                className="h-24 w-full object-contain"
-              />
 
-              <h3 className="text-[8px] md:text-xs font-semibold mt-2">
-                {item.name}
-              </h3>
-              <p className="text-[6px] md:text-[10px] mt-1 text-gray-500 line-clamp-3">{item.description}</p>
+              {/* IMAGE */}
+              <div className="h-40 flex items-center justify-center bg-gray-50 relative">
 
-              <p className="text-green-800 text-[10px] md:text-sm font-semibold mt-1">
-                ₹{item.price}
-              </p>
+                <img
+                  src={product.image?.[0]}
+                  alt={product.name}
+                  className="
+                    h-full object-contain
+                    group-hover:scale-105
+                    transition-transform duration-300
+                  "
+                />
+
+                {/* ADD TO CART */}
+                <div
+                  className="absolute bottom-2 right-2"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <AddCart productId={product._id} />
+                </div>
+
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-3 space-y-1">
+
+                {/* NAME */}
+                <h5 className="text-sm font-medium text-gray-800 line-clamp-1">
+                  {product.name}
+                </h5>
+
+                {/* DESCRIPTION */}
+                <p className="text-xs text-gray-500 line-clamp-2">
+                  {product.description}
+                </p>
+
+                {/* PRICE */}
+                <p className="text-green-600 font-bold text-sm">
+                  ₹{product.price}
+                </p>
+
+              </div>
+
             </div>
           ))}
+
         </div>
       )}
-
     </div>
-  )
+  );
 }

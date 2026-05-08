@@ -3,10 +3,11 @@ import Navbar from "./Navbar";
 import Searchbar from "../components/Searchbar";
 import Logo from "../components/Logo";
 import CartItems from "../components/CartItems";
-import YourOrders from "../components/YourOrders";
-import { BiSearch } from "react-icons/bi";
+import YourOrders from "../components/customers/YourOrders";
+import { BiSearch, BiUserCircle } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineUser } from "react-icons/ai";
 
 export default function Header() {
   const [showNav, setShowNav] = useState(false);
@@ -15,7 +16,6 @@ export default function Header() {
   const navRef = useRef();
   const searchRef = useRef();
 
-  // Close on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (navRef.current && !navRef.current.contains(e.target)) {
@@ -31,37 +31,40 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
 
-      {/* MAIN BAR */}
-      <div className="flex items-center justify-between px-4 py-3">
+      {/* TOP BAR */}
+      <div className="flex items-center justify-between md:justify-evenly px-1 py-3">
 
         <Logo />
 
         {/* Desktop Search */}
-        <div className="hidden sm:flex flex-1 max-w-xl mx-6">
+        <div className="hidden md:flex flex-1 max-w-2xl mx-6">
           <Searchbar />
         </div>
 
-        {/* Right Icons */}
-        <div className="flex items-center gap-4">
+        {/* RIGHT ACTIONS */}
+        <div className="flex items-center gap-5">
 
-          <YourOrders />
 
-          <CartItems />
-
-          {/* Mobile Search */}
+          {/* Mobile search */}
           <button
-            onClick={() => setShowSearch((p) => !p)}
-            className="sm:hidden text-xl text-gray-700"
+            onClick={() => setShowSearch(!showSearch)}
+            className="md:hidden text-xl"
           >
             {showSearch ? <IoMdClose /> : <BiSearch />}
           </button>
+          <CartItems />
 
-          {/* Menu */}
+          <button className="bg-emerald-600 p-0.5 rounded-full text-white font-medium">
+            <AiOutlineUser size={22} />
+          </button>
+
+
+          {/* Mobile menu */}
           <button
-            onClick={() => setShowNav((p) => !p)}
-            className="text-2xl text-gray-700"
+            onClick={() => setShowNav(!showNav)}
+            className="md:hidden text-2xl"
           >
             <GiHamburgerMenu />
           </button>
@@ -69,23 +72,25 @@ export default function Header() {
         </div>
       </div>
 
-      {/* MOBILE SEARCH */}
-      <div
-        ref={searchRef}
-        className={`sm:hidden px-4 pb-3 transition-all duration-300 ${
-          showSearch ? "block opacity-100" : "hidden opacity-0"
-        }`}
-      >
-        <Searchbar />
+      {/* SEARCH MOBILE */}
+      {showSearch && (
+        <div ref={searchRef} className="md:hidden px-4 pb-3">
+          <Searchbar />
+        </div>
+      )}
+
+      {/* DESKTOP NAVBAR */}
+      <div className="hidden md:block">
+        <Navbar horizontal />
       </div>
 
       {/* MOBILE NAV */}
       {showNav && (
         <div
           ref={navRef}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t animate-fadeIn"
+          className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
         >
-          <Navbar />
+          <Navbar horizontal={false} />
         </div>
       )}
 

@@ -2,17 +2,29 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Logo() {
-  const navigate = useNavigate()
-  const handleClick = () => {
-    navigate("/")
-  }
-  return (
-    <div className="flex items-center gap-2 select-none cursor-pointer">
+  const navigate = useNavigate();
 
-      {/* Icon (SVG) */}
+  return (
+    <div
+      onClick={() => navigate("/")}
+      className="
+        flex items-center gap-2
+        cursor-pointer select-none
+        group
+      "
+    >
+
+      {/* ICON */}
       <div
-      onClick={handleClick}
-      className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-md">
+        className="
+          w-10 h-10 md:w-11 md:h-11
+          rounded-xl bg-gradient-to-br from-green-400 to-green-600
+          flex items-center justify-center
+          shadow-md
+          group-hover:scale-105
+          transition-transform duration-200
+        "
+      >
         <svg
           width="22"
           height="22"
@@ -20,7 +32,6 @@ export default function Logo() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Leaf / freshness icon */}
           <path
             d="M20 4C14 4 9 6 6 10C3 14 3 20 3 20C3 20 9 20 13 17C17 14 20 9 20 4Z"
             stroke="white"
@@ -37,8 +48,8 @@ export default function Logo() {
         </svg>
       </div>
 
-      {/* Brand Name */}
-      <h1 className="text-xl md:text-2xl font-bold tracking-tight">
+      {/* BRAND NAME */}
+      <h1 className="text-xl md:text-2xl font-bold tracking-tight group-hover:opacity-80 transition">
         <span className="text-gray-900">Ve</span>
         <span className="text-green-600">ssy</span>
       </h1>

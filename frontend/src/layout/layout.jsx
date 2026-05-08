@@ -1,19 +1,24 @@
-import { Outlet } from "react-router-dom"
-import Footer from "./Footer"
-import Header from "./Header"
+import { Outlet } from "react-router-dom";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function Layout() {
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="flex flex-col min-h-screen bg-gray-50">
+
+      {/* HEADER */}
       <Header />
 
-      {/* Page Content */}
-      <main className="min-h-screen bg-gray-50 px-3 max-w-7xl mx-auto">
+      {/* NAVBAR (desktop only optional inside header if needed) */}
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6">
         <Outlet />
       </main>
 
-      {/* Example Footer */}
-        <Footer />
+      {/* FOOTER */}
+      <Footer />
+
     </div>
-  )
+  );
 }
