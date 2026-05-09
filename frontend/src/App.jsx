@@ -1,5 +1,5 @@
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
@@ -16,23 +16,25 @@ import CustomerLogin from './pages/customers/CustomerLogin'
 import CartPage from './pages/CartPage'
 import { useEffect } from 'react'
 import Lenis from "lenis"
+import {Toaster} from "react-hot-toast"
 
 
 function App() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      smooth: true,
-      smoothTouch: true,
-    })
 
-    function raf(time){
-      lenis.raf(time);
-      requestAnimationFrame(raf)
-    }
-    requestAnimationFrame(raf)
-    return () => lenis.destroy()
-  }, [])
+  // useEffect(() => {
+  //   const lenis = new Lenis({
+  //     duration: 1.2,
+  //     smooth: true,
+  //     smoothTouch: true,
+  //   })
+
+  //   function raf(time){
+  //     lenis.raf(time);
+  //     requestAnimationFrame(raf)
+  //   }
+  //   requestAnimationFrame(raf)
+  //   return () => lenis.destroy()
+  // }, [])
 
   return (
     <>
@@ -56,6 +58,16 @@ function App() {
       <Route path="*" element={<NotFound />} />
     </Routes>
     </BrowserRouter>
+
+    {/* Toast Container */}
+    <Toaster position='top-center'
+    reverseOrder={false}
+    toastOptions={{style: {
+      background: "#468423",
+      color: "white",
+      fontSize: "14px"
+    }, 
+  }} />
     </>
   )
 }

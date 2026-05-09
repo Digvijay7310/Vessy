@@ -30,7 +30,7 @@ export default function Footer() {
     <footer className="bg-gray-100 border-t mt-auto">
 
       {/* TOP GRID */}
-      <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+      {/* <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
 
         <div>
           <h3 className="font-semibold text-gray-800 mb-3">Categories</h3>
@@ -76,7 +76,7 @@ export default function Footer() {
           </ul>
         </div>
 
-      </div>
+      </div> */}
 
       {/* BOTTOM BAR */}
       <div className="border-t py-4 text-center text-sm text-gray-500">

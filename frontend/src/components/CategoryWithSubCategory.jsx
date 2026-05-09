@@ -56,7 +56,7 @@ export default function CategoryWithSubCategory() {
 
             {/* CATEGORY HEADER */}
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-lg font-bold text-gray-900">
                 {cat.categoryName}
               </h2>
             </div>

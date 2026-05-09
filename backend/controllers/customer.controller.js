@@ -88,6 +88,19 @@ export const customerLogin = asyncHandler(async (req, res) => {
     )
 })
 
+export const customerProfile = asyncHandler(async (req, res) => {
+    if(!req.user){
+        throw new apiError(401, "Not authenticated")
+    }
+    const customer = await Customer.findById(req.user._id).select("-password -refreshToken")
+    if(!customer){
+        throw new apiError(404, "Customer not found")
+    }
+    return res.status(200).json(
+        new apiResponse(200, customer, "Profile fetched successfully")
+    )
+})
+
 
 export const customerLogout = asyncHandler(async (req, res) => {
 

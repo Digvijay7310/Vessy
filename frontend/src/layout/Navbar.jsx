@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
-import axiosInstance from "../utils/axiosInstance";
 import Logout from "../components/customers/Logout";
 
-export default function Navbar({ horizontal = true }) {
+export default function Navbar({ horizontal = true, user }) {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Categories", path: "/categories" },
     { name: "Products", path: "/products" },
     { name: "Orders", path: "/orders" },
     { name: "Cart", path: "/my-cart" },
-    { name: "Login", path: "/customer/login" },
-    
   ];
 
   return (
@@ -26,18 +23,26 @@ export default function Navbar({ horizontal = true }) {
         <Link
           key={link.path}
           to={link.path}
-          className="
-            relative group transition
-            hover:text-black
-          "
+          className="relative group transition hover:text-black"
         >
           {link.name}
-
-          {/* hover underline animation */}
           <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
         </Link>
       ))}
-      <Logout />
+
+      {/* Show Logout only if user exists */}
+      {user && <Logout />}
+      
+      {/* Show Login link if user not logged in */}
+      {!user && (
+        <Link
+          to="/customer/login"
+          className="relative group transition hover:text-black"
+        >
+          Login
+          <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
+        </Link>
+      )}
     </nav>
   );
 }

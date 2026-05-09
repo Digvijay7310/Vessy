@@ -9,16 +9,13 @@ export default function Layout() {
       {/* HEADER */}
       <Header />
 
-      {/* NAVBAR (desktop only optional inside header if needed) */}
-
       {/* MAIN CONTENT */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-6">
+      <main className="w-full max-w-7xl mx-auto px-1 py-6">
         <Outlet />
       </main>
 
       {/* FOOTER */}
       <Footer />
-
     </div>
   );
 }

@@ -43,6 +43,9 @@ export default function OtherCategoryProducts({
                 src={product.image?.[0]}
                 alt={product.name}
                 className="h-full object-contain"
+                height={160}
+                width={160}
+                loading="lazy"
               />
 
               {/* ADD TO CART */}
