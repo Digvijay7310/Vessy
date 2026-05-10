@@ -6,7 +6,7 @@ export default function Navbar({ horizontal = true, user }) {
     { name: "Home", path: "/" },
     { name: "Categories", path: "/categories" },
     { name: "Products", path: "/products" },
-    { name: "Orders", path: "/orders" },
+    { name: "Orders", path: "/my-orders" },
     { name: "Cart", path: "/my-cart" },
   ];
 
@@ -30,11 +30,9 @@ export default function Navbar({ horizontal = true, user }) {
         </Link>
       ))}
 
-      {/* Show Logout only if user exists */}
-      {user && <Logout />}
+    <Logout />
       
-      {/* Show Login link if user not logged in */}
-      {!user && (
+      
         <Link
           to="/customer/login"
           className="relative group transition hover:text-black"
@@ -42,7 +40,6 @@ export default function Navbar({ horizontal = true, user }) {
           Login
           <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-black transition-all group-hover:w-full"></span>
         </Link>
-      )}
     </nav>
   );
 }

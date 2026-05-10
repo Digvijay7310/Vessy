@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema({
         ref: "SubCategory",
         required: true,
     },
+    stock: {
+        type: Number,
+        default: 100,
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Admin",

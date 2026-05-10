@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 
 const isUser = asyncHandler(async(req, res, next) => {
     if (req.user?.role !== "users") {
-    throw new apiError(403, "users only")
+      throw new apiError(403, "users only")
 }
 next()
 })

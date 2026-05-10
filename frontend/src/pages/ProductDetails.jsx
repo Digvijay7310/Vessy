@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 import ProductList from "../components/ProductList";
-const OtherProducts = React.lazy(() => import("../components/OtherProducts"))
-const OtherCategoryProducts = React.lazy(() => import("../components/OtherCategoryProducts"))
+import OtherProducts from "../components/OtherProducts"
+import OtherCategoryProducts from "../components/OtherCategoryProducts"
 import AddCart from "../components/AddCart";
 
 export default function ProductDetails() {
@@ -79,13 +79,14 @@ export default function ProductDetails() {
             width={400}
             height={400}
             loading="lazy"
-            className="w-full max-h-[400px] object-contain"
+            className="max-w-sm object-contain"
           />
         </div>
 
         {/* DETAILS */}
         <div className="flex flex-col gap-4 md:sticky md:top-24">
           <h1 className="text-2xl font-semibold text-gray-900">{product.name}</h1>
+          <small className=" font-semibold text-red-700">Stock: {product.stock}</small>
 
           <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
 

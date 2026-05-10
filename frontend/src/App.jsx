@@ -17,6 +17,9 @@ import CartPage from './pages/CartPage'
 import { useEffect } from 'react'
 import Lenis from "lenis"
 import {Toaster} from "react-hot-toast"
+import CheckoutPage from './pages/customers/CheckoutPage'
+import MyOrders from './pages/customers/MyOrders'
+import OrderDetail from './pages/customers/OrderDetail'
 
 
 function App() {
@@ -54,6 +57,9 @@ function App() {
       <Route path='/customer/login' element={<CustomerLogin />} />
       <Route path='/customer/register' element={<Register />} />
       <Route path='/my-cart' element={<CartPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/order/:id" element={<OrderDetail />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -4,9 +4,12 @@ import { FaBeerMugEmpty } from "react-icons/fa6";
 import ProductDecreaseButton from "../components/ProductDecreaseButton";
 import ProductIncreaseButton from "../components/ProductIncreaseButton";
 import ProductRemoveButton from "../components/ProductRemoveButton";
+import { useNavigate } from "react-router-dom";
 
 export default function CartPage() {
   const { cart } = useCart();
+
+  const navigate = useNavigate()
 
   const totalPrice = cart.reduce(
     (acc, item) => acc + item.quantity * item.product.price,
@@ -115,6 +118,7 @@ export default function CartPage() {
         </div>
 
         <button
+        onClick={() => navigate("/checkout")}
           className="
             bg-green-600 text-white
             px-6 py-2 rounded-lg

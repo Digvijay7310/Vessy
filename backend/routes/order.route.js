@@ -1,0 +1,18 @@
+import express from "express"
+import { verifyCustomer } from "../middlewares/isUser.middleware.js"
+import { checkoutOrder, getAllOrders, getMyOrders, getOrderById } from "../controllers/order.controller.js"
+import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js"
+
+
+const router = express.Router()
+
+// Customers
+router.post("/checkout", verifyCustomer, checkoutOrder)
+router.get("/my-orders", verifyCustomer, getMyOrders)
+router.get("/:orderId", verifyCustomer, getOrderById)
+
+
+// Admin
+router.get("/", isAdmin, verifyAdmin, getAllOrders)
+
+export default router

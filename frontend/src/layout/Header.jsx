@@ -31,7 +31,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
+    <header className="sticky top-0 z-50 bg-white opacity-95 border-b shadow-sm">
 
       {/* TOP BAR */}
       <div className="flex items-center justify-between md:justify-evenly px-1 py-3">
