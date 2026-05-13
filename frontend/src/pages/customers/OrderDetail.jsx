@@ -42,11 +42,11 @@ export default function OrderDetail() {
             <div className="flex flex-col gap-4">
                 {order.items.map(item => (
                     <div key={item._id} className="flex items-center gap-4 border-b pb-2">
-                        {/* <img
+                        <img
                             src={item.image[0]}
                             alt={item.name}
                             className="w-20 h-20 object-contain rounded-lg bg-gray-100 p-1"
-                        /> */}
+                        />
                         <div className="flex-1">
                             <p className="font-medium">{item.name}</p>
                             <p className="text-sm text-gray-500">{item.description}</p>

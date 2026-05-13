@@ -5,6 +5,7 @@ import ProductDecreaseButton from "../components/ProductDecreaseButton";
 import ProductIncreaseButton from "../components/ProductIncreaseButton";
 import ProductRemoveButton from "../components/ProductRemoveButton";
 import { useNavigate } from "react-router-dom";
+import { AiFillShopping } from "react-icons/ai";
 
 export default function CartPage() {
   const { cart } = useCart();
@@ -36,7 +37,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-4 py-6">
 
       {/* HEADER */}
       <h2 className="text-xl md:text-2xl font-semibold mb-6">
@@ -67,13 +68,9 @@ export default function CartPage() {
               />
 
               <div>
-                <p className="text-sm font-medium line-clamp-2 max-w-xs">
-                  {item.product.name}
-                </p>
+                <p className="text-sm font-medium line-clamp-2 max-w-xs">{item.product.name}</p>
 
-                <p className="text-green-600 font-semibold mt-1 text-sm">
-                  {formatPrice(item.product.price)}
-                </p>
+                <p className="text-green-600 font-semibold mt-1 text-sm">{formatPrice(item.product.price)}</p>
               </div>
             </div>
 
@@ -81,16 +78,10 @@ export default function CartPage() {
             <div className="flex items-center justify-between md:justify-end gap-4">
 
               {/* Quantity Controls */}
-              <div className="
-                flex items-center gap-3
-                border rounded-full px-3 py-1
-                bg-gray-50
-              ">
+              <div className="flex items-center gap-3 border rounded-full px-3 py-1">
                 <ProductDecreaseButton productId={item.product._id} />
 
-                <span className="text-sm font-semibold w-5 text-center">
-                  {item.quantity}
-                </span>
+                <span className="text-sm font-semibold w-5 text-center">{item.quantity}</span>
 
                 <ProductIncreaseButton productId={item.product._id} />
               </div>

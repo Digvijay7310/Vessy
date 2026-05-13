@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
+import Logo from '../../components/Logo'
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
@@ -36,14 +37,10 @@ export default function CustomerLogin() {
     <div className="min-h-screen flex">
 
       {/* LEFT SIDE BRAND PANEL */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-black via-gray-900 to-emerald-900 items-center justify-center p-10">
+      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-black via-orange-800 to-gray-800 items-center justify-center p-10">
         <div className="text-center text-white">
-          <h1 className="text-5xl font-extrabold tracking-tight">
-            Your Store
-          </h1>
-          <p className="mt-4 text-gray-300 text-lg">
-            Shop smarter. Experience better.
-          </p>
+          <h1 className="text-5xl font-extrabold tracking-tight"><Logo /> </h1>
+          <p className="mt-4 text-gray-300 text-lg">Shop smarter. Experience better.</p>
         </div>
       </div>
 
@@ -56,12 +53,8 @@ export default function CustomerLogin() {
         >
 
           {/* Title */}
-          <h2 className="text-3xl font-bold text-gray-900">
-            Welcome back
-          </h2>
-          <p className="text-gray-500 mt-1 mb-6">
-            Login to continue to your account
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
+          <p className="text-gray-500 mt-1 mb-6">Login to continue to your account</p>
 
           {/* Error */}
           {error && (

@@ -4,7 +4,7 @@ import Header from "./Header";
 
 export default function Layout() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-t from-fuchsia-200 to-cyan-100">
+    <div className="flex flex-col min-h-screen">
 
       {/* HEADER */}
       <Header />
