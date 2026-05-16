@@ -105,11 +105,22 @@ export const customerProfile = asyncHandler(async (req, res) => {
 export const customerLogout = asyncHandler(async (req, res) => {
 
     const user = await Customer.findById(req.user._id)
-    user.refreshToken = null
+    if(!user) {
+        return res.status(404).json({success: false, message: "User not found"})
+    }
+    user.refreshToken = undefined
     await user.save({validateBeforeSave: false})
 
-    res.clearCookie("accessToken")
-    res.clearCookie("refreshToken")
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: true,
+    })
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: true,
+    })
 
     return res.status(200).json({
         success: true,

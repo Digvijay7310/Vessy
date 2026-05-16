@@ -1,15 +1,10 @@
 import React, { useState } from 'react'
 import AllCategory from '../../components/admins/AllCategory'
 import AllSubCategory from '../../components/admins/AllSubCategory'
-import Sidebar from '../../components/admins/Sidebar'
-import CreateCategory from '../../components/admins/CreateCategory'
-import CreateSubCategory from '../../components/admins/CreateSubCategory'
 import ProductList from '../../components/admins/ProductList'
-import Header from '../../components/admins/Header'
-import AddProduct from '../../components/admins/AddProduct'
-
 
 export default function Dashboard() {
+
   const [refresh, setRefresh] = useState(false)
 
   const triggerRefresh = () => {
@@ -17,59 +12,69 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="bg-zinc-100 min-h-screen w-full flex">
+    <div className="space-y-6">
 
-      {/* SIDEBAR */}
-      <Sidebar />
+      {/* PAGE TITLE */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Dashboard
+        </h1>
 
-      {/* MAIN AREA */}
-      <div className="flex-1 flex flex-col">
+        <p className="text-gray-500 text-sm">
+          Welcome back Admin 👋
+        </p>
+      </div>
 
-        <Header />
+      {/* TOP STATS */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-        <div className="p-4 space-y-6">
+        <div className="bg-white rounded-xl shadow-sm p-5 border">
+          <h3 className="text-sm text-gray-500">
+            Total Categories
+          </h3>
 
-          {/* TOP SECTION: CREATE FORMS */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <p className="text-3xl font-bold text-red-500 mt-2">
+            <AllCategory refresh={refresh} />
+          </p>
+        </div>
 
-            <div className="bg-white p-4 rounded shadow">
-              <h4 className="font-semibold mb-2">Create Category</h4>
-              <CreateCategory onSuccess={triggerRefresh} />
-            </div>
+        <div className="bg-white rounded-xl shadow-sm p-5 border">
+          <h3 className="text-sm text-gray-500">
+            Total SubCategories
+          </h3>
 
-            <div className="bg-white p-4 rounded shadow">
-              <h4 className="font-semibold mb-2">Create Sub Category</h4>
-              <CreateSubCategory onSuccess={triggerRefresh} />
-            </div>
+          <p className="text-3xl font-bold text-blue-500 mt-2">
+            <AllSubCategory refresh={refresh} />
+          </p>
+        </div>
 
-            <div className="bg-white p-4 rounded shadow">
-              <h4 className="font-semibold text-center">Create Product</h4>
-              <AddProduct refresh={triggerRefresh} />
-            </div>
+        <div className="bg-white rounded-xl shadow-sm p-5 border">
+          <h3 className="text-sm text-gray-500">
+            Total Products
+          </h3>
 
-          </div>
+          <p className="text-3xl font-bold text-green-500 mt-2">
+            --
+          </p>
+        </div>
 
-          {/* MIDDLE SECTION: LISTS */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      </div>
 
-            <div className="bg-white p-4 rounded shadow">
-              <AllCategory refresh={refresh} />
-            </div>
+      {/* PRODUCTS SECTION */}
+      <div className="bg-white rounded-xl shadow-sm border p-4">
 
-            <div className="bg-white p-4 rounded shadow">
-              <AllSubCategory refresh={refresh} />
-            </div>
+        <div className="flex items-center justify-between mb-4">
 
-            <div className="bg-white p-4 rounded shadow">
-              <ProductList refresh={refresh} />
-            </div>
-
-          </div>
-
-    
+          <h2 className="text-xl font-semibold">
+            Recent Products
+          </h2>
 
         </div>
+
+        <ProductList refresh={refresh} />
+
       </div>
+
     </div>
   )
 }

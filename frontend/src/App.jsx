@@ -20,6 +20,10 @@ import {Toaster} from "react-hot-toast"
 import CheckoutPage from './pages/customers/CheckoutPage'
 import MyOrders from './pages/customers/MyOrders'
 import OrderDetail from './pages/customers/OrderDetail'
+import ProductsPage from './pages/admins/Products/ProductsPage'
+import CategoriesPage from './pages/admins/Categories/CategoriesPage'
+import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
+import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
 
 
 function App() {
@@ -45,9 +49,9 @@ function App() {
     <Routes>
       <Route path='/' element={<Layout />} >
       <Route index element={<Home />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/create-product' element={<AddProduct />} />
+      {/* <Route path='/create-product' element={<AddProduct />} /> */}
+
+      {/* Shop */}
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
       <Route path='/products/product/:id' element={<ProductDetails />} />
       <Route path='/search' element={<SearchResult />} />
@@ -60,6 +64,15 @@ function App() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/my-orders" element={<MyOrders />} />
       <Route path="/order/:id" element={<OrderDetail />} />
+      </Route>
+
+          {/* Admin */}
+      <Route path="/admin" element={<AdminLayout />}>
+      <Route path='login' element={<Login />} />
+      <Route path='dashboard' element={<Dashboard />} />
+      <Route path='products' element={<ProductsPage />}/>
+      <Route path='categories' element={<CategoriesPage />}/>
+      <Route path='subcategories' element={<Subcategoriespage />}/>
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

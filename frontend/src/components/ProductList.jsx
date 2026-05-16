@@ -12,8 +12,10 @@ export default function ProductList({ product }) {
   };
 
   const handleCartClick = (e) => {
-    e.stopPropagation(); // IMPORTANT FIX
+    e.stopPropagation();
   };
+
+  const isOutOfStock = product.stock <= 0;
 
   return (
     <div
@@ -23,9 +25,20 @@ export default function ProductList({ product }) {
         transition duration-200
         cursor-pointer group
         overflow-hidden
+        relative
+        opacity-100
       "
       onClick={handleNavigate}
     >
+
+      {/* OUT OF STOCK BADGE */}
+      {isOutOfStock && (
+        <div className="absolute top-2 left-2 z-10">
+          <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
+            Out of Stock
+          </span>
+        </div>
+      )}
 
       {/* IMAGE */}
       <div className="h-40 flex items-center justify-center bg-gray-50 relative">
@@ -33,11 +46,12 @@ export default function ProductList({ product }) {
         <img
           src={product.image?.[0]}
           alt={product.name}
-          className="
+          className={`
             h-full object-contain
             group-hover:scale-105
             transition-transform duration-300
-          "
+            ${isOutOfStock ? "opacity-50" : ""}
+          `}
         />
 
         {/* ADD TO CART */}
@@ -45,7 +59,7 @@ export default function ProductList({ product }) {
           className="absolute bottom-2 right-2"
           onClick={handleCartClick}
         >
-          <AddCart productId={product._id} />
+          <AddCart product={product} />
         </div>
 
       </div>
@@ -63,10 +77,16 @@ export default function ProductList({ product }) {
           {product.description}
         </p>
 
-        {/* PRICE */}
-        <p className="text-green-600 font-bold text-sm">
-          ₹{product.price}
-        </p>
+        {/* PRICE + STOCK */}
+        <div className="flex justify-between items-center">
+          <p className="text-green-600 font-bold text-sm">
+            ₹{product.price}
+          </p>
+
+          <p className="text-xs text-gray-500">
+            Stock: {product.stock}
+          </p>
+        </div>
 
       </div>
 

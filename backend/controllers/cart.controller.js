@@ -6,6 +6,14 @@ export const addToCart = asyncHandler(async (req, res) => {
     const userId = req.user._id
     const { productId } = req.body
 
+    const product = await Product.findById(productId);
+
+if (!product || product.stock <= 0) {
+    return res.status(400).json({
+        message: "Product out of stock"
+    });
+}
+
     let cart = await Cart.findOne({ owner: userId })
 
     if (!cart) {

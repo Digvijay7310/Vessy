@@ -54,17 +54,12 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
 
     if (paymentMethod !== "COD") {
 
-        return res.status(400).json({
-            success: false,
-            message: "Please select Cash on Delivery for now"
-        });
+        return res.status(400).json({success: false, message: "Please select Cash on Delivery for now" });
     }
 
     // GET USER CART
 
-    const cart = await Cart.findOne({
-        owner: req.user._id
-    }).populate("items.product");
+    const cart = await Cart.findOne({owner: req.user._id }).populate("items.product");
 
     // EMPTY CART CHECK
 
@@ -98,10 +93,7 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
 
     // FINAL AMOUNT
 
-    const finalAmount =
-        totalPrice +
-        platformCharge +
-        deliveryCharge;
+    const finalAmount = totalPrice + platformCharge + deliveryCharge;
 
     // CREATE ORDER ITEMS
 
@@ -123,6 +115,14 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
         expectedDelivery.getDate() + 7
     );
 
+    for (const item of cart.items) {
+    if (item.quantity > item.product.stock) {
+        return res.status(400).json({
+            success: false,
+            message: `${item.product.name} out of stock`
+        });
+    }
+}
     // CREATE ORDER
 
     const order = await Order.create({
@@ -219,6 +219,16 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
             populatedOrder.createdAt
 
     };
+    for (const item of cart.items) {
+    await Product.findByIdAndUpdate(
+        item.product._id,
+        {
+            $inc: {
+                stock: -item.quantity
+            }
+        }
+    );
+}
 
     return res.status(201).json(
 
