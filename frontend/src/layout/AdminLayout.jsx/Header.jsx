@@ -1,25 +1,35 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React from "react";
+import { Menu } from "lucide-react";
 
-export default function Header() {
+export default function Header({ setIsOpen }) {
+
   return (
-    <div className='bg-gray-100 border-b flex w-full justify-between gap-3 px-3 py-1 overflow-x-auto scroll-m-1'>
-        <NavLink to="#"
-        className="bg-gray-200 px-3 py-1 hover:bg-red-600 hover:text-white rounded-lg"
-        >Products</NavLink>
-        <NavLink to="#"
-        className="bg-gray-200 px-3 py-1 hover:bg-red-600 hover:text-white rounded-lg"
-        >Category</NavLink>
-        <NavLink to="#"
-        className="bg-gray-200 px-3 py-1 hover:bg-red-600 hover:text-white rounded-lg"
-        >SubCategory</NavLink>
-        <NavLink to="#"
-        className="bg-gray-200 px-3 py-1 hover:bg-red-600 hover:text-white rounded-lg"
-        >Orders</NavLink>
-        <NavLink to="#"
-        className="bg-gray-200 px-3 py-1 hover:bg-red-600 hover:text-white rounded-lg"
-        >Logout</NavLink>
+    <header
+      className="
+        h-16
+        bg-white
+        border-b
+        flex items-center justify-between
+        px-4 md:px-6
+        sticky top-0 z-30
+      "
+    >
 
-    </div>
-  )
+      <div className="flex items-center gap-3">
+
+        <button
+          onClick={() => setIsOpen(true)}
+          className="lg:hidden"
+        >
+          <Menu size={24} />
+        </button>
+
+        <h2 className="text-lg font-semibold text-gray-800">
+          Admin Dashboard
+        </h2>
+
+      </div>
+
+    </header>
+  );
 }

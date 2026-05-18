@@ -1,9 +1,8 @@
-
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
-import Dashboard from './pages/admins/Dashboard'
+import Dashboard from './pages/admins/Dashboard/Dashboard'
 import AddProduct from './components/admins/AddProduct'
 import CategoryWithSubCategory from './components/CategoryWithSubCategory'
 import SubCategoriesProduct from './pages/SubCategoriesProduct'
@@ -24,6 +23,7 @@ import ProductsPage from './pages/admins/Products/ProductsPage'
 import CategoriesPage from './pages/admins/Categories/CategoriesPage'
 import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
 import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
+import { AllOrder } from '../../backend/controllers/admin.controller'
 
 
 function App() {
@@ -73,6 +73,7 @@ function App() {
       <Route path='products' element={<ProductsPage />}/>
       <Route path='categories' element={<CategoriesPage />}/>
       <Route path='subcategories' element={<Subcategoriespage />}/>
+      <Route path='orders' element={<AllOrder />}/>
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

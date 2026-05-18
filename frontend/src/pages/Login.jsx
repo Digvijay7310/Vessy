@@ -19,7 +19,7 @@ export default function Login() {
 
       await axiosInstance.post("/admins/login", { email, password });
 
-      navigate("/dashboard");
+      navigate("/admin/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {

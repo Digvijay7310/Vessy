@@ -1,132 +1,158 @@
-import { NavLink, useNavigate } from "react-router-dom"
-import axiosInstance from "../../utils/axiosInstance"
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
 
 import {
   LayoutDashboard,
   Package,
   Layers3,
   Shapes,
-  LogOut
-} from "lucide-react"
+  LogOut,
+  X,
+  ListOrdered
+} from "lucide-react";
 
-// import Profile from "./Profile"
+import SidebarItem from "../../components/admins/SidebarItem";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, setIsOpen }) {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const routes = [
     {
       path: "/admin/dashboard",
-      name: "Dashboard",
-      icon: <LayoutDashboard size={18} />
+      label: "Dashboard",
+      icon: <LayoutDashboard size={18} />,
     },
     {
       path: "/admin/products",
-      name: "Products",
-      icon: <Package size={18} />
+      label: "Products",
+      icon: <Package size={18} />,
     },
     {
       path: "/admin/categories",
-      name: "Categories",
-      icon: <Layers3 size={18} />
+      label: "Categories",
+      icon: <Layers3 size={18} />,
     },
     {
       path: "/admin/subcategories",
-      name: "SubCategories",
-      icon: <Shapes size={18} />
-    }
-  ]
+      label: "SubCategories",
+      icon: <Shapes size={18} />,
+    },
+    {
+      path: "/admin/orders",
+      label: "Orders",
+      icon: <ListOrdered size={18} />,
+    },
+  ];
 
   const handleLogout = async () => {
     try {
 
-      await axiosInstance.post("/admins/logout")
+      await axiosInstance.post("/admins/logout");
 
-      navigate("/login")
+      navigate("/login");
 
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
-    <div className="w-72 min-h-screen bg-white border-r flex flex-col justify-between">
+    <>
+      {/* Overlay */}
+      <div
+        onClick={() => setIsOpen(false)}
+        className={`
+          fixed inset-0 bg-black/40 z-40 lg:hidden
+          transition-opacity duration-300
 
-      {/* TOP */}
-      <div>
+          ${
+            isOpen
+              ? "opacity-100 visible"
+              : "opacity-0 invisible"
+          }
+        `}
+      />
 
-        {/* LOGO */}
-        <div className="p-5 border-b">
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed lg:static top-0 left-0 z-50
+          w-72 h-screen bg-white border-r
 
-          <h1 className="text-2xl font-bold text-red-500">
-            Admin Panel
-          </h1>
+          flex flex-col justify-between
 
-        </div>
+          transition-transform duration-300 ease-in-out
 
-        {/* PROFILE */}
-        <div className="p-4 border-b">
-          {/* <Profile /> */}
-        </div>
+          ${
+            isOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }
+        `}
+      >
 
-        {/* NAVIGATION */}
-        <div className="p-3 flex flex-col gap-2">
+        {/* Top */}
+        <div>
 
-          {routes.map((route) => (
+          {/* Logo */}
+          <div className="flex items-center justify-between p-5 border-b">
 
-            <NavLink
-              key={route.path}
-              to={route.path}
-              className={({ isActive }) =>
-                `
-                flex items-center gap-3
-                px-4 py-3 rounded-lg
-                transition-all duration-200
+            <h1 className="text-2xl font-bold text-red-500">
+              Admin Panel
+            </h1>
 
-                ${isActive
-                  ? "bg-red-500 text-white shadow"
-                  : "hover:bg-red-50 text-gray-700"}
-                `
-              }
+            <button
+              onClick={() => setIsOpen(false)}
+              className="lg:hidden"
             >
+              <X size={22} />
+            </button>
 
-              {route.icon}
+          </div>
 
-              <span className="font-medium">
-                {route.name}
-              </span>
+          {/* Nav */}
+          <div className="p-4 space-y-2">
 
-            </NavLink>
-          ))}
+            {routes.map((route) => (
+              <SidebarItem
+                key={route.path}
+                to={route.path}
+                icon={route.icon}
+                label={route.label}
+                onClick={() => setIsOpen(false)}
+              />
+            ))}
+
+          </div>
 
         </div>
 
-      </div>
+        {/* Logout */}
+        <div className="p-4 border-t">
 
-      {/* LOGOUT */}
-      <div className="p-4 border-t">
+          <button
+            onClick={handleLogout}
+            className="
+              w-full
+              flex items-center justify-center gap-2
+              bg-red-500 hover:bg-red-600
+              text-white
+              py-3 rounded-xl
+              transition-all duration-300
+            "
+          >
 
-        <button
-          onClick={handleLogout}
-          className="
-            w-full
-            flex items-center justify-center gap-2
-            bg-red-500 hover:bg-red-600
-            text-white
-            py-3 rounded-lg
-            transition-all duration-200
-          "
-        >
+            <LogOut size={18} />
 
-          <LogOut size={18} />
+            Logout
 
-          Logout
+          </button>
 
-        </button>
+        </div>
 
-      </div>
-
-    </div>
-  )
+      </aside>
+    </>
+  );
 }
