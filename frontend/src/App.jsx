@@ -9,7 +9,7 @@ import SubCategoriesProduct from './pages/SubCategoriesProduct'
 import Layout from './layout/layout'
 import ProductDetails from './pages/ProductDetails'
 import SearchResult from './pages/SearchResult'
-import Cart from './pages/Cart'
+// import Cart from './pages/Cart'
 import Register from './pages/customers/Register'
 import CustomerLogin from './pages/customers/CustomerLogin'
 import CartPage from './pages/CartPage'
@@ -23,7 +23,8 @@ import ProductsPage from './pages/admins/Products/ProductsPage'
 import CategoriesPage from './pages/admins/Categories/CategoriesPage'
 import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
 import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
-import { AllOrder } from '../../backend/controllers/admin.controller'
+import AllOrders from './pages/admins/Orders/AllOrders'
+import OrdersByStatus from './pages/admins/Orders/OrderByStatus'
 
 
 function App() {
@@ -55,7 +56,7 @@ function App() {
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
       <Route path='/products/product/:id' element={<ProductDetails />} />
       <Route path='/search' element={<SearchResult />} />
-      <Route path='/cart' element={<Cart />} />
+      {/* <Route path='/cart' element={<Cart />} /> */}
 
       {/* Customer */}
       <Route path='/customer/login' element={<CustomerLogin />} />
@@ -73,7 +74,8 @@ function App() {
       <Route path='products' element={<ProductsPage />}/>
       <Route path='categories' element={<CategoriesPage />}/>
       <Route path='subcategories' element={<Subcategoriespage />}/>
-      <Route path='orders' element={<AllOrder />}/>
+      <Route path='orders' element={<AllOrders />}/>
+      <Route path='orders/:status' element={<OrdersByStatus />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

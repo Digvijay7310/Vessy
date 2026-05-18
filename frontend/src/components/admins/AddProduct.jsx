@@ -3,7 +3,6 @@ import axiosInstance from "../../utils/axiosInstance";
 import { UploadCloud } from "lucide-react";
 
 export default function AddProduct({ refresh }) {
-
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
@@ -21,63 +20,46 @@ export default function AddProduct({ refresh }) {
 
   // ---------------- FETCH CATEGORIES ----------------
   useEffect(() => {
-
     const fetchCategories = async () => {
       try {
-
         const res = await axiosInstance.get("/categories/all-category");
-
         setCategories(res.data.category);
-
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchCategories();
-
   }, []);
 
   // ---------------- FETCH SUBCATEGORIES ----------------
   useEffect(() => {
-
     const fetchSubCategories = async () => {
       try {
-
         const res = await axiosInstance.get("/categories/all-sub-category");
 
         setSubCategories(res.data.subcategory);
-
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchSubCategories();
-
   }, []);
 
   // ---------------- HANDLE CHANGE ----------------
   const handleChange = (e) => {
-
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
-
   };
 
   // ---------------- SUBMIT ----------------
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
-    if (
-      !form.name ||
-      !form.price ||
-      !form.category ||
-      !form.subCategory
-    ) {
+    if (!form.name || !form.price || !form.category || !form.subCategory) {
       return alert("All fields required");
     }
 
@@ -86,9 +68,7 @@ export default function AddProduct({ refresh }) {
     }
 
     try {
-
       setLoading(true);
-
       const data = new FormData();
 
       data.append("name", form.name);
@@ -98,62 +78,33 @@ export default function AddProduct({ refresh }) {
       data.append("subCategory", form.subCategory);
       data.append("image", image);
 
-      await axiosInstance.post(
-        "/products/create-product",
-        data
-      );
+      await axiosInstance.post("/products/create-product", data);
 
       // reset
-      setForm({
-        name: "",
-        price: "",
-        description: "",
-        category: "",
-        subCategory: "",
-      });
-
+      setForm({name: "", price: "", description: "", category: "", subCategory: "",});
       setImage(null);
-
       if (refresh) refresh();
-
     } catch (err) {
-
       console.log(err.response?.data || err.message);
-
     } finally {
-
       setLoading(false);
-
     }
   };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border p-5 md:p-6">
-
       {/* Heading */}
       <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Add Product</h2>
 
-        <h2 className="text-2xl font-bold text-gray-800">
-          Add Product
-        </h2>
-
-        <p className="text-sm text-gray-500 mt-1">
-          Create a new product for your store
-        </p>
-
+        <p className="text-sm text-gray-500 mt-1">Create a new product for your store</p>
       </div>
 
       {/* FORM */}
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-5"
-      >
-
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5" >
         {/* Product Name */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
-            Product Name
-          </label>
+          <label className="text-sm font-medium text-gray-700">Product Name</label>
 
           <input
             type="text"
@@ -161,22 +112,14 @@ export default function AddProduct({ refresh }) {
             placeholder="Enter product name"
             value={form.name}
             onChange={handleChange}
-            className="
-              w-full mt-2
-              border border-gray-300
-              rounded-xl
-              px-4 py-3
-              outline-none
-              focus:ring-2 focus:ring-red-400
+            className="w-full mt-2 border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-red-400
             "
           />
         </div>
 
         {/* Price */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
-            Price
-          </label>
+          <label className="text-sm font-medium text-gray-700">Price</label>
 
           <input
             type="number"
@@ -197,9 +140,7 @@ export default function AddProduct({ refresh }) {
 
         {/* Category */}
         <div>
-          <label className="text-sm font-medium text-gray-700">
-            Category
-          </label>
+          <label className="text-sm font-medium text-gray-700">Category</label>
 
           <select
             name="category"
@@ -214,17 +155,13 @@ export default function AddProduct({ refresh }) {
               focus:ring-2 focus:ring-red-400
             "
           >
-
-            <option value="">
-              Select Category
-            </option>
+            <option value="">Select Category</option>
 
             {categories.map((c) => (
               <option key={c._id} value={c._id}>
                 {c.name}
               </option>
             ))}
-
           </select>
         </div>
 
@@ -247,23 +184,18 @@ export default function AddProduct({ refresh }) {
               focus:ring-2 focus:ring-red-400
             "
           >
-
-            <option value="">
-              Select SubCategory
-            </option>
+            <option value="">Select SubCategory</option>
 
             {subCategories.map((s) => (
               <option key={s._id} value={s._id}>
                 {s.name}
               </option>
             ))}
-
           </select>
         </div>
 
         {/* Description */}
         <div className="md:col-span-2">
-
           <label className="text-sm font-medium text-gray-700">
             Description
           </label>
@@ -284,12 +216,10 @@ export default function AddProduct({ refresh }) {
               focus:ring-2 focus:ring-red-400
             "
           />
-
         </div>
 
         {/* Image Upload */}
         <div className="md:col-span-2">
-
           <label className="text-sm font-medium text-gray-700">
             Product Image
           </label>
@@ -307,11 +237,7 @@ export default function AddProduct({ refresh }) {
               transition-all
             "
           >
-
-            <UploadCloud
-              className="text-gray-400 mb-2"
-              size={40}
-            />
+            <UploadCloud className="text-gray-400 mb-2" size={40} />
 
             <p className="text-sm text-gray-500">
               Click to upload product image
@@ -320,17 +246,13 @@ export default function AddProduct({ refresh }) {
             <input
               type="file"
               className="hidden"
-              onChange={(e) =>
-                setImage(e.target.files[0])
-              }
+              onChange={(e) => setImage(e.target.files[0])}
             />
-
           </label>
 
           {/* Preview */}
           {image && (
             <div className="mt-4">
-
               <img
                 src={URL.createObjectURL(image)}
                 alt="preview"
@@ -341,15 +263,12 @@ export default function AddProduct({ refresh }) {
                   border
                 "
               />
-
             </div>
           )}
-
         </div>
 
         {/* Button */}
         <div className="md:col-span-2">
-
           <button
             disabled={loading}
             className={`
@@ -366,17 +285,10 @@ export default function AddProduct({ refresh }) {
               }
             `}
           >
-
-            {loading
-              ? "Creating Product..."
-              : "Add Product"}
-
+            {loading ? "Creating Product..." : "Add Product"}
           </button>
-
         </div>
-
       </form>
-
     </div>
   );
 }

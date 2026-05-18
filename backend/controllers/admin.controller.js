@@ -127,32 +127,51 @@ export const getAllData = asyncHandler(async (req, res) => {
     )
 })
 
+// Orders
+
+
 export const AllOrder = asyncHandler(async (req, res) => {
 
     const orders = await Order.find(); // ✅ get all orders
+    const totalOrders = await Order.countDocuments()
 
-   const pendingOrders = await Order.countDocuments({ orderStatus: "pending" });
-const confirmedOrders = await Order.countDocuments({ orderStatus: "confirmed" });
-const processingOrders = await Order.countDocuments({ orderStatus: "processing" });
-const shippedOrders = await Order.countDocuments({ orderStatus: "shipped" });
-const outForDelivery = await Order.countDocuments({ orderStatus: "outForDelivery" });
-const deliveredOrders = await Order.countDocuments({ orderStatus: "delivered" });
-const returnedOrders = await Order.countDocuments({ orderStatus: "returned" });
+    const pendingOrders = await Order.countDocuments({ orderStatus: "Pending" });
+    const confirmedOrders = await Order.countDocuments({ orderStatus: "Confirmed" });
+    const processingOrders = await Order.countDocuments({ orderStatus: "Processing" });
+    const shippedOrders = await Order.countDocuments({ orderStatus: "Shipped" });
+    const outForDelivery = await Order.countDocuments({ orderStatus: "OutForDelivery" });
+    const deliveredOrders = await Order.countDocuments({ orderStatus: "Delivered" });
+    const returnedOrders = await Order.countDocuments({ orderStatus: "Returned" });
 
     res.status(200).json(
         new apiResponse(
-            200,
-            {
-                totalOrders: orders.length,
-                pendingOrders: pendingOrders.length,
-                confirmedOrders: confirmedOrders.length,
-                processingOrders: processingOrders.length,
-                shippedOrders: shippedOrders.length,
-                outForDelivery: outForDelivery.length,
-                deliveredOrders: deliveredOrders.length,
-                returnedOrders: returnedOrders.length,
+            200,{
+                orders, totalOrders,
+                 pendingOrders, confirmedOrders,
+                processingOrders, shippedOrders, outForDelivery,
+                deliveredOrders, returnedOrders
             },
             "Orders with status fetched"
         )
+    );
+});
+
+export const getOrdersByStatus = asyncHandler(async (req, res) => {
+
+    let { status } = req.params;
+
+    // normalize
+    status = status
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase());
+
+    const orders = await Order.find(
+        status ? { orderStatus: status } : {}
+    )
+    .populate("customer", "name email")
+    .sort({ createdAt: -1 });
+
+    res.status(200).json(
+        new apiResponse(200, orders, "Orders fetched successfully")
     );
 });

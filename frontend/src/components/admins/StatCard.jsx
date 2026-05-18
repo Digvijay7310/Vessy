@@ -1,11 +1,6 @@
 import React from "react";
 
-export default function StatCard({
-  title,
-  value,
-  color,
-  bgColor,
-}) {
+export default function StatCard({title, value, color, bgColor,}) {
   return (
     <div
       className={`

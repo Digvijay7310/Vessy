@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-
 import { Plus } from "lucide-react";
 
 export default function CreateCategory({ onSuccess }) {
