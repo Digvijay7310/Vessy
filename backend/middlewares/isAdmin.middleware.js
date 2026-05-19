@@ -13,7 +13,7 @@ export const isAdmin = asyncHandler(async (req, res, next) => {
 
 
 export const verifyAdmin = asyncHandler(async (req, res, next) => {
-    const token = req.cookies?.accessToken;
+    const token = req.cookies?.adminaccessToken;
 
     if (!token) {
         throw new apiError(401, "Unauthorized request");

@@ -26,18 +26,16 @@ export const customerRegistration = asyncHandler(async (req, res) => {
     customer.refreshToken = refreshToken
     await customer.save({validateBeforeSave: false})
 
-    res.cookie("accessToken", accessToken, {
+    res.cookie("customeraccessToken", accessToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "lax",
-        withCredentials: true
     })
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("customerrefreshToken", refreshToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "lax",
-        withCredentials: true
     })
 
     return res.status(201).json(
@@ -45,47 +43,68 @@ export const customerRegistration = asyncHandler(async (req, res) => {
     )
 })
 
-
 export const customerLogin = asyncHandler(async (req, res) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
-    if(!email || !password){
-        throw new apiError(402, "All fields are required")
+    if (!email || !password) {
+        throw new apiError(402, "All fields are required");
     }
 
-    const customer = await Customer.findOne({email})
-    if(!customer) {
-        throw new apiError(404, "Invalid password")
+    const customer = await Customer.findOne({ email });
+    if (!customer) {
+        throw new apiError(404, "Invalid email");
     }
 
-    const isMatch = await customer.matchedPassword(password)
-    if(!isMatch){
-        throw new apiError(404, "Invalid password")
+    const isMatch = await customer.matchedPassword(password);
+    if (!isMatch) {
+        throw new apiError(404, "Invalid password");
     }
-    
-    const accessToken = customer.generateAccessToken()
-    const refreshToken = customer.generateRefreshToken()
-    
-    customer.refreshToken = refreshToken
-    await customer.save({validateBeforeSave: false})
 
-    res.cookie("accessToken", accessToken, {
+    const accessToken = customer.generateAccessToken();
+    const refreshToken = customer.generateRefreshToken();
+
+    customer.refreshToken = refreshToken;
+    await customer.save({ validateBeforeSave: false });
+
+    res.cookie("customeraccessToken", accessToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "lax",
-        withCredentials: true
+    });
+
+    res.cookie("customerrefreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+    });
+
+    return res.status(200).json({
+        success: true,
+        message: "Login successful",
+        customer
+    });
+});
+
+export const customerLogout = asyncHandler(async (req, res) => {
+
+    console.log(req.user)
+    console.log("The users ----------------");
+    
+    res.clearCookie("customeraccessToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+    })
+    res.clearCookie("customerrefreshToken", {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
     })
 
-    res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        withCredentials: true
+    return res.status(200).json({
+        success: true,
+        message: "Logout successfully"
     })
-
-    return res.status(200).json(
-        new apiResponse(200, customer, "Login successfull")
-    )
 })
 
 export const customerProfile = asyncHandler(async (req, res) => {
@@ -101,29 +120,3 @@ export const customerProfile = asyncHandler(async (req, res) => {
     )
 })
 
-
-export const customerLogout = asyncHandler(async (req, res) => {
-
-    const user = await Customer.findById(req.user._id)
-    if(!user) {
-        return res.status(404).json({success: false, message: "User not found"})
-    }
-    user.refreshToken = undefined
-    await user.save({validateBeforeSave: false})
-
-    res.clearCookie("accessToken", {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: true,
-    })
-    res.clearCookie("refreshToken", {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: true,
-    })
-
-    return res.status(200).json({
-        success: true,
-        message: "Logout successfully"
-    })
-})

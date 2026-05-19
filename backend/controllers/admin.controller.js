@@ -26,18 +26,16 @@ export const adminRegistration = asyncHandler(async (req, res) => {
     admin.refreshToken = refreshToken
     await admin.save({validateBeforeSave: false})
     
-    res.cookie("accessToken", accessToken, {
+    res.cookie("adminaccessToken", accessToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
-        withCredentials: true
     });
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("adminrefreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
-        withCredentials: true
     });
 
     res.status(201).json({
@@ -68,18 +66,16 @@ export const adminLogin = asyncHandler(async (req, res) => {
     admin.refreshToken = refreshToken
     await admin.save({validateBeforeSave: false})
 
-    res.cookie("accessToken", accessToken, {
+    res.cookie("adminaccessToken", accessToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "lax",
-        withCredentials: true
     });
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("adminrefreshToken", refreshToken, {
         httpOnly: true,
-        secure: true,
+        secure: false,
         sameSite: "lax",
-        withCredentials: true
     });
 
     return res.status(200).json({
@@ -101,8 +97,8 @@ export const getMyProfile = asyncHandler(async (req, res) => {
 })
 
 export const adminLogout = asyncHandler(async (req, res) => {
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("adminaccessToken");
+    res.clearCookie("adminrefreshToken");
 
     return res.status(200).json({
         success: true,
@@ -119,7 +115,11 @@ export const getAllData = asyncHandler(async (req, res) => {
     const totalProducts = await Product.countDocuments()
     const totalOrder = await Order.countDocuments()
 
-    if(!totalCategory || !totalSubCategory || !totalProducts || !totalOrder){
+    if(totalCategory == null ||
+         totalSubCategory == null ||
+         totalProducts == null || 
+         totalOrder == null
+        ){
         throw new apiError(404, "No data found")
     }
     res.status(200).json(
@@ -158,20 +158,37 @@ export const AllOrder = asyncHandler(async (req, res) => {
 
 export const getOrdersByStatus = asyncHandler(async (req, res) => {
 
-    let { status } = req.params;
+    try {
 
-    // normalize
-    status = status
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (l) => l.toUpperCase());
+        let { status } = req.params;
 
-    const orders = await Order.find(
-        status ? { orderStatus: status } : {}
-    )
-    .populate("customer", "name email")
-    .sort({ createdAt: -1 });
+        status = status
+            .replace(/-/g, " ")
+            .replace(/\b\w/g, (l) => l.toUpperCase());
 
-    res.status(200).json(
-        new apiResponse(200, orders, "Orders fetched successfully")
-    );
+        console.log("STATUS:", status);
+
+        const orders = await Order.find({
+            orderStatus: status
+        })
+        .populate("customer", "fullName email")
+        .sort({ createdAt: -1 });
+
+        console.log("ORDERS:", orders);
+
+        res.status(200).json(
+            new apiResponse(
+                200,
+                orders,
+                "Orders fetched successfully"
+            )
+        );
+
+    } catch (error) {
+
+        console.log("GET ORDERS ERROR:", error);
+
+        throw new apiError(500, error.message);
+
+    }
 });

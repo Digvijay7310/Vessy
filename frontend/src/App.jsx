@@ -25,6 +25,8 @@ import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
 import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
 import AllOrders from './pages/admins/Orders/AllOrders'
 import OrdersByStatus from './pages/admins/Orders/OrderByStatus'
+import CustomerLayoutWrapper from './components/customers/CustomerLayoutWrapper'
+import Profile from './components/customers/Profile'
 
 
 function App() {
@@ -48,19 +50,22 @@ function App() {
     <>
     <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Layout />} >
+      <Route path='/' element={
+        <CustomerLayoutWrapper>
+          <Layout />
+        </CustomerLayoutWrapper>
+      } >
       <Route index element={<Home />} />
-      {/* <Route path='/create-product' element={<AddProduct />} /> */}
 
       {/* Shop */}
       <Route path='/sub-category/:id' element={<SubCategoriesProduct />} />
       <Route path='/products/product/:id' element={<ProductDetails />} />
       <Route path='/search' element={<SearchResult />} />
-      {/* <Route path='/cart' element={<Cart />} /> */}
 
       {/* Customer */}
       <Route path='/customer/login' element={<CustomerLogin />} />
       <Route path='/customer/register' element={<Register />} />
+      <Route path='/customer/profile' element={<Profile />} />
       <Route path='/my-cart' element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/my-orders" element={<MyOrders />} />

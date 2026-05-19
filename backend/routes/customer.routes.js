@@ -9,7 +9,7 @@ router.post("/refresh-token", refreshAccessToken)
 
 router.post("/register", customerRegistration)
 router.post("/login", customerLogin)
-router.get("/me", isUser, verifyCustomer, customerProfile)
+router.get("/me", verifyCustomer, customerProfile)
 router.post("/logout", verifyCustomer, customerLogout)
 
 export default router

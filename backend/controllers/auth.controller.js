@@ -6,7 +6,7 @@ import { Customer } from '../models/customer.model.js'
 
 export const refreshAccessToken = asyncHandler(async (req, res) => {
 
-    const incomingRefreshToken = req.cookies.refreshToken
+    const incomingRefreshToken = req.cookies.customerrefreshToken
 
     if (!incomingRefreshToken) {
         throw new apiError(401, "No refresh Token")
