@@ -26,13 +26,13 @@ export const customerRegistration = asyncHandler(async (req, res) => {
     customer.refreshToken = refreshToken
     await customer.save({validateBeforeSave: false})
 
-    res.cookie("customeraccessToken", accessToken, {
+    res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
     })
 
-    res.cookie("customerrefreshToken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
@@ -45,6 +45,7 @@ export const customerRegistration = asyncHandler(async (req, res) => {
 
 export const customerLogin = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
+    
 
     if (!email || !password) {
         throw new apiError(402, "All fields are required");
@@ -66,17 +67,18 @@ export const customerLogin = asyncHandler(async (req, res) => {
     customer.refreshToken = refreshToken;
     await customer.save({ validateBeforeSave: false });
 
-    res.cookie("customeraccessToken", accessToken, {
+    res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
     });
 
-    res.cookie("customerrefreshToken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
     });
+        console.log("customer login token: ", accessToken);
 
     return res.status(200).json({
         success: true,
@@ -90,12 +92,12 @@ export const customerLogout = asyncHandler(async (req, res) => {
     console.log(req.user)
     console.log("The users ----------------");
     
-    res.clearCookie("customeraccessToken", {
+    res.clearCookie("accessToken", {
         httpOnly: true,
         sameSite: "lax",
         secure: false,
     })
-    res.clearCookie("customerrefreshToken", {
+    res.clearCookie("refreshToken", {
         httpOnly: true,
         sameSite: "lax",
         secure: false,

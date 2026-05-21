@@ -59,7 +59,7 @@ export default function ProductList({ product }) {
           className="absolute bottom-2 right-2"
           onClick={handleCartClick}
         >
-          <AddCart product={product} />
+          <AddCart productId={product._id} />
         </div>
 
       </div>

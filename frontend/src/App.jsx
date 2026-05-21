@@ -25,7 +25,6 @@ import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
 import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
 import AllOrders from './pages/admins/Orders/AllOrders'
 import OrdersByStatus from './pages/admins/Orders/OrderByStatus'
-import CustomerLayoutWrapper from './components/customers/CustomerLayoutWrapper'
 import Profile from './components/customers/Profile'
 
 
@@ -50,11 +49,7 @@ function App() {
     <>
     <BrowserRouter>
     <Routes>
-      <Route path='/' element={
-        <CustomerLayoutWrapper>
-          <Layout />
-        </CustomerLayoutWrapper>
-      } >
+      <Route path='/' element={<Layout /> } >
       <Route index element={<Home />} />
 
       {/* Shop */}

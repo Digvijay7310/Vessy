@@ -14,7 +14,7 @@ next()
 
 
 export const verifyCustomer = asyncHandler(async (req, res, next) => {
-    const token = req.cookie?.customeraccessToken;
+    const token = req.cookies?.accessToken;
 
     if (!token) {
         throw new apiError(401, "Unauthorized request");

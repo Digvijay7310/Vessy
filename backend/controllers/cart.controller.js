@@ -1,10 +1,13 @@
 import { Cart } from '../models/cart.model.js';
 import asyncHandler from '../utils/asyncHandler.js'
+import {Product} from '../models/product.model.js'
 
 
 export const addToCart = asyncHandler(async (req, res) => {
     const userId = req.user._id
     const { productId } = req.body
+    console.log("REQ USER:", req.user)
+console.log("PRODUCT ID:", productId)
 
     const product = await Product.findById(productId);
 
