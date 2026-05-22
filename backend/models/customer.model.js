@@ -14,9 +14,10 @@ const customerSchema = new mongoose.Schema({
     },
     phone: {
         type: Number,
-        maxLength: 10,
         required: true,
-        unique: true
+        unique: true,
+        minlength: 10,
+        maxlength: 10,
     },
     password: {
         type: String,

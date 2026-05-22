@@ -1,6 +1,6 @@
 import express from "express"
 import { addToCart, decreaseQty, getCart, removeFromCart } from "../controllers/cart.controller.js"
-import { isUser, verifyCustomer } from "../middlewares/isUser.middleware.js"
+import { verifyCustomer } from "../middlewares/isUser.middleware.js"
 import { isAdmin } from "../middlewares/isAdmin.middleware.js"
 
 const router = express.Router()

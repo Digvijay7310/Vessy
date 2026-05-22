@@ -1,97 +1,120 @@
-import React, { useEffect, useRef, useState } from "react";
-import Navbar from "./Navbar";
-import Searchbar from "../components/Searchbar";
+import { useState } from "react";
+import {
+  Menu,
+  Search,
+  ShoppingCart,
+  User,
+  X
+} from "lucide-react";
+
 import Logo from "../components/Logo";
-import CartItems from "../components/CartItems";
-import YourOrders from "../components/customers/YourOrders";
-import { BiSearch, BiUserCircle } from "react-icons/bi";
-import { IoMdClose } from "react-icons/io";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { AiOutlineUser } from "react-icons/ai";
+import Searchbar from "../components/Searchbar";
+import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const [showNav, setShowNav] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
 
-  const navRef = useRef();
-  const searchRef = useRef();
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [mobileSearch, setMobileSearch] = useState(false);
 
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (navRef.current && !navRef.current.contains(e.target)) {
-        setShowNav(false);
-      }
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setShowSearch(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const navigate = useNavigate()
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white border-b">
 
-      {/* TOP BAR */}
-      <div className="flex items-center justify-between md:justify-evenly px-1 py-3">
+      {/* TOP HEADER */}
+      <div className="max-w-7xl mx-auto px-4">
 
-        <Logo />
+        <div className="h-16 flex items-center justify-between gap-4">
 
-        {/* Desktop Search */}
-        <div className="hidden md:flex flex-1 max-w-2xl mx-6">
-          <Searchbar />
+          {/* LEFT */}
+          <div className="flex items-center gap-3">
+
+            <button
+              onClick={() => setMobileMenu(true)}
+              className="md:hidden"
+            >
+              <Menu size={24} />
+            </button>
+
+            <Logo />
+          </div>
+
+          {/* DESKTOP SEARCH */}
+          <div className="hidden md:flex flex-1 max-w-2xl">
+            <Searchbar />
+          </div>
+
+          {/* RIGHT */}
+          <div className="flex items-center gap-5">
+
+            {/* Mobile Search */}
+            <button
+              onClick={() => setMobileSearch(!mobileSearch)}
+              className="md:hidden"
+            >
+              <Search size={22} />
+            </button>
+
+            {/* Account */}
+            <button className="hover:text-emerald-600 transition">
+              <User onClick={() => navigate("/customer/profile")} size={24} />
+            </button>
+
+            {/* Cart */}
+            <button className="relative hover:text-emerald-600 transition">
+              <ShoppingCart size={24} />
+
+              <span className="absolute -top-2 -right-2 bg-emerald-600 text-white text-[10px] rounded-full px-1.5 py-0.5">
+                2
+              </span>
+            </button>
+
+          </div>
         </div>
 
-        {/* RIGHT ACTIONS */}
-        <div className="flex items-center gap-5">
-
-
-          {/* Mobile search */}
-          <button
-            onClick={() => setShowSearch(!showSearch)}
-            className="md:hidden text-xl"
-          >
-            {showSearch ? <IoMdClose /> : <BiSearch />}
-          </button>
-          <CartItems />
-
-          <button className="bg-emerald-600 p-0.5 rounded-full text-white font-medium">
-            <AiOutlineUser size={22} />
-          </button>
-
-
-          {/* Mobile menu */}
-          <button
-            onClick={() => setShowNav(!showNav)}
-            className="md:hidden text-2xl"
-          >
-            <GiHamburgerMenu />
-          </button>
-
-        </div>
       </div>
 
-      {/* SEARCH MOBILE */}
-      {showSearch && (
-        <div ref={searchRef} className="md:hidden px-4 pb-3">
+      {/* MOBILE SEARCH */}
+      {mobileSearch && (
+        <div className="md:hidden border-t px-4 py-3">
           <Searchbar />
         </div>
       )}
 
-      {/* DESKTOP NAVBAR */}
-      <div className="hidden md:block">
-        <Navbar horizontal />
+      {/* DESKTOP NAV */}
+      <div className="hidden md:block border-t">
+        <div className="max-w-7xl mx-auto px-4">
+          <Navbar />
+        </div>
       </div>
 
-      {/* MOBILE NAV */}
-      {showNav && (
-        <div
-          ref={navRef}
-          className="absolute top-full left-0 w-full bg-white shadow-lg border-t"
-        >
-          <Navbar horizontal={false} />
-        </div>
+      {/* MOBILE SIDEBAR */}
+      {mobileMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black/40 z-40"
+            onClick={() => setMobileMenu(false)}
+          />
+
+          {/* Sidebar */}
+          <div className="fixed top-0 left-0 h-full w-72 bg-white z-50 shadow-xl p-5">
+
+            <div className="flex items-center justify-between mb-8">
+
+              <Logo />
+
+              <button onClick={() => setMobileMenu(false)}>
+                <X />
+              </button>
+
+            </div>
+
+            <Navbar mobile />
+
+          </div>
+        </>
       )}
 
     </header>

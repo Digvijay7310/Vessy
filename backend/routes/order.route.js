@@ -14,6 +14,6 @@ router.get("/:orderId", verifyCustomer, getOrderById)
 
 
 // Admin
-router.get("/", verifyAdmin, getAllOrders)
+router.get("/", verifyAdmin, isAdmin, getAllOrders)
 
 export default router

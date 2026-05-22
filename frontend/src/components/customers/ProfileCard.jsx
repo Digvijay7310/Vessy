@@ -17,7 +17,7 @@ export default function Profile() {
     }, [])
   return (
     <div>
-        {user}
+        {/* {user} */}
     </div>
   )
 }

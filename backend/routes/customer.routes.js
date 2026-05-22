@@ -1,6 +1,6 @@
 import express from "express"
 import { customerLogin, customerLogout, customerProfile, customerRegistration } from "../controllers/customer.controller.js"
-import { isUser, verifyCustomer } from "../middlewares/isUser.middleware.js"
+import { verifyCustomer } from "../middlewares/isUser.middleware.js"
 import { refreshAccessToken } from "../controllers/auth.controller.js"
 
 const router = express.Router()

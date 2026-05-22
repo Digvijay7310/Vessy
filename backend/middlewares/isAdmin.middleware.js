@@ -13,20 +13,36 @@ export const isAdmin = asyncHandler(async (req, res, next) => {
 
 
 export const verifyAdmin = asyncHandler(async (req, res, next) => {
-    const token = req.cookies?.accessToken;
 
-    if (!token) {
-        throw new apiError(401, "Unauthorized request");
+    try {
+
+        const token = req.cookies?.accessToken;
+
+        if (!token) {
+            throw new apiError(401, "Unauthorized request");
+        }
+
+        const decoded = jwt.verify(
+            token,
+            process.env.ACCESS_TOKEN_SECRET
+        );
+
+        const customer = await Admin
+            .findById(decoded.id)
+            .select("-password -refreshToken");
+
+        if (!admin) {
+            throw new apiError(401, "Invalid token");
+        }
+
+        req.user = admin;
+
+        next();
+
+    } catch (error) {
+
+        throw new apiError(401, "Invalid or expired token");
+
     }
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-    const admin = await Admin.findById(decoded.id).select("-password");
-
-    if (!admin) {
-        throw new apiError(401, "Invalid token");
-    }
-
-    req.user = admin;
-    next();
 });

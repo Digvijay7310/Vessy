@@ -25,7 +25,8 @@ import Subcategoriespage from './pages/admins/Subcategories/Subcategoriespage'
 import AdminLayout from './layout/AdminLayout.jsx/AdminLayout'
 import AllOrders from './pages/admins/Orders/AllOrders'
 import OrdersByStatus from './pages/admins/Orders/OrderByStatus'
-import Profile from './components/customers/Profile'
+import Profile from './components/customers/ProfileCard'
+import UserProfile from './pages/customers/UserProfile'
 
 
 function App() {
@@ -60,7 +61,7 @@ function App() {
       {/* Customer */}
       <Route path='/customer/login' element={<CustomerLogin />} />
       <Route path='/customer/register' element={<Register />} />
-      <Route path='/customer/profile' element={<Profile />} />
+      <Route path='/customer/profile' element={<UserProfile />} />
       <Route path='/my-cart' element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/my-orders" element={<MyOrders />} />

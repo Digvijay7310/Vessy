@@ -1,6 +1,8 @@
 import asyncHandler from '../utils/asyncHandler.js'
 import apiError from '../utils/apiError.js'
 import { Customer } from '../models/customer.model.js';
+import { Order } from '../models/order.model.js';
+import { Cart } from '../models/cart.model.js';
 import apiResponse from '../utils/apiResponse.js';
 
 
@@ -78,7 +80,7 @@ export const customerLogin = asyncHandler(async (req, res) => {
         secure: false,
         sameSite: "lax",
     });
-        console.log("customer login token: ", accessToken);
+        // console.log("customer login token: ", accessToken);
 
     return res.status(200).json({
         success: true,
@@ -89,8 +91,15 @@ export const customerLogin = asyncHandler(async (req, res) => {
 
 export const customerLogout = asyncHandler(async (req, res) => {
 
-    console.log(req.user)
-    console.log("The users ----------------");
+    // console.log(req.user)
+
+    await Customer.findOneAndReplace(req.user._id, {
+        $unset: {
+            refreshToken: 1
+        }
+    }, {
+        new: true
+    })
     
     res.clearCookie("accessToken", {
         httpOnly: true,
@@ -110,15 +119,114 @@ export const customerLogout = asyncHandler(async (req, res) => {
 })
 
 export const customerProfile = asyncHandler(async (req, res) => {
-    if(!req.user){
-        throw new apiError(401, "Not authenticated")
-    }
-    const customer = await Customer.findById(req.user._id).select("-password -refreshToken")
-    if(!customer){
-        throw new apiError(404, "Customer not found")
-    }
-    return res.status(200).json(
-        new apiResponse(200, customer, "Profile fetched successfully")
-    )
-})
 
+    if (!req.user) {
+        throw new apiError(401, "Not authenticated");
+    }
+
+    // CUSTOMER
+
+    const customer = await Customer.findById(req.user._id)
+        .select("-password -refreshToken");
+
+    if (!customer) {
+        throw new apiError(404, "Customer not found");
+    }
+
+    // CART
+
+    const cart = await Cart.findOne({
+        owner: req.user._id
+    }).populate("items.product");
+
+    // ORDERS
+
+    const orders = await Order.find({
+        customer: req.user._id
+    })
+    .sort({ createdAt: -1 })
+    .populate("items.product");
+
+    // STATS
+
+    const deliveredOrders = orders.filter(
+        order => order.orderStatus === "Delivered"
+    );
+
+    const cancelledOrders = orders.filter(
+        order => order.orderStatus === "Cancelled"
+    );
+
+    const returnedOrders = orders.filter(
+        order => order.orderStatus === "Returned"
+    );
+
+    const pendingOrders = orders.filter(order =>
+        [
+            "Pending",
+            "Confirmed",
+            "Processing",
+            "Shipped",
+            "Out for Delivery"
+        ].includes(order.orderStatus)
+    );
+
+    // MONEY SPENT
+
+    const totalSpent = deliveredOrders.reduce(
+        (acc, order) => acc + order.finalAmount,
+        0
+    );
+
+    // PRODUCTS PURCHASED
+
+    const totalProductsPurchased = deliveredOrders.reduce(
+        (acc, order) => {
+
+            const orderQty = order.items.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+
+            return acc + orderQty;
+
+        },
+        0
+    );
+
+    // RESPONSE
+
+    return res.status(200).json({
+
+        success: true,
+
+        customer,
+
+        cart: {
+            totalItems: cart?.items?.length || 0,
+            items: cart?.items || []
+        },
+
+        stats: {
+
+            totalOrders: orders.length,
+
+            deliveredOrders: deliveredOrders.length,
+
+            cancelledOrders: cancelledOrders.length,
+
+            returnedOrders: returnedOrders.length,
+
+            pendingOrders: pendingOrders.length,
+
+            totalSpent,
+
+            totalProductsPurchased
+
+        },
+
+        recentOrders: orders.slice(0, 5)
+
+    });
+
+});

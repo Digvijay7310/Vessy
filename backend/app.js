@@ -16,6 +16,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
+
 app.get("/", (req, res) => {
     res.send("Hey there! This is testing route")
 })
@@ -34,6 +35,15 @@ app.use("/api/categories", categoryRoues)
 app.use("/api/customer", customerRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/orders", orderRoutes)
+
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    return res.status(err.statusCode || 500).json({
+        success: false,
+        message: err.message || "Internal server error"
+    })
+})
 
 
 export {app}
