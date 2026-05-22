@@ -32,12 +32,14 @@ export const customerRegistration = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000
     })
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     })
 
     return res.status(201).json(
@@ -73,12 +75,14 @@ export const customerLogin = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     });
         // console.log("customer login token: ", accessToken);
 

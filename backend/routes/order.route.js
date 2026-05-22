@@ -1,6 +1,6 @@
 import express from "express"
 import { verifyCustomer } from "../middlewares/isUser.middleware.js"
-import { checkoutOrder, getAllOrders, getMyOrders, getOrderById, previewCheckout } from "../controllers/order.controller.js"
+import { addAddress, checkoutOrder, getAddresses, getAllOrders, getMyOrders, getOrderById, previewCheckout, setDefaultAddress } from "../controllers/order.controller.js"
 import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js"
 
 
@@ -11,6 +11,9 @@ router.get("/preview-checkout", verifyCustomer, previewCheckout)
 router.post("/checkout", verifyCustomer, checkoutOrder)
 router.get("/my-orders", verifyCustomer, getMyOrders)
 router.get("/:orderId", verifyCustomer, getOrderById)
+router.get('/', verifyCustomer, getAddresses)
+router.post('/', verifyCustomer, addAddress)
+router.patch('/:id', verifyCustomer, setDefaultAddress)
 
 
 // Admin

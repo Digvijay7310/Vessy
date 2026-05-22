@@ -65,7 +65,7 @@ export default function ProductList({ product }) {
       </div>
 
       {/* CONTENT */}
-      <div className="p-3 space-y-1">
+      <div className="p-1 space-y-1">
 
         {/* NAME */}
         <h5 className="text-sm font-medium text-gray-800 line-clamp-1">

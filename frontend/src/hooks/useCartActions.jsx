@@ -10,14 +10,14 @@ export default function useCartActions() {
 
         try {
 
-            console.log("PRODUCT ID:", productId)
+            // console.log("PRODUCT ID:", productId)
 
             const res = await axiosInstance.post(
                 "/cart/add-cart",
                 { productId }
             )
 
-            console.log("ADD RESPONSE:", res.data)
+            // console.log("ADD RESPONSE:", res.data)
 
             fetchCart()
 

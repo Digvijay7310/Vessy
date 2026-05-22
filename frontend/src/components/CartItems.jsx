@@ -1,5 +1,5 @@
 import React from "react";
-import { CiShoppingCart } from "react-icons/ci";
+import { ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export default function CartItems() {
     >
 
       {/* CART ICON */}
-      <CiShoppingCart
+      <ShoppingCart
         className="
           text-2xl text-gray-700
           group-hover:scale-110

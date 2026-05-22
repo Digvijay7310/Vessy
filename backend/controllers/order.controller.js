@@ -1,7 +1,10 @@
+import mongoose from "mongoose";
 import asyncHandler from "../utils/asyncHandler.js";
 import apiResponse from "../utils/apiResponse.js";
 import { Cart } from "../models/cart.model.js";
 import { Order } from "../models/order.model.js";
+import { Customer } from "../models/customer.model.js";
+import { Product } from "../models/product.model.js";
 
 
 // Preview Checkout
@@ -48,196 +51,111 @@ export const previewCheckout = asyncHandler(async (req, res) => {
 
 export const checkoutOrder = asyncHandler(async (req, res) => {
 
-    const { paymentMethod } = req.body;
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-    // ONLY COD ALLOWED FOR NOW
+    try {
 
-    if (paymentMethod !== "COD") {
+        const { paymentMethod } = req.body;
 
-        return res.status(400).json({success: false, message: "Please select Cash on Delivery for now" });
-    }
+        if (paymentMethod !== "COD") {
+            throw new Error("Only COD allowed for now");
+        }
 
-    // GET USER CART
+        const cart = await Cart.findOne({ owner: req.user._id })
+            .populate("items.product")
+            .session(session);
 
-    const cart = await Cart.findOne({owner: req.user._id }).populate("items.product");
+        if (!cart || cart.items.length === 0) {
+            throw new Error("Cart is empty");
+        }
 
-    // EMPTY CART CHECK
-
-    if (!cart || cart.items.length === 0) {
-
-        return res.status(400).json({
-            success: false,
-            message: "Cart is empty"
-        });
-    }
-
-    // CALCULATE PRICES
-
-    const totalPrice = cart.items.reduce(
-        (acc, item) =>
-            acc + (
-                item.product.price *
-                item.quantity
-            ),
-        0
-    );
-
-    // PLATFORM CHARGE
-
-    const platformCharge = 10;
-
-    // DELIVERY CHARGE
-
-    const deliveryCharge =
-        totalPrice < 199 ? 60 : 0;
-
-    // FINAL AMOUNT
-
-    const finalAmount = totalPrice + platformCharge + deliveryCharge;
-
-    // CREATE ORDER ITEMS
-
-    const orderItems = cart.items.map(item => ({
-
-        product: item.product._id,
-
-        quantity: item.quantity,
-
-        price: item.product.price
-
-    }));
-
-    // EXPECTED DELIVERY DATE
-
-    const expectedDelivery = new Date();
-
-    expectedDelivery.setDate(
-        expectedDelivery.getDate() + 7
-    );
-
-    for (const item of cart.items) {
-    if (item.quantity > item.product.stock) {
-        return res.status(400).json({
-            success: false,
-            message: `${item.product.name} out of stock`
-        });
-    }
-}
-    // CREATE ORDER
-
-    const order = await Order.create({
-
-        customer: req.user._id,
-
-        items: orderItems,
-
-        totalPrice,
-
-        platformCharge,
-
-        deliveryCharge,
-
-        finalAmount,
-
-        paymentMethod: "COD",
-
-        paymentStatus: "Pending",
-
-        orderStatus: "Pending",
-
-        expectedDelivery
-
-    });
-
-    // CLEAR USER CART
-
-    await Cart.findOneAndUpdate(
-        {
-            owner: req.user._id
-        },
-        {
-            $set: {
-                items: []
+        // STOCK CHECK
+        for (const item of cart.items) {
+            if (item.quantity > item.product.stock) {
+                throw new Error(`${item.product.name} out of stock`);
             }
         }
-    );
 
-    // GET POPULATED ORDER
+        const totalPrice = cart.items.reduce(
+            (acc, item) =>
+                acc + item.product.price * item.quantity,
+            0
+        );
 
-    const populatedOrder =
-        await Order.findById(order._id)
-        .populate("items.product");
+        const platformCharge = 10;
+        const deliveryCharge = totalPrice < 199 ? 60 : 0;
+        const finalAmount =
+            totalPrice + platformCharge + deliveryCharge;
 
-    // FORMATTED RESPONSE
-
-    const response = {
-
-        orderId: populatedOrder._id,
-
-        items: populatedOrder.items.map(item => ({
-
-            productId: item.product._id,
-
-            name: item.product.name,
-
-            image: item.product.image,
-
-            description:
-                item.product.description,
-
+        const orderItems = cart.items.map(item => ({
+            product: item.product._id,
             quantity: item.quantity,
+            price: item.product.price
+        }));
 
-            price: item.price
+        const expectedDelivery = new Date();
+        expectedDelivery.setDate(expectedDelivery.getDate() + 7);
 
-        })),
+        // CREATE ORDER
+        const [order] = await Order.create(
+            [{
+                customer: req.user._id,
+                items: orderItems,
+                totalPrice,
+                platformCharge,
+                deliveryCharge,
+                finalAmount,
+                paymentMethod: "COD",
+                paymentStatus: "Pending",
+                orderStatus: "Pending",
+                expectedDelivery
+            }],
+            { session }
+        );
 
-        totalPrice:
-            populatedOrder.totalPrice,
-
-        platformCharge:
-            populatedOrder.platformCharge,
-
-        deliveryCharge:
-            populatedOrder.deliveryCharge,
-
-        finalAmount:
-            populatedOrder.finalAmount,
-
-        paymentMethod:
-            populatedOrder.paymentMethod,
-
-        paymentStatus:
-            populatedOrder.paymentStatus,
-
-        orderStatus:
-            populatedOrder.orderStatus,
-
-        expectedDelivery:
-            populatedOrder.expectedDelivery,
-
-        createdAt:
-            populatedOrder.createdAt
-
-    };
-    for (const item of cart.items) {
-    await Product.findByIdAndUpdate(
-        item.product._id,
-        {
-            $inc: {
-                stock: -item.quantity
-            }
+        // UPDATE STOCK
+        for (const item of cart.items) {
+            await Product.findByIdAndUpdate(
+                item.product._id,
+                {
+                    $inc: { stock: -item.quantity }
+                },
+                { session }
+            );
         }
-    );
-}
 
-    return res.status(201).json(
+        // CLEAR CART
+        await Cart.findOneAndUpdate(
+            { owner: req.user._id },
+            { $set: { items: [] } },
+            { session }
+        );
 
-        new apiResponse(
-            201,
-            response,
-            "Order placed successfully"
-        )
-    );
+        await session.commitTransaction();
+        session.endSession();
+
+        const populatedOrder = await Order.findById(order._id)
+            .populate("items.product");
+
+        return res.status(201).json(
+            new apiResponse(
+                201,
+                populatedOrder,
+                "Order placed successfully"
+            )
+        );
+
+    } catch (error) {
+
+        await session.abortTransaction();
+        session.endSession();
+
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
 });
 
 // Get current user's orders
@@ -305,7 +223,7 @@ export const getOrderById = asyncHandler(async (req, res) => {
     const { orderId } = req.params;
 
     // Find order and ensure it belongs to logged-in customer
-    const order = await Order.findOne({ _id: orderId, customer: req.user._id });
+    const order = await Order.findOne({ _id: orderId, customer: req.user._id }).populate("items.product")
 
     if (!order) {
         throw new apiError(404, "Order not found");
@@ -336,6 +254,55 @@ export const getOrderById = asyncHandler(async (req, res) => {
         new apiResponse(200, response, "Order fetched successfully")
     );
 });
+
+
+export const addAddress = asyncHandler(async(req, res) => {
+    const user = await Customer.findById(req.user._id);
+
+    const newAddress = req.body;
+
+    // first address auto default
+    if(user.addresses.length === 0){
+        newAddress.isDefault = true;
+    }
+
+    // if new default -> remove old default
+    if(newAddress.isDefault){
+        user.addresses.forEach(a => a.isDefault= false);
+    }
+    
+    user.addresses.push(newAddress);
+
+    await user.save()
+
+    res.status(200).json(
+        new apiResponse(200, {addAddress: user.addresses}, "Address added successfully")
+    )
+})
+
+
+export const getAddresses = asyncHandler(async(req, res) => {
+    const user = await Customer.findById(req.user._id);
+
+    res.status(200).json(
+        new apiResponse(200, {addresses: user.addresses}, "address fetched")
+    )
+})
+
+export const setDefaultAddress = asyncHandler(async(req, res) => {
+    const user = await Customer.findById(req.user._id);
+
+  user.addresses.forEach(addr => {
+    addr.isDefault = addr._id.toString() === req.params.id;
+  });
+
+  await user.save();
+
+  res.json({
+    success: true,
+    addresses: user.addresses
+  });
+})
 
 // Admin: All Orders
 export const getAllOrders = asyncHandler(async (req, res) => {

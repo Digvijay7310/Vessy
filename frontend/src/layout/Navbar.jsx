@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logout from "../components/customers/Logout"
 
 export default function Navbar({ mobile = false }) {
 
@@ -7,6 +8,10 @@ export default function Navbar({ mobile = false }) {
     { name: "Shop", path: "/products" },
     { name: "Categories", path: "/categories" },
     { name: "Orders", path: "/my-orders" },
+    { name: "Cart", path: "/my-cart" },
+    {name: "login", path: "/customer/login"},
+    { name: "My  Profile", path: "/customer/profile"},
+    
   ];
 
   return (
@@ -33,9 +38,9 @@ export default function Navbar({ mobile = false }) {
         >
           {link.name}
         </Link>
-
+        
       ))}
-
+      <Logout />
     </nav>
   );
 }

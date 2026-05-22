@@ -27,7 +27,7 @@ export default function CategoryWithSubCategory() {
   }, []);
 
   return (
-    <div className="px-4 md:px-10 lg:px-20 py-6 space-y-10">
+    <div className="px-1 md:px-10 lg:px-20 py-6 space-y-10">
 
       {/* LOADING SKELETON */}
       {loading && (

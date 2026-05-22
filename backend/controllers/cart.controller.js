@@ -93,12 +93,35 @@ export const removeFromCart = asyncHandler(async (req, res) => {
 
 
 export const getCart = asyncHandler(async (req, res) => {
-    const cart = await Cart.findOne({ owner: req.user._id })
-        .populate("items.product")
+
+    const cart = await Cart.findOne({
+        owner: req.user._id
+    }).populate("items.product");
 
     if (!cart) {
-        return res.json({ items: [] })
+        return res.status(200).json({
+            success: true,
+            items: [],
+            totalItems: 0,
+            totalPrice: 0
+        });
     }
 
-    res.json(cart)
-})
+    const totalItems = cart.items.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+    );
+
+    const totalPrice = cart.items.reduce(
+        (acc, item) =>
+            acc + item.quantity * item.product.price,
+        0
+    );
+
+    res.status(200).json({
+        success: true,
+        items: cart.items,
+        totalItems,
+        totalPrice
+    });
+});

@@ -11,6 +11,7 @@ import Logo from "../components/Logo";
 import Searchbar from "../components/Searchbar";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import CartItems from "../components/CartItems"
 
 export default function Header() {
 
@@ -61,14 +62,8 @@ export default function Header() {
               <User onClick={() => navigate("/customer/profile")} size={24} />
             </button>
 
-            {/* Cart */}
-            <button className="relative hover:text-emerald-600 transition">
-              <ShoppingCart size={24} />
-
-              <span className="absolute -top-2 -right-2 bg-emerald-600 text-white text-[10px] rounded-full px-1.5 py-0.5">
-                2
-              </span>
-            </button>
+            
+            <CartItems />
 
           </div>
         </div>
