@@ -45,7 +45,7 @@ export default function CustomerLogin() {
       </div>
 
       {/* RIGHT SIDE LOGIN */}
-      <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50 px-6">
+      <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50">
 
         <form
           onSubmit={handleLogin}

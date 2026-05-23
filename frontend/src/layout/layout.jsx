@@ -1,23 +1,25 @@
 import { Outlet } from "react-router-dom";
-import Footer from "./Footer";
 import Header from "./Header";
+import Footer from "./Footer";
 import { CartProvider } from "../context/CartContext";
 
 export default function Layout() {
   return (
-    <>
     <CartProvider>
-      {/* HEADER */}
-      <Header />
+      <div className="min-h-screen flex flex-col bg-white">
+        
+        {/* HEADER */}
+        <Header />
 
-      {/* MAIN CONTENT */}
-      <main className="w-full max-w-7xl mx-auto px-1 py-6">
-        <Outlet />
-      </main>
+        {/* MAIN */}
+        <main className="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-4 py-4">
+          <Outlet />
+        </main>
 
-      {/* FOOTER */}
-      <Footer />
+        {/* FOOTER */}
+        <Footer />
+        
+      </div>
     </CartProvider>
-    </>
   );
 }

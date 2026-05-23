@@ -56,7 +56,7 @@ export default function SubCategoriesProduct() {
 
       {/* LOADING SKELETON */}
       {loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {[...Array(10)].map((_, i) => (
             <div
               key={i}
@@ -77,7 +77,7 @@ export default function SubCategoriesProduct() {
 
       {/* PRODUCT GRID */}
       {!loading && products.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
           {products.map((product) => (
             <div
               key={product._id}

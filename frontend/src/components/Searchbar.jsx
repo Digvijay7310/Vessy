@@ -1,35 +1,39 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BiSearch, BiX } from "react-icons/bi";
+import { Search, X } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
 
 export default function Searchbar() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const searchProducts = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
 
-    if (!search.trim() || loading) return;
+    const query = search.trim();
+
+    if (!query || loading) return;
 
     try {
       setLoading(true);
 
-      const res = await axiosInstance.get("/products/", {
-        params: { search },
+      const { data } = await axiosInstance.get("/products", {
+        params: { search: query },
       });
 
       navigate("/search", {
         state: {
-          products: res.data.products,
-          total: res.data.totalProducts,
+          products: data.products,
+          total: data.totalProducts,
+          query,
         },
       });
 
       setSearch("");
     } catch (error) {
-      console.log("Error in search:", error);
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -37,22 +41,40 @@ export default function Searchbar() {
 
   return (
     <form
-      onSubmit={searchProducts}
+      onSubmit={handleSearch}
       className="
-        flex items-center w-full
-        bg-white rounded-full
-        shadow-sm border
-        focus-within:border-emerald-600
+        w-full max-w-xl
+        h-12
+        flex items-center
+        bg-white
+        border border-gray-200
+        rounded-lg
         overflow-hidden
+        transition
+        focus-within:border-emerald-500
+        focus-within:ring-2
+        focus-within:ring-emerald-100
       "
     >
+      {/* SEARCH ICON */}
+      <div className="px-3 text-gray-400">
+        <Search size={18} strokeWidth={2.2} />
+      </div>
 
       {/* INPUT */}
       <input
+        type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search products..."
-        className="flex-1 px-4 py-2 text-sm outline-none"
+        placeholder="Search products"
+        className="
+          flex-1
+          h-full
+          text-sm
+          text-gray-700
+          placeholder:text-gray-400
+          outline-none
+        "
       />
 
       {/* CLEAR BUTTON */}
@@ -60,9 +82,14 @@ export default function Searchbar() {
         <button
           type="button"
           onClick={() => setSearch("")}
-          className="px-2 text-gray-400 hover:text-gray-600"
+          className="
+            px-2
+            text-gray-400
+            hover:text-gray-700
+            transition
+          "
         >
-          <BiX size={20} />
+          <X size={18} strokeWidth={2.2} />
         </button>
       )}
 
@@ -71,20 +98,23 @@ export default function Searchbar() {
         type="submit"
         disabled={loading}
         className="
-          bg-green-600 hover:bg-green-700
-          px-4 py-2 text-white
-          flex items-center justify-center
-          disabled:opacity-60 disabled:cursor-not-allowed
+          h-full
+          px-2
+          bg-emerald-600
+          hover:bg-emerald-700
+          text-white
+          text-sm
+          font-medium
           transition
+          disabled:opacity-70
         "
       >
         {loading ? (
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
         ) : (
-          <BiSearch size={18} />
+          <p className="text-xs">Search</p>
         )}
       </button>
-
     </form>
   );
 }

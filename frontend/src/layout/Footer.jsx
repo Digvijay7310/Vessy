@@ -1,88 +1,38 @@
-import React, { useMemo } from "react";
+import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 export default function Footer() {
-
-  const year = useMemo(() => new Date().getFullYear(), []);
-
-  const categories = [
-    "Grocery", "Electronics", "Fashions", "Home & Lifestyle",
-    "Premium Fruits", "Books", "Furniture"
-  ];
-
-  const popular = [
-    "Biscuits & Packaged Foods", "Fruits & Vegetables",
-    "Cooking Essentials", "Dairy & Bakery",
-    "Personal Care", "Beauty", "Home",
-    "Baby Care", "Stationery"
-  ];
-
-  const customers = [
-    "My Account", "My Orders", "Wishlist",
-    "Delivery Addresses", "Wallet"
-  ];
-
-  const helps = [
-    "About Us", "FAQ", "Terms & Conditions",
-    "Privacy Policy", "Return Policy", "Shipping Policy"
-  ];
-
   return (
-    <footer className="bg-gray-100 border-t mt-auto">
+    <footer className="border-t bg-white">
+      
+      {/* TOP STRIP */}
+      <div className="max-w-7xl mx-auto px-4 h-12 flex items-center justify-between">
+        
+        {/* LEFT */}
+        <p className="text-sm text-gray-500">
+          © 2026 Vessy
+        </p>
 
-      {/* TOP GRID */}
-      {/* <div className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
-
-        <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Categories</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            {categories.map((item, i) => (
-              <li key={i} className="hover:text-green-600 cursor-pointer transition">
-                {item}
-              </li>
-            ))}
-          </ul>
+        {/* CENTER LINKS */}
+        <div className="hidden md:flex items-center gap-4 text-xs text-gray-500">
+          <span className="hover:text-black cursor-pointer">About</span>
+          <span className="hover:text-black cursor-pointer">Privacy</span>
+          <span className="hover:text-black cursor-pointer">Terms</span>
+          <span className="hover:text-black cursor-pointer">Support</span>
         </div>
 
-        <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Popular</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            {popular.map((item, i) => (
-              <li key={i} className="hover:text-green-600 cursor-pointer transition">
-                {item}
-              </li>
-            ))}
-          </ul>
+        {/* RIGHT SOCIAL */}
+        <div className="flex items-center gap-2">
+          {[FaInstagram, FaTwitter, FaYoutube].map((Icon, i) => (
+            <span
+              key={i}
+              className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-black cursor-pointer"
+            >
+              <Icon size={14} />
+            </span>
+          ))}
         </div>
 
-        <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Account</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            {customers.map((item, i) => (
-              <li key={i} className="hover:text-green-600 cursor-pointer transition">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Help & Support</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            {helps.map((item, i) => (
-              <li key={i} className="hover:text-green-600 cursor-pointer transition">
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-      </div> */}
-
-      {/* BOTTOM BAR */}
-      <div className="border-t py-4 text-center text-sm text-gray-500">
-        © {year} All rights reserved.
       </div>
-
     </footer>
   );
 }
