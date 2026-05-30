@@ -27,7 +27,7 @@ export const verifyAdmin = asyncHandler(async (req, res, next) => {
             process.env.ACCESS_TOKEN_SECRET
         );
 
-        const customer = await Admin
+        const admin = await Admin
             .findById(decoded.id)
             .select("-password -refreshToken");
 

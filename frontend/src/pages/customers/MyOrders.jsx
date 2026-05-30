@@ -3,311 +3,232 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 
 export default function MyOrders() {
-
     const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-
         const fetchOrders = async () => {
-
             try {
+                setLoading(true);
 
-                const res =
-                    await axiosInstance.get(
-                        "/orders/my-orders"
-                    );
-
-                setOrders(res.data.data);
+                const res = await axiosInstance.get("/orders/my-orders");
+                setOrders(res.data?.data || []);
 
             } catch (err) {
-
-                console.error(
-                    "Error fetching orders",
-                    err
-                );
+                setError(err.response?.data?.message || "Failed to load orders");
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchOrders();
-
     }, []);
 
     const formatPrice = (price) =>
-        new Intl.NumberFormat(
-            "en-IN",
-            {
-                style: "currency",
-                currency: "INR",
-                maximumFractionDigits: 0
-            }
-        ).format(price);
+        new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0,
+        }).format(price);
 
-    if (orders.length === 0) {
+    const getImage = (img) => {
+        if (!img) return "https://via.placeholder.com/100";
+        if (typeof img === "string") return img;
+        if (Array.isArray(img) && img.length > 0) return img[0];
+        return "https://via.placeholder.com/100";
+    };
 
+    // ================= LOADING =================
+    if (loading) {
         return (
+            <div className="h-[70vh] flex items-center justify-center">
+                <div className="animate-pulse text-gray-500 text-lg">
+                    Loading your orders...
+                </div>
+            </div>
+        );
+    }
 
-            <div className="flex flex-col items-center justify-center mt-24">
+    // ================= ERROR =================
+    if (error) {
+        return (
+            <div className="h-[70vh] flex items-center justify-center text-red-500 font-medium">
+                {error}
+            </div>
+        );
+    }
 
+    // ================= EMPTY =================
+    if (!orders.length) {
+        return (
+            <div className="h-[70vh] flex flex-col items-center justify-center text-gray-500">
                 <img
                     src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
-                    alt="empty"
                     className="w-28 opacity-70"
                 />
-
-                <p className="mt-4 text-lg font-semibold text-gray-700">
+                <p className="mt-4 text-lg font-semibold">
                     No Orders Yet
                 </p>
-
-                <p className="text-sm text-gray-500">
-                    Your placed orders will appear here
+                <p className="text-sm">
+                    Start shopping to see your orders here
                 </p>
-
             </div>
         );
     }
 
     return (
-
-        <div className="max-w-5xl mx-auto px-3 md:px-6 py-5">
+        <div className="max-w-6xl mx-auto px-4 py-6">
 
             {/* HEADER */}
-
-            <div className="flex items-center justify-between mb-6">
-
-                <h2 className="text-2xl md:text-3xl font-bold">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold text-gray-900">
                     My Orders
-                </h2>
-
-                <span className="text-sm text-gray-500">
-                    {orders.length} Orders
-                </span>
-
+                </h1>
+                <p className="text-gray-500 text-sm mt-1">
+                    Track and manage all your purchases
+                </p>
             </div>
 
-            {/* ORDERS */}
+            {/* ORDERS GRID */}
+            <div className="space-y-6">
 
-            <div className="flex flex-col gap-5">
+                {orders.map((order) => (
+                    <div
+                        key={order.orderId}
+                        onClick={() =>
+                            navigate(`/order/${order.orderId}`)
+                        }
+                        className="
+                            bg-white
+                            border
+                            rounded-2xl
+                            shadow-sm
+                            hover:shadow-xl
+                            transition-all
+                            duration-300
+                            cursor-pointer
+                            overflow-hidden
+                        "
+                    >
 
-                {
-                    orders.map(order => (
+                        {/* TOP BAR */}
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between px-5 py-4 bg-gray-50 border-b">
 
-                        <div
-                            key={order.orderId}
-                            onClick={() =>
-                                navigate(
-                                    `/order/${order.orderId}`
-                                )
-                            }
-                            className="
-                                bg-white
-                                border
-                                rounded-2xl
-                                p-4
-                                shadow-sm
-                                hover:shadow-md
-                                transition
-                                cursor-pointer
-                            "
-                        >
-
-                            {/* TOP */}
-
-                            <div className="flex justify-between items-start gap-3">
-
-                                <div>
-
-                                    <p className="text-xs text-gray-500">
-                                        Order ID
-                                    </p>
-
-                                    <p className="font-semibold text-sm md:text-base text-blue-600 break-all">
-                                        {order.orderId}
-                                    </p>
-
-                                </div>
-
-                                <div className="text-right">
-
-                                    <p className="text-xs text-gray-500">
-                                        Ordered On
-                                    </p>
-
-                                    <p className="text-sm font-medium">
-                                        {
-                                            new Date(
-                                                order.createdAt
-                                            ).toLocaleDateString()
-                                        }
-                                    </p>
-
-                                </div>
-
+                            <div>
+                                <p className="text-xs text-gray-500">
+                                    ORDER ID
+                                </p>
+                                <p className="text-sm font-semibold text-blue-600 break-all">
+                                    {order.orderId}
+                                </p>
                             </div>
+
+                            <div className="mt-2 md:mt-0 text-sm text-gray-600">
+                                Ordered on{" "}
+                                <span className="font-medium text-gray-900">
+                                    {new Date(order.createdAt).toDateString()}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        {/* BODY */}
+                        <div className="p-5 flex flex-col md:flex-row gap-5">
 
                             {/* IMAGES */}
+                            <div className="flex gap-2 overflow-x-auto">
 
-                            <div className="flex items-center gap-2 mt-5 overflow-x-auto pb-2">
+                                {order.items.slice(0, 3).map((item, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="
+                                            w-20 h-20
+                                            rounded-xl
+                                            border
+                                            bg-gray-50
+                                            flex
+                                            items-center
+                                            justify-center
+                                            shrink-0
+                                            hover:scale-105
+                                            transition
+                                        "
+                                    >
+                                        <img
+                                            src={getImage(item.image)}
+                                            alt={item.name}
+                                            className="w-full h-full object-contain p-1"
+                                        />
+                                    </div>
+                                ))}
 
-                                {
-                                    order.items.map((item, idx) => (
-
-                                        <div
-                                            key={idx}
-                                            className="
-                                                min-w-[65px]
-                                                h-[65px]
-                                                rounded-xl
-                                                border
-                                                bg-gray-50
-                                                p-1
-                                                flex
-                                                items-center
-                                                justify-center
-                                            "
-                                        >
-
-                                            <img
-                                                src={
-                                                    item.image?.[0] ||
-                                                    "https://via.placeholder.com/80"
-                                                }
-                                                alt={item.name}
-                                                className="
-                                                    w-full
-                                                    h-full
-                                                    object-contain
-                                                    rounded-lg
-                                                "
-                                            />
-
-                                        </div>
-                                    ))
-                                }
+                                {order.items.length > 3 && (
+                                    <div className="w-20 h-20 flex items-center justify-center text-sm text-gray-500 border rounded-xl bg-gray-100">
+                                        +{order.items.length - 3}
+                                    </div>
+                                )}
 
                             </div>
 
-                            {/* PRODUCT NAMES */}
+                            {/* INFO */}
+                            <div className="flex-1">
 
-                            <div className="mt-4">
-
-                                <p className="font-semibold text-gray-800 line-clamp-1">
-
-                                    {
-                                        order.items
-                                            .map(item => item.name)
-                                            .join(", ")
-                                    }
-
+                                <p className="font-semibold text-gray-900 line-clamp-1">
+                                    {order.items.map(i => i.name).join(", ")}
                                 </p>
 
                                 <p className="text-sm text-gray-500 mt-1">
+                                    {order.items.length} Items Purchased
+                                </p>
 
-                                    {
-                                        order.items.length
-                                    } Items
+                                {/* PRICE */}
+                                <div className="mt-4 text-xl font-bold text-green-600">
+                                    {formatPrice(order.finalAmount)}
+                                </div>
 
+                            </div>
+
+                            {/* STATUS */}
+                            <div className="flex flex-col gap-2 md:items-end">
+
+                                <span className={`
+                                    px-3 py-1 rounded-full text-xs font-semibold
+                                    ${order.paymentStatus === "Paid"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-yellow-100 text-yellow-700"
+                                    }
+                                `}>
+                                    {order.paymentStatus}
+                                </span>
+
+                                <span className={`
+                                    px-3 py-1 rounded-full text-xs font-semibold
+                                    ${order.orderStatus === "Delivered"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-blue-100 text-blue-700"
+                                    }
+                                `}>
+                                    {order.orderStatus}
+                                </span>
+
+                                <p className="text-xs text-gray-400 mt-2">
+                                    Expected:{" "}
+                                    {order.expectedDelivery
+                                        ? new Date(order.expectedDelivery).toDateString()
+                                        : "N/A"}
                                 </p>
 
                             </div>
 
-                            {/* PRICE + STATUS */}
-
-                            <div className="flex flex-wrap items-center justify-between gap-3 mt-5">
-
-                                {/* PRICE */}
-
-                                <div>
-
-                                    <p className="text-xs text-gray-500">
-                                        Total Amount
-                                    </p>
-
-                                    <p className="text-lg font-bold text-green-600">
-                                        {
-                                            formatPrice(
-                                                order.finalAmount
-                                            )
-                                        }
-                                    </p>
-
-                                </div>
-
-                                {/* STATUS */}
-
-                                <div className="flex gap-2 flex-wrap">
-
-                                    <span
-                                        className={`
-                                            px-3 py-1 rounded-full
-                                            text-xs font-semibold
-                                            ${
-                                                order.paymentStatus === "Paid"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : "bg-yellow-100 text-yellow-700"
-                                            }
-                                        `}
-                                    >
-
-                                        {order.paymentStatus}
-
-                                    </span>
-
-                                    <span
-                                        className={`
-                                            px-3 py-1 rounded-full
-                                            text-xs font-semibold
-                                            ${
-                                                order.orderStatus === "Delivered"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : "bg-blue-100 text-blue-700"
-                                            }
-                                        `}
-                                    >
-
-                                        {order.orderStatus}
-
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                            {/* DELIVERY */}
-
-                            {
-                                order.expectedDelivery && (
-
-                                    <div className="mt-4 border-t pt-3">
-
-                                        <p className="text-sm text-gray-600">
-
-                                            Expected Delivery:
-                                            {" "}
-
-                                            <span className="font-semibold">
-
-                                                {
-                                                    new Date(
-                                                        order.expectedDelivery
-                                                    ).toDateString()
-                                                }
-
-                                            </span>
-
-                                        </p>
-
-                                    </div>
-                                )
-                            }
-
                         </div>
-                    ))
-                }
+
+                    </div>
+                ))}
 
             </div>
-
         </div>
     );
 }

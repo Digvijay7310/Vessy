@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 
@@ -17,6 +17,7 @@ import SidebarItem from "../../components/admins/SidebarItem";
 export default function Sidebar({ isOpen, setIsOpen }) {
 
   const navigate = useNavigate();
+
 
   const routes = [
     {
@@ -51,7 +52,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
       await axiosInstance.post("/admins/logout");
 
-      navigate("/login");
+      navigate("/admins/login");
 
     } catch (error) {
       console.log(error);

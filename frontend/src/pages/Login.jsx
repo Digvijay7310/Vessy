@@ -17,7 +17,7 @@ export default function Login() {
       setLoading(true);
       setError(null);
 
-      await axiosInstance.post("/admins/login", { email, password });
+      await axiosInstance.post("/admins/login", { email, password });      
 
       navigate("/admin/dashboard");
     } catch (err) {

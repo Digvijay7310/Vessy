@@ -18,15 +18,15 @@ export default function OrderDetail() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await axiosInstance.get(`/orders/${id}`);
+        // ✅ FIXED ROUTE
+        const res = await axiosInstance.get(`/orders/order/${id}`);
 
-        // safer fallback
-        const data = res.data.data || res.data.order || res.data;
-
-        setOrder(data);
+        // ✅ DIRECT DATA
+        setOrder(res.data.data);
 
       } catch (err) {
         console.error("Error fetching order", err);
+        setOrder(null);
       } finally {
         setLoading(false);
       }
@@ -55,79 +55,52 @@ export default function OrderDetail() {
     <div className="max-w-5xl mx-auto p-6 space-y-6">
 
       {/* BACK */}
-      <Link
-        to="/my-orders"
-        className="text-sm text-emerald-600 hover:underline"
-      >
+      <Link to="/my-orders" className="text-sm text-emerald-600 hover:underline">
         ← Back to Orders
       </Link>
 
-      {/* HEADER CARD */}
+      {/* HEADER */}
       <div className="bg-white border rounded-xl p-5 shadow-sm">
-
         <div className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold">Order Details</h2>
 
-          <h2 className="text-xl font-semibold">
-            Order Details
-          </h2>
-
-          {/* STATUS BADGE */}
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-            order.orderStatus === "Delivered"
-              ? "bg-green-100 text-green-700"
-              : order.orderStatus === "Cancelled"
-              ? "bg-red-100 text-red-700"
-              : "bg-yellow-100 text-yellow-700"
-          }`}>
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
             {order.orderStatus}
           </span>
-
         </div>
 
         <p className="text-sm text-gray-500 mt-2">
-          Order ID: {order._id}
+          Order ID: {order.orderId || order._id}
         </p>
-
-        <p className="text-sm text-gray-500">
-          Placed on: {new Date(order.createdAt).toLocaleString()}
-        </p>
-
       </div>
 
       {/* ITEMS */}
       <div className="bg-white border rounded-xl p-5 space-y-4">
 
         {order.items?.map((item) => (
-          <div
-            key={item._id}
-            className="flex items-center gap-4 border-b pb-4 last:border-none"
-          >
+          <div key={item._id} className="flex items-center gap-4 border-b pb-4 last:border-none">
 
-            {/* IMAGE */}
+            {/* IMAGE FIX */}
             <img
-              src={item.product?.images?.[0] || "/placeholder.png"}
-              alt={item.product?.name || "product"}
-              className="w-20 h-20 object-cover rounded-lg bg-gray-100"
+              src={
+                Array.isArray(item.product?.image)
+                  ? item.product.image[0]
+                  : item.product?.image || "https://via.placeholder.com/80"
+              }
+              alt={item.product?.name}
+              className="w-20 h-20 object-contain rounded-lg bg-gray-100"
             />
 
-            {/* INFO */}
             <div className="flex-1">
-
               <p className="font-medium">
                 {item.product?.name}
-              </p>
-
-              <p className="text-sm text-gray-500 line-clamp-1">
-                {item.product?.description}
               </p>
 
               <p className="text-emerald-600 font-semibold text-sm mt-1">
                 {formatPrice(item.price)} × {item.quantity}
               </p>
-
             </div>
 
-            {/* TOTAL */}
             <div className="font-semibold">
               {formatPrice(item.price * item.quantity)}
             </div>
@@ -151,7 +124,7 @@ export default function OrderDetail() {
         </div>
 
         <div className="flex justify-between">
-          <span>Delivery Charge</span>
+          <span>Delivery</span>
           <span>{formatPrice(order.deliveryCharge)}</span>
         </div>
 
@@ -160,10 +133,6 @@ export default function OrderDetail() {
         <div className="flex justify-between font-bold text-lg text-emerald-600">
           <span>Total</span>
           <span>{formatPrice(order.finalAmount)}</span>
-        </div>
-
-        <div className="text-sm text-gray-600 pt-2">
-          Payment: {order.paymentMethod} • {order.paymentStatus}
         </div>
 
       </div>

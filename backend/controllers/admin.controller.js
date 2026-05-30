@@ -29,13 +29,13 @@ export const adminRegistration = asyncHandler(async (req, res) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax",
+        sameSite: "none",
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
-        sameSite: "lax",
+        sameSite: "none",
     });
 
     res.status(201).json({
@@ -70,12 +70,14 @@ export const adminLogin = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 24 * 60 * 60 * 1000
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     return res.status(200).json({
