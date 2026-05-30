@@ -28,20 +28,44 @@ const customerSchema = new mongoose.Schema({
         enum: ["admin", "users"],
         default: "users",
     },
-    addresses: [
-        {
-            name: String,
-            phone: String,
-            street: String,
-            city: String,
-            state: String,
-            pincode: String,
-            isDefault: {
-                type: Boolean,
-                default: false
-            }
-        }
-    ],
+    shippingAddresses: [
+  {
+    name: {
+      type: String,
+      required: true
+    },
+
+    phone: {
+      type: String,
+      required: true
+    },
+
+    street: {
+      type: String,
+      required: true
+    },
+
+    city: {
+      type: String,
+      required: true
+    },
+
+    state: {
+      type: String,
+      required: true
+    },
+
+    pincode: {
+      type: String,
+      required: true
+    },
+
+    isDefault: {
+      type: Boolean,
+      default: false
+    }
+  }
+],
     refreshToken: {
         type: String,
     },

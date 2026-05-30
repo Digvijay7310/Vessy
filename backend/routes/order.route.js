@@ -1,22 +1,43 @@
-import express from "express"
-import { verifyCustomer } from "../middlewares/isUser.middleware.js"
-import { addAddress, checkoutOrder, getAddresses, getAllOrders, getMyOrders, getOrderById, previewCheckout, setDefaultAddress } from "../controllers/order.controller.js"
-import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js"
+import express from "express";
+import { verifyCustomer } from "../middlewares/isUser.middleware.js";
+
+import {
+    addAddress,
+    checkoutOrder,
+    getAddresses,
+    getAllOrders,
+    getMyOrders,
+    getOrderById,
+    previewCheckout,
+    setDefaultAddress
+} from "../controllers/order.controller.js";
+import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js";
+
+const router = express.Router();
 
 
-const router = express.Router()
-
-// Customers
-router.get("/preview-checkout", verifyCustomer, previewCheckout)
-router.post("/checkout", verifyCustomer, checkoutOrder)
-router.get("/my-orders", verifyCustomer, getMyOrders)
-router.get("/:orderId", verifyCustomer, getOrderById)
-router.get('/', verifyCustomer, getAddresses)
-router.post('/', verifyCustomer, addAddress)
-router.patch('/:id', verifyCustomer, setDefaultAddress)
+// ========================
+// CHECKOUT
+// ========================
+router.get("/preview-checkout", verifyCustomer, previewCheckout);
+router.post("/checkout", verifyCustomer, checkoutOrder);
 
 
-// Admin
-router.get("/", verifyAdmin, isAdmin, getAllOrders)
+// ========================
+// ORDERS (CUSTOMER)
+// ========================
+router.get("/my-orders", verifyCustomer, getMyOrders);
+router.get("/order/:orderId", verifyCustomer, getOrderById);
 
-export default router
+
+// ========================
+// ADDRESSES
+// ========================
+router.get("/addresses", verifyCustomer, getAddresses);
+router.post("/addresses", verifyCustomer, addAddress);
+router.patch("/addresses/:id", verifyCustomer, setDefaultAddress);
+
+
+router.get("/orders", verifyAdmin, isAdmin, getAllOrders)
+
+export default router;

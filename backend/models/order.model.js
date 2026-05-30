@@ -1,16 +1,23 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-
-    // CUSTOMER
-
     customer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Customer",
         required: true
     },
-
-    // ORDER ITEMS
+    shippingAddress: [{
+        name: String,
+        phone: String,
+        street: String,
+        city: String,
+        state: String,
+        pincode: String,
+        isDefault: {
+            type: Boolean,
+            default: false
+        }
+    }],
 
     items: [
         {
