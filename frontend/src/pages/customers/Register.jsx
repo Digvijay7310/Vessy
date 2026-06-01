@@ -30,7 +30,7 @@ export default function Register() {
 
       await axiosInstance.post("/customer/register", form);
 
-      navigate("/login");
+      navigate("/customer/login");
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {

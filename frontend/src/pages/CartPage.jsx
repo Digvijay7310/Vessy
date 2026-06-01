@@ -55,7 +55,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-5 pb-28">
+    <div className="max-w-4xl mx-auto px-2 py-5 pb-28">
 
       {/* HEADER */}
       <div className="flex items-center justify-between mb-5">
@@ -69,10 +69,6 @@ export default function CartPage() {
             {cart.length} Items
           </p>
         </div>
-
-        <div className="text-green-600 font-semibold">
-          Free Delivery
-        </div>
       </div>
 
       {/* ITEMS */}
@@ -83,10 +79,8 @@ export default function CartPage() {
           <div
             key={item.product._id}
             className="
-              flex gap-4
-              bg-white border
-              rounded-2xl p-4
-              shadow-sm
+              flex gap-4 bg-gray-50
+              rounded-2xl p-2
             "
           >
 
@@ -97,7 +91,6 @@ export default function CartPage() {
               className="
                 h-24 w-24
                 object-contain
-                bg-gray-100
                 rounded-xl p-2
               "
             />
@@ -151,7 +144,7 @@ export default function CartPage() {
         className="
           fixed bottom-0 left-0 right-0
           bg-white border-t
-          px-4 py-4
+          px-1 py-4
         "
       >
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import ProductList from "../components/ProductList";
+import ProductList from "./ProductList"
 
 export default function SubCategoriesProduct() {
   const { id } = useParams();
@@ -81,7 +81,7 @@ export default function SubCategoriesProduct() {
           {products.map((product) => (
             <div
               key={product._id}
-              className="transition hover:-translate-y-1 duration-200"
+              className=""
             >
               <ProductList product={product} />
             </div>

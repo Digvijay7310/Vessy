@@ -13,11 +13,11 @@ export default function ProductDecreaseButton({ productId }) {
       }}
       className="
         w-9 h-9 flex items-center justify-center
-        rounded-full bg-gray-100 hover:bg-gray-200
+        rounded-full
         active:scale-90 transition
       "
     >
-      <AiFillMinusCircle className="text-gray-700 text-xl" />
+      <AiFillMinusCircle className="text-green-500 text-xl" />
     </button>
   );
 }

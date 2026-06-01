@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
-import ProductList from "../components/ProductList";
+import ProductList from "./ProductList";
 import OtherProducts from "../components/OtherProducts"
 import OtherCategoryProducts from "../components/OtherCategoryProducts"
 import AddCart from "../components/AddCart";

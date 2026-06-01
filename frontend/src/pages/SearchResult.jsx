@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AddCart from "../components/AddCart";
-import ProductList from "../components/ProductList";
+import ProductList from "./ProductList";
 
 export default function SearchResult() {
   const location = useLocation();
