@@ -1,16 +1,56 @@
-export default function StatCard({ label, value, color = "gray" }) {
+import {
+  ShoppingBag,
+  CheckCircle2,
+  Wallet,
+  ShoppingCart,
+} from "lucide-react";
 
-  const colors = {
-    gray: "bg-gray-100 text-gray-700",
-    green: "bg-emerald-100 text-emerald-700",
-    blue: "bg-blue-100 text-blue-700",
-    red: "bg-red-100 text-red-700",
+export default function StatCard({ label, value }) {
+  const config = {
+    "Total Orders": {
+      icon: ShoppingBag,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+    },
+    Delivered: {
+      icon: CheckCircle2,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+    },
+    "Total Spent": {
+      icon: Wallet,
+      color: "text-violet-600",
+      bg: "bg-violet-50",
+    },
+    "Cart Items": {
+      icon: ShoppingCart,
+      color: "text-orange-600",
+      bg: "bg-orange-50",
+    },
   };
 
+  const current = config[label];
+  const Icon = current?.icon;
+
   return (
-    <div className={`p-5 rounded-xl shadow-sm border ${colors[color]}`}>
-      <p className="text-sm opacity-70">{label}</p>
-      <h3 className="text-xl font-semibold mt-1">{value}</h3>
+    <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+      <div className="flex items-center flex-col gap-3">
+        <div
+          className={`h-11 w-11 rounded-xl flex items-center justify-center ${current?.bg}`}
+        >
+          <Icon size={20} className={current?.color} />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-[11px] text-gray-500 font-medium">
+            {label}
+          </p>
+
+          <h3 className="text-xl text-center font-bold text-gray-900 leading-none mt-1">
+            {value}
+          </h3>
+        </div>
+      </div>
     </div>
   );
 }

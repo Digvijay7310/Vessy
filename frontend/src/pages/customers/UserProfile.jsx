@@ -4,6 +4,8 @@ import axiosInstance from "../../utils/axiosInstance";
 import ProfileHeader from "../../components/customers/ProfileHeader";
 import StatCard from "../../components/customers/StatCard";
 import OrderCard from "../../components/customers/OrderCard";
+import AddressCard from "../../components/customers/AddressCard";
+import OrderCards from "../../components/customers/OrderCards";
 
 export default function UserProfile() {
   const [data, setData] = useState(null);
@@ -13,6 +15,7 @@ export default function UserProfile() {
     try {
       const res = await axiosInstance.get("/customer/me");
       setData(res.data);
+      // console.log(res.data)
     } catch (error) {
       console.log("Error fetching profile:", error);
     } finally {
@@ -48,45 +51,52 @@ export default function UserProfile() {
         <ProfileHeader user={data.customer} />
       </div>
 
+      {/* Address */}
+      <AddressCard address={data.customer.shippingAddresses[0]} />
+
       {/* STATS GRID (FIXED RESPONSIVE) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-        <StatCard
-          label="Total Orders"
-          value={data.stats.totalOrders}
-          color="blue"
-        />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+  <StatCard
+    label="Total Orders"
+    value={data.stats.totalOrders}
+  />
 
-        <StatCard
-          label="Delivered"
-          value={data.stats.deliveredOrders}
-          color="green"
-        />
+  <StatCard
+    label="Delivered"
+    value={data.stats.deliveredOrders}
+  />
 
-        <StatCard
-          label="Total Spent"
-          value={`₹${data.stats.totalSpent}`}
-          color="emerald"
-        />
+  <StatCard
+    label="Total Spent"
+    value={`₹${data.stats.totalSpent}`}
+  />
 
-        <StatCard
-          label="Cart Items"
-          value={data.cart.totalItems}
-          color="gray"
-        />
-      </div>
+  <StatCard
+    label="Cart Items"
+    value={data.cart.totalItems}
+  />
+</div>
 
-      {/* RECENT ORDERS (FIXED MOBILE GRID) */}
       <div className="w-full">
-        <h2 className="text-lg sm:text-xl font-semibold mb-4">
-          Recent Orders
-        </h2>
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="text-lg font-semibold text-gray-900">
+      Recent Orders
+    </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-          {data.recentOrders.map((order) => (
-            <OrderCard key={order._id} order={order} />
-          ))}
-        </div>
-      </div>
+    <button className="text-sm font-medium text-gray-600 hover:text-black">
+      View All
+    </button>
+  </div>
+
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    {data.recentOrders.map((order) => (
+      <OrderCard
+        key={order._id}
+        order={order}
+      />
+    ))}
+  </div>
+</div>
 
     </div>
   );

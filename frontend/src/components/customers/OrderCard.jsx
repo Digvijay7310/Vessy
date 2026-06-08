@@ -5,8 +5,7 @@ export default function OrderCard({ order }) {
   const firstItem = order.items?.[0]?.product;
   const totalItems = order.items?.length || 0;
 
-  console.log("firstItem ", firstItem)
-  console.log(totalItems)
+
 
   // 🎨 STATUS COLORS (clean + consistent)
   const getStatusStyle = (status) => {
@@ -57,7 +56,7 @@ export default function OrderCard({ order }) {
 
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-500 truncate">
-                  Order #{order._id?.slice(-6)}
+                  Order #{order._id}
                 </p>
 
                 <p className="font-semibold text-gray-800 mt-1 text-sm sm:text-base">
