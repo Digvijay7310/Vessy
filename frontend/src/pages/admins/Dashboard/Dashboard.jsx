@@ -60,7 +60,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
+    <div className=" md:p-6 bg-gray-100 min-h-screen">
 
       {/* Header */}
       <div className="mb-6">
@@ -74,7 +74,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
 
         {stats.map((item, index) => (
           <StatCard

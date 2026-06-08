@@ -42,7 +42,7 @@ export default function CreateSubCategory({onSuccess}) {
         }
     } 
   return (
-    <form onSubmit={handleCreate} className="flex flex-col p-2 border bg-gray-100 gap-2 mb-3">
+    <form onSubmit={handleCreate} className="flex flex-col p-2 gap-2 mb-3">
         <input type="text"
         placeholder='SubCategory Name'
         value={name}

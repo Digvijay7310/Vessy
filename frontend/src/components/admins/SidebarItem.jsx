@@ -1,12 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-export default function SidebarItem({
-  to,
-  icon,
-  label,
-  onClick,
-}) {
+export default function SidebarItem({ to, icon, label, onClick }) {
   return (
     <NavLink
       to={to}
@@ -21,8 +16,8 @@ export default function SidebarItem({
 
         ${
           isActive
-            ? "bg-red-500 text-white shadow-md"
-            : "text-gray-700 hover:bg-red-50 hover:text-red-500"
+            ? "bg-gradient-to-r from-red-600 to-orange-500 text-white shadow-md"
+            : "text-gray-700 hover:text-white hover:bg-gradient-to-r hover:from-red-500 hover:to-orange-400 backdrop-blur-md"
         }
         `
       }

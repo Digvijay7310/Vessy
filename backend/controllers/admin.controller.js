@@ -132,65 +132,163 @@ export const getAllData = asyncHandler(async (req, res) => {
 // Orders
 
 
-export const AllOrder = asyncHandler(async (req, res) => {
 
-    const orders = await Order.find(); // ✅ get all orders
-    const totalOrders = await Order.countDocuments()
+export const getAllOrderStats = asyncHandler(async (req, res) => {
+  try {
+    const normalize = (status) => status;
 
-    const pendingOrders = await Order.countDocuments({ orderStatus: "Pending" });
-    const confirmedOrders = await Order.countDocuments({ orderStatus: "Confirmed" });
-    const processingOrders = await Order.countDocuments({ orderStatus: "Processing" });
-    const shippedOrders = await Order.countDocuments({ orderStatus: "Shipped" });
-    const outForDelivery = await Order.countDocuments({ orderStatus: "OutForDelivery" });
-    const deliveredOrders = await Order.countDocuments({ orderStatus: "Delivered" });
-    const returnedOrders = await Order.countDocuments({ orderStatus: "Returned" });
+    const stats = {
+      totalOrders: await Order.countDocuments(),
 
-    res.status(200).json(
-        new apiResponse(
-            200,{
-                orders, totalOrders,
-                 pendingOrders, confirmedOrders,
-                processingOrders, shippedOrders, outForDelivery,
-                deliveredOrders, returnedOrders
-            },
-            "Orders with status fetched"
-        )
+      pendingOrders: await Order.countDocuments({ orderStatus: "Pending" }),
+      confirmedOrders: await Order.countDocuments({ orderStatus: "Confirmed" }),
+      processingOrders: await Order.countDocuments({ orderStatus: "Processing" }),
+      shippedOrders: await Order.countDocuments({ orderStatus: "Shipped" }),
+
+      // ✅ FIXED THIS LINE (MOST IMPORTANT)
+      outForDelivery: await Order.countDocuments({
+        orderStatus: "Out for Delivery",
+      }),
+
+      deliveredOrders: await Order.countDocuments({ orderStatus: "Delivered" }),
+      cancelledOrders: await Order.countDocuments({ orderStatus: "Cancelled" }),
+      returnedOrders: await Order.countDocuments({ orderStatus: "Returned" }),
+    };
+
+    return res.status(200).json(
+      new apiResponse(200, stats, "Order stats fetched successfully")
     );
+  } catch (error) {
+    throw new apiError(500, error.message);
+  }
 });
 
 export const getOrdersByStatus = asyncHandler(async (req, res) => {
+  try {
+    let { status } = req.params;
 
-    try {
+    // 1. normalize slug
+    status = status.toLowerCase();
 
-        let { status } = req.params;
+    // 2. map slug → DB value
+    const statusMap = {
+      pending: "Pending",
+      processing: "Processing",
+      shipped: "Shipped",
+      "out-for-delivery": "Out for Delivery",
+      delivered: "Delivered",
+      cancelled: "Cancelled",
+      returned: "Returned",
+    };
 
-        status = status
-            .replace(/-/g, " ")
-            .replace(/\b\w/g, (l) => l.toUpperCase());
+    const dbStatus = statusMap[status];
 
-        console.log("STATUS:", status);
-
-        const orders = await Order.find({
-            orderStatus: status
-        })
-        .populate("customer", "fullName email")
-        .sort({ createdAt: -1 });
-
-        console.log("ORDERS:", orders);
-
-        res.status(200).json(
-            new apiResponse(
-                200,
-                orders,
-                "Orders fetched successfully"
-            )
-        );
-
-    } catch (error) {
-
-        console.log("GET ORDERS ERROR:", error);
-
-        throw new apiError(500, error.message);
-
+    if (!dbStatus) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
     }
+
+    // 3. DB query (now safe)
+    const orders = await Order.find({
+      orderStatus: dbStatus,
+    })
+      .populate("customer", "fullName email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(
+      new apiResponse(200, orders, "Orders fetched successfully")
+    );
+
+  } catch (error) {
+    console.log("GET ORDERS ERROR:", error);
+    throw new apiError(500, error.message);
+  }
+});
+
+export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  const allowedStatuses = [
+    "Pending",
+    "Processing",
+    "Shipped",
+    "Out for Delivery",
+    "Delivered",
+  ];
+
+  // ❌ reject invalid status
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json(
+      new apiResponse(400, null, "Invalid status")
+    );
+  }
+
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    return res.status(404).json(
+      new apiResponse(404, null, "Order not found")
+    );
+  }
+
+  // 🔥 define flow order
+  const flow = [
+    "Pending",
+    "Processing",
+    "Shipped",
+    "Out for Delivery",
+    "Delivered",
+  ];
+
+  const currentIndex = flow.indexOf(order.orderStatus);
+  const newIndex = flow.indexOf(status);
+
+  // ❌ prevent going backwards or jumping
+  if (newIndex < currentIndex) {
+    return res.status(400).json(
+      new apiResponse(
+        400,
+        null,
+        "You cannot move order back to previous status"
+      )
+    );
+  }
+
+  // ❌ prevent skipping steps (optional strict mode)
+  if (newIndex - currentIndex > 1) {
+    return res.status(400).json(
+      new apiResponse(
+        400,
+        null,
+        "You cannot skip order stages"
+      )
+    );
+  }
+
+  // ❌ once delivered, no change allowed
+  if (order.orderStatus === "Delivered") {
+    return res.status(400).json(
+      new apiResponse(
+        400,
+        null,
+        "Delivered order cannot be modified"
+      )
+    );
+  }
+
+  // ✅ update status
+  order.orderStatus = status;
+
+  if (status === "Delivered") {
+    order.deliveredAt = new Date();
+  }
+
+  await order.save();
+
+  return res.status(200).json(
+    new apiResponse(200, order, "Order status updated successfully")
+  );
 });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
 export default function Login() {
@@ -103,10 +103,15 @@ export default function Login() {
             {loading ? "Authenticating..." : "Login"}
           </button>
 
+  
+
           {/* Footer note */}
           <p className="text-center text-xs text-gray-400 mt-6">
             Unauthorized access is prohibited
           </p>
+
+          <Link to="/customer/login"
+          className="text-center text-xs text-gray-600 mt-6 bg-gradient-to-r from-red-200 to-red-50 text-red-800 px-2 py-1 rounded-xl">User login</Link>
 
         </form>
       </div>

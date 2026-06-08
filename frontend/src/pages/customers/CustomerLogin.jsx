@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import Logo from '../../components/Logo'
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CustomerLogin() {
   const [email, setEmail] = useState("");
@@ -119,6 +119,8 @@ export default function CustomerLogin() {
               Create one
             </span>
           </p>
+          <Link to="/admin/login" 
+          className="text-center text-xs text-gray-600 mt-6 bg-gradient-to-r from-red-200 to-red-50 text-red-800 px-2 py-1 rounded-xl">Admin Only</Link>
 
         </form>
       </div>

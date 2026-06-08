@@ -38,9 +38,9 @@ export default function CreateCategory({ onSuccess }) {
     <form
       onSubmit={handleCreate}
       className="
-        flex items-center gap-2
+        flex flex-col items-center gap-2
         bg-white
-        border
+        
         rounded-xl
         shadow-sm
         p-2
@@ -56,8 +56,8 @@ export default function CreateCategory({ onSuccess }) {
         className="
           flex-1
           px-3 py-2
-          text-sm
-          outline-none
+          text-sm w-full
+          border rounded
           bg-transparent
         "
       />
@@ -66,8 +66,8 @@ export default function CreateCategory({ onSuccess }) {
       <button
         disabled={loading}
         className={`
-          flex items-center gap-1
-          px-4 py-2
+          flex items-center justify-center gap-1
+          px-4 py-2 w-full
           rounded-lg
           text-sm font-medium
           transition-all duration-300

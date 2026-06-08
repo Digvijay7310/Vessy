@@ -1,5 +1,5 @@
 import express from "express";
-import { adminLogin, adminLogout, adminRegistration, AllOrder,getAllData, getMyProfile, getOrdersByStatus } from "../controllers/admin.controller.js";
+import { adminLogin, adminLogout, adminRegistration, getAllData, getAllOrderStats, getMyProfile, getOrdersByStatus, updateOrderStatus } from "../controllers/admin.controller.js";
 import { isAdmin, verifyAdmin } from "../middlewares/isAdmin.middleware.js";
 
 const router = express.Router();
@@ -11,8 +11,10 @@ router.get("/get-profile", verifyAdmin, isAdmin, getMyProfile);
 router.post("/logout", verifyAdmin, isAdmin, adminLogout);
 
 router.get("/all-data", verifyAdmin, getAllData)
-router.get("/all-orders", verifyAdmin, AllOrder)
+router.get("/all-orders", verifyAdmin, getAllOrderStats)
 router.get("/:status", verifyAdmin, getOrdersByStatus)
 
+
+router.put("/:orderId/status", verifyAdmin, updateOrderStatus)
 
 export default router;

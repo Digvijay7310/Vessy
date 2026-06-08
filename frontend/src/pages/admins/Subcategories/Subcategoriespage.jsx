@@ -10,7 +10,7 @@ export default function Subcategories() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 p-4 md:p-6">
+    <div className="min-h-screen bg-zinc-100 md:p-6">
 
       {/* PAGE HEADER */}
       <div className="mb-6">
@@ -28,7 +28,7 @@ export default function Subcategories() {
 
         {/* CREATE SUBCATEGORY */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+          <div className="bg-white rounded-2xl p-2">
 
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-gray-800">

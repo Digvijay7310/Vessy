@@ -52,7 +52,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
       await axiosInstance.post("/admins/logout");
 
-      navigate("/admins/login");
+      navigate("/admin/login");
 
     } catch (error) {
       console.log(error);

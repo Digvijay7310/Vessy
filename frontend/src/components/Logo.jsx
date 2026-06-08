@@ -48,12 +48,6 @@ export default function Logo() {
         </svg>
       </div>
 
-      {/* BRAND NAME */}
-      <h1 className="text-xl md:text-2xl font-bold tracking-tight group-hover:opacity-80 transition">
-        <span className="text-gray-900">Ve</span>
-        <span className="text-green-600">ssy</span>
-      </h1>
-
     </div>
   );
 }

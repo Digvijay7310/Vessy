@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-
 import {
   Clock3,
   BadgeCheck,
@@ -10,11 +9,11 @@ import {
   Bike,
   RotateCcw,
   ShoppingBag,
-  ArrowRight,
+  Package,
+  CheckCircle2,
 } from "lucide-react";
 
 export default function AllOrders() {
-
   const navigate = useNavigate();
 
   const [data, setData] = useState({
@@ -31,23 +30,14 @@ export default function AllOrders() {
   const [loading, setLoading] = useState(false);
 
   const fetchAllOrders = async () => {
-
     try {
-
       setLoading(true);
-
       const res = await axiosInstance.get("/admins/all-orders");
-
-      setData(res.data.data);
-
-    } catch (error) {
-
-      console.log(error);
-
+      setData(res.data.data || {});
+    } catch (err) {
+      console.log(err);
     } finally {
-
       setLoading(false);
-
     }
   };
 
@@ -55,271 +45,105 @@ export default function AllOrders() {
     fetchAllOrders();
   }, []);
 
-  const stats = [
+  const cards = [
+    {
+      title: "Total",
+      value: data.totalOrders,
+      icon: ShoppingBag,
+      color: "bg-gray-100 text-gray-700",
+      route: "all",
+    },
     {
       title: "Pending",
       value: data.pendingOrders,
       icon: Clock3,
       color: "bg-yellow-100 text-yellow-600",
-      route: "Pending",
+      route: "pending",
     },
-
     {
       title: "Confirmed",
       value: data.confirmedOrders,
       icon: BadgeCheck,
       color: "bg-blue-100 text-blue-600",
-      route: "Confirmed",
+      route: "confirmed",
     },
-
     {
       title: "Processing",
       value: data.processingOrders,
       icon: PackageCheck,
       color: "bg-violet-100 text-violet-600",
-      route: "Processing",
+      route: "processing",
     },
-
     {
       title: "Shipped",
       value: data.shippedOrders,
       icon: Truck,
       color: "bg-purple-100 text-purple-600",
-      route: "Shipped",
+      route: "shipped",
     },
-
     {
       title: "Out for Delivery",
       value: data.outForDelivery,
       icon: Bike,
       color: "bg-orange-100 text-orange-600",
-      route: "Out-for-Delivery",
+      route: "out-for-delivery",
     },
-
+    {
+      title: "Delivered",
+      value: data.deliveredOrders,
+      icon: CheckCircle2,
+      color: "bg-green-100 text-green-600",
+      route: "delivered",
+    },
     {
       title: "Returned",
       value: data.returnedOrders,
       icon: RotateCcw,
       color: "bg-red-100 text-red-600",
-      route: "Returned",
+      route: "returned",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb]">
+    <div className="min-h-screen bg-gray-50 p-4">
 
       {/* HEADER */}
-
-      <div className="
-        flex
-        flex-col
-        lg:flex-row
-        lg:items-center
-        lg:justify-between
-        gap-2
-        mb-8
-      ">
-
-        <div>
-
-          <h1 className="
-            text-3xl
-            sm:text-4xl
-            font-bold
-            text-gray-900
-            tracking-tight
-          ">
-            Orders Dashboard
-          </h1>
-
-          <p className="text-gray-500 mt-1">
-            Track and manage all order activities
-          </p>
-
-        </div>
-
-        {/* TOTAL CARD */}
-
-        <div className="
-          bg-white
-          rounded-3xl
-          px-6
-          py-5
-          shadow-sm
-          border
-          border-gray-100
-          min-w-[220px]
-        ">
-
-          <div className="flex items-center justify-between">
-
-            <div>
-
-              <p className="text-sm text-gray-500">
-                Total Orders
-              </p>
-
-              <h2 className="
-                text-4xl
-                font-bold
-                text-gray-900
-                mt-1
-              ">
-                {data.totalOrders}
-              </h2>
-
-            </div>
-
-            <div className="
-              w-14
-              h-14
-              rounded-2xl
-              bg-black
-              text-white
-              flex
-              items-center
-              justify-center
-            ">
-              <ShoppingBag size={26} />
-            </div>
-
-          </div>
-
-        </div>
-
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">Orders Dashboard</h1>
+        <p className="text-gray-500">Manage all orders efficiently</p>
       </div>
 
       {/* LOADING */}
-
       {loading ? (
-
-        <div className="
-          flex
-          justify-center
-          items-center
-          h-[60vh]
-        ">
-
-          <div className="
-            w-12
-            h-10
-            rounded-full
-            border-4
-            border-gray-200
-            border-t-black
-            animate-spin
-          "/>
-
+        <div className="h-[60vh] flex items-center justify-center">
+          <div className="w-10 h-10 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
         </div>
-
       ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
 
-        <>
-          {/* STATS GRID */}
+          {cards.map((c, i) => {
+            const Icon = c.icon;
 
-          <div className="
-            grid
-            grid-cols-3
-            sm:grid-cols-4
-            lg:grid-cols-5
-            gap-4
-          ">
-
-            {stats.map((item, index) => {
-
-              const Icon = item.icon;
-
-              return (
-
-                <div
-                  key={index}
-                  onClick={() =>
-                    navigate(`/admin/orders/${item.route}`)
-                  }
-                  className="
-                    bg-white
-                    rounded-3xl
-                    border
-                    border-gray-100
-                    shadow-sm
-                    hover:shadow-xl
-                    hover:-translate-y-1
-                    transition-all
-                    duration-300
-                    cursor-pointer
-                    p-2
-                    group
-                  "
-                >
-
-                  {/* TOP */}
-
-                  <div className="
-                    flex
-                    items-start
-                    justify-between
-                  ">
-
-                    <div className={`
-                      w-12
-                      h-12
-                      rounded-2xl
-                      flex
-                      items-center
-                      justify-center
-                      ${item.color}
-                    `}>
-
-                      <Icon size={22} />
-
-                    </div>
-
-                    <ArrowRight
-                      size={18}
-                      className="
-                        text-gray-300
-                        group-hover:text-black
-                        transition
-                      "
-                    />
-
+            return (
+              <div
+                key={i}
+                onClick={() => navigate(`/admin/orders/${c.route}`)}
+                className="bg-white p-4 rounded-2xl shadow-sm border hover:shadow-lg transition cursor-pointer"
+              >
+                <div className="flex justify-between">
+                  <div className={`p-2 rounded-xl ${c.color}`}>
+                    <Icon size={20} />
                   </div>
-
-                  {/* BODY */}
-
-                  <div className="mt-5">
-
-                    <p className="
-                      text-xs
-                      lineclamp-2
-                      text-gray-500
-                      font-medium
-                      leading-10
-                    ">
-                      {item.title}
-                    </p>
-
-                    <h2 className="
-                      text-3xl
-                      font-bold
-                      text-gray-900
-                      mt-2
-                    ">
-                      {item.value}
-                    </h2>
-
-                  </div>
-
                 </div>
 
-              );
-            })}
+                <h2 className="text-sm text-gray-500 mt-3">{c.title}</h2>
+                <p className="text-2xl font-bold">{c.value}</p>
+              </div>
+            );
+          })}
 
-          </div>
-        </>
-
+        </div>
       )}
-
     </div>
   );
 }

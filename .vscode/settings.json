@@ -1,3 +1,5 @@
 {
-    "postman.settings.dotenv-detection-notification-visibility": false
+    "editor.minimap.enabled": false,
+"editor.stickyScroll.enabled": false,
+"workbench.editor.enablePreview": false,
 }

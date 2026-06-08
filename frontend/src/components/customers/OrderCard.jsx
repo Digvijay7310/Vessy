@@ -2,27 +2,47 @@ import { Link } from "react-router-dom";
 import { FiPackage } from "react-icons/fi";
 
 export default function OrderCard({ order }) {
-
   const firstItem = order.items?.[0]?.product;
   const totalItems = order.items?.length || 0;
 
+  console.log("firstItem ", firstItem)
+  console.log(totalItems)
+
+  // 🎨 STATUS COLORS (clean + consistent)
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "Delivered":
+        return "bg-emerald-100 text-emerald-700";
+      case "Cancelled":
+        return "bg-red-100 text-red-700";
+      case "Returned":
+        return "bg-purple-100 text-purple-700";
+      case "Out for Delivery":
+        return "bg-orange-100 text-orange-700";
+      case "Shipped":
+        return "bg-blue-100 text-blue-700";
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
+
   return (
     <Link to={`/orders/${order._id}`}>
-
-      <div className="group border rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+      <div className="group w-full border border-gray-100 rounded bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
 
         {/* TOP SECTION */}
-        <div className="flex gap-4 p-4">
+        <div className="flex gap-2 p-0.5">
 
           {/* IMAGE */}
-          <div className="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
 
-            {firstItem?.images?.[0] ? (
+            {firstItem?.image ? (
               <img
-                src={firstItem.images[0]}
+                src={firstItem.image}
                 alt="product"
                 className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />
+              
             ) : (
               <FiPackage className="text-gray-400 text-2xl" />
             )}
@@ -30,48 +50,46 @@ export default function OrderCard({ order }) {
           </div>
 
           {/* INFO */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
 
-            <div className="flex justify-between items-start">
+            {/* HEADER */}
+            <div className="flex justify-between items-start gap-2">
 
-              <div>
-                <p className="text-sm text-gray-500">
-                  Order #{order._id.slice(-6)}
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-500 truncate">
+                  Order #{order._id?.slice(-6)}
                 </p>
 
-                <p className="font-semibold text-gray-800 mt-1">
+                <p className="font-semibold text-gray-800 mt-1 text-sm sm:text-base">
                   {totalItems} item{totalItems > 1 ? "s" : ""}
                 </p>
               </div>
 
-              {/* STATUS BADGE */}
-              <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                order.orderStatus === "Delivered"
-                  ? "bg-green-100 text-green-700"
-                  : order.orderStatus === "Cancelled"
-                  ? "bg-red-100 text-red-700"
-                  : order.orderStatus === "Returned"
-                  ? "bg-purple-100 text-purple-700"
-                  : "bg-yellow-100 text-yellow-700"
-              }`}>
+              {/* STATUS */}
+              <span
+                className={`text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-full font-medium whitespace-nowrap ${getStatusStyle(
+                  order.orderStatus
+                )}`}
+              >
                 {order.orderStatus}
               </span>
 
             </div>
 
-            {/* PRICE */}
+            {/* PRICE + DATE */}
             <div className="mt-3 flex justify-between items-center">
 
-              <p className="text-lg font-bold text-gray-900">
+              <p className="text-base sm:text-lg font-bold text-gray-900">
                 ₹{order.finalAmount}
               </p>
 
-              <p className="text-xs text-gray-500">
-                {new Date(order.createdAt).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric"
-                })}
+              <p className="text-[10px] sm:text-xs text-gray-500 text-right">
+                {order.createdAt &&
+                  new Date(order.createdAt).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
               </p>
 
             </div>
@@ -81,10 +99,9 @@ export default function OrderCard({ order }) {
         </div>
 
         {/* HOVER BAR */}
-        <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-emerald-400 to-green-600 transition-all duration-300"></div>
+        <div className="h-[2px] w-0 group-hover:w-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 transition-all duration-300"></div>
 
       </div>
-
     </Link>
   );
 }
