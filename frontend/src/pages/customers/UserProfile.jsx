@@ -55,7 +55,7 @@ export default function UserProfile() {
       <AddressCard address={data.customer.shippingAddresses[0]} />
 
       {/* STATS GRID (FIXED RESPONSIVE) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
   <StatCard
     label="Total Orders"
     value={data.stats.totalOrders}
@@ -82,13 +82,9 @@ export default function UserProfile() {
     <h2 className="text-lg font-semibold text-gray-900">
       Recent Orders
     </h2>
-
-    <button className="text-sm font-medium text-gray-600 hover:text-black">
-      View All
-    </button>
   </div>
 
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
     {data.recentOrders.map((order) => (
       <OrderCard
         key={order._id}

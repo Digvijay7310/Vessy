@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Package,
   ChevronRight,
@@ -10,8 +10,8 @@ export default function OrderCards({ order }) {
   const products = order.items || [];
 
   return (
-    <div
-      onClick={() => navigate(`/order/${order._id}`)}
+    <Link
+      to={`/order/${order._id}`}
       className="
         bg-white border border-gray-100 rounded-2xl p-4
         shadow-sm hover:shadow-md transition-all
@@ -77,6 +77,6 @@ export default function OrderCards({ order }) {
           <ChevronRight size={16} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

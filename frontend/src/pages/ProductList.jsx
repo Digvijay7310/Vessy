@@ -8,6 +8,9 @@ import AddWishList from "../components/AddWishList";
 export default function ProductList({ product }) {
   const navigate = useNavigate();
 
+  console.log(product);
+  
+
   if (!product) return null;
 
   const isOutOfStock = product.stock <= 0;

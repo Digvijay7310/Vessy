@@ -4,6 +4,7 @@ import { FiPackage } from "react-icons/fi";
 export default function OrderCard({ order }) {
   const firstItem = order.items?.[0]?.product;
   const totalItems = order.items?.length || 0;
+  
 
 
 
@@ -26,7 +27,7 @@ export default function OrderCard({ order }) {
   };
 
   return (
-    <Link to={`/orders/${order._id}`}>
+    <Link to={`/order/${order._id}`}>
       <div className="group w-full border border-gray-100 rounded bg-white shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
 
         {/* TOP SECTION */}

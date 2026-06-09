@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import mongoose from 'mongoose';
 import { Category, SubCategory } from '../models/category.model.js';
 import { v2 as cloudinary } from "cloudinary";
+import { Customer } from '../models/customer.model.js';
 
 
 export const getProducts = asyncHandler(async (req, res) => {
@@ -91,6 +92,31 @@ export const searchProducts = asyncHandler(async (req, res) => {
         products
     });
 });
+
+export const wishlistToggle = asyncHandler(async (req, res) => {
+    const customer = await Customer.findById(req.user.id)
+
+    const index = customer.wishlist.indexOf(req.params.productId);
+
+    if(index === -1){
+        customer.wishlist.push(req.params.productId);
+    } else {
+        customer.wishlist.splice(index, 1)
+    }
+
+    await customer.save()
+    res.status(200).json(
+        new apiResponse(200, {wishlist: customer.wishlist}, "toggle wishlist")
+    )
+})
+
+export const getWishList = asyncHandler(async (req, res) => {
+    const customer = await Customer.findById(req.user.id).populate("wishlist");
+
+    res.status(200).json(
+        new apiResponse(200, customer, "get wishlist")
+    )
+})
 
 export const getProductById = asyncHandler(async (req, res) => {
     const {id} = req.params;
