@@ -34,7 +34,7 @@ export default function OrderCard({ order }) {
         <div className="flex gap-2 p-0.5">
 
           {/* IMAGE */}
-          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
+          <div className="w-15 h-15 md:w-20 md:h-20 bg-gray-100 overflow-hidden flex items-center justify-center shrink-0">
 
             {firstItem?.image ? (
               <img
@@ -56,18 +56,14 @@ export default function OrderCard({ order }) {
             <div className="flex justify-between items-start gap-2">
 
               <div className="min-w-0">
-                <p className="text-xs sm:text-sm text-gray-500 truncate">
-                  Order #{order._id}
-                </p>
-
-                <p className="font-semibold text-gray-800 mt-1 text-sm sm:text-base">
+                <p className="font-semibold text-gray-800 mt-1 text-xs">
                   {totalItems} item{totalItems > 1 ? "s" : ""}
                 </p>
               </div>
 
               {/* STATUS */}
               <span
-                className={`text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-full font-medium whitespace-nowrap ${getStatusStyle(
+                className={`text-[8px] px-2 sm:px-3 py-1 rounded-full font-medium whitespace-nowrap ${getStatusStyle(
                   order.orderStatus
                 )}`}
               >
@@ -79,7 +75,7 @@ export default function OrderCard({ order }) {
             {/* PRICE + DATE */}
             <div className="mt-3 flex justify-between items-center">
 
-              <p className="text-base sm:text-lg font-bold text-gray-900">
+              <p className="text-base font-bold text-gray-900">
                 ₹{order.finalAmount}
               </p>
 

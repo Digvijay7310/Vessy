@@ -1,55 +1,76 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CategoryWithSubCategory from "../components/CategoryWithSubCategory";
 import axiosInstance from "../utils/axiosInstance";
-import { useEffect } from "react";
-import LoginDialog from "./customers/LoginDialog";
 
 export default function Home() {
-  const [user, setUser] = useState(null)
-  const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const [user, setUser] = useState(null);
 
-  // const fetchUser = async () => {
-  //   try {
-  //     const res = await axiosInstance.get("/customer/me")
-  //     setUser(res.data.data)
-  //   } catch (error) {
-  //     setUser(null)
-  //     setShowLoginDialog(true)
-  //   }
-  // }
+  const fetchUser = async () => {
+    try {
+      const res = await axiosInstance.get("/customer/me");
+      setUser(res.data);
+    } catch (error) {
+      setUser(null);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchUser()
-  // } ,[])
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const address = user?.customer?.shippingAddresses?.find(
+    (addr) => addr.isDefault
+  );
+
   return (
     <div className="flex flex-col gap-6">
 
-      {/* HERO SECTION (future slider place) */}
-      <div className="w-full bg-gradient-to-r from-gray-900 to-sky-700 text-white p-10 rounded-xl">
-        <h1 className="text-xl font-bold">Welcome to Your Store</h1>
-        {/* {user ? (
-          <p className="text-green-500">Hello, {user.fullName}</p>
-        ) : (
-          <p className="text-yellow-300">You are not logged in</p>
-        )} */}
+      {user && (
+  <div className="w-full bg-gradient-to-r from-green-900 to-green-700 text-white p-8 rounded-xl">
 
-       {/* <div className="w-1/3 h-2/3 border-2 border-red-700">
-       {showLoginDialog && (
-        <LoginDialog onSuccess={() => {
-          fetchUser()
-          setShowLoginDialog(false)
-        }}
-        onClose={() => setShowLoginDialog(false)}
-        />
-       )}
-       </div> */}
-       
-        <p className="text-white mt-1">
-          Discover products, deals & categories in one place
+    <h1 className="text-xl font-bold">
+      Welcome back 👋
+    </h1>
+
+    <p className="text-green-300">
+      {user.customer.fullName}
+    </p>
+
+    {user?.customer?.shippingAddresses?.find(a => a.isDefault) && (
+      <div className=" max-w-sm bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20">
+
+        <p className="text-xs uppercase tracking-wider text-gray-200">
+          Default Delivery Address
         </p>
-      </div>
 
-      {/* CATEGORY SECTION */}
+        <p className="text-sm font-semibold mt-2">
+          {user.customer.shippingAddresses.find(a => a.isDefault).name}
+        </p>
+
+        <p className="text-sm text-gray-200 mt-1 truncate">
+          {user.customer.shippingAddresses.find(a => a.isDefault).street}
+        </p>
+
+        <div className="flex justify-between mt-3 text-sm">
+          <p>
+            📍 {user.customer.shippingAddresses.find(a => a.isDefault).city}
+          </p>
+
+          <p className="font-bold text-yellow-300">
+            PIN {user.customer.shippingAddresses.find(a => a.isDefault).pincode}
+          </p>
+        </div>
+
+      </div>
+    )}
+
+    <p className="text-white/80 mt-4 text-sm">
+      Discover products, deals & categories in one place
+    </p>
+
+  </div>
+)}
+
       <CategoryWithSubCategory />
 
     </div>

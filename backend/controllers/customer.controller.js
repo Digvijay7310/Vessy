@@ -131,7 +131,7 @@ export const customerProfile = asyncHandler(async (req, res) => {
     // CUSTOMER
 
     const customer = await Customer.findById(req.user._id)
-        .select("-password -refreshToken");
+        .select("-password -refreshToken")
 
     if (!customer) {
         throw new apiError(404, "Customer not found");

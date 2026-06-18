@@ -39,96 +39,88 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4">
 
-      {/* LEFT BRAND SECTION */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-emerald-900 via-black to-gray-900 items-center justify-center p-10">
-        <div className="text-center text-white">
-          <h1 className="text-5xl font-extrabold">
-            Join Us Today
-          </h1>
-          <p className="mt-4 text-gray-300 text-lg">
-            Create your account and start shopping smarter
-          </p>
-        </div>
-      </div>
+      {/* BACKGROUND GLOW */}
+      <div className="absolute w-[400px] h-[400px] bg-emerald-200 blur-[120px] opacity-40 top-10 left-10 rounded-full"></div>
+      <div className="absolute w-[400px] h-[400px] bg-blue-200 blur-[120px] opacity-40 bottom-10 right-10 rounded-full"></div>
 
-      {/* RIGHT FORM SECTION */}
-      <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50 px-6">
+      {/* CARD */}
+      <div className="w-full max-w-md relative">
 
         <form
           onSubmit={handleRegister}
-          className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-8"
+          className="bg-white border border-gray-100 shadow-xl rounded-2xl p-8"
         >
 
+          {/* TITLE */}
           <h2 className="text-3xl font-bold text-gray-900">
             Create account
           </h2>
 
-          <p className="text-gray-500 mt-1 mb-6">
+          <p className="text-sm text-gray-500 mt-1 mb-6">
             It takes less than a minute
           </p>
 
-          {/* Error */}
+          {/* ERROR */}
           {error && (
-            <div className="mb-4 text-sm bg-red-50 text-red-600 border border-red-200 p-2 rounded">
+            <div className="mb-4 text-sm bg-red-50 text-red-600 border border-red-200 p-2 rounded-lg">
               {error}
             </div>
           )}
 
-          {/* Full Name */}
+          {/* FULL NAME */}
           <input
             name="fullName"
             placeholder="Full Name"
-            className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+            className="w-full p-3 mb-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             onChange={handleChange}
             required
           />
 
-          {/* Email */}
+          {/* EMAIL */}
           <input
             name="email"
             placeholder="Email address"
             type="email"
-            className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+            className="w-full p-3 mb-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             onChange={handleChange}
             required
           />
 
-          {/* Phone */}
+          {/* PHONE */}
           <input
             name="phone"
             placeholder="Phone number"
-            className="w-full p-3 mb-3 border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+            className="w-full p-3 mb-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
             onChange={handleChange}
             required
           />
 
-          {/* Password */}
+          {/* PASSWORD */}
           <div className="relative mb-5">
-
             <input
               name="password"
               type={showPass ? "text" : "password"}
               placeholder="Password"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+              className="w-full p-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
               onChange={handleChange}
               required
             />
 
             <div
-              className="absolute right-3 top-3 cursor-pointer text-xl text-gray-500"
+              className="absolute right-3 top-3 text-xl text-gray-500 cursor-pointer"
               onClick={() => setShowPass(!showPass)}
             >
               {showPass ? <AiFillEyeInvisible /> : <AiFillEye />}
             </div>
           </div>
 
-          {/* Button */}
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 text-white py-3 rounded-lg font-semibold hover:bg-emerald-700 transition flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg hover:scale-[1.01] transition flex items-center justify-center gap-2"
           >
             {loading && (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -136,7 +128,7 @@ export default function Register() {
             {loading ? "Creating account..." : "Register"}
           </button>
 
-          {/* Login Link */}
+          {/* LOGIN LINK */}
           <p className="text-center text-sm text-gray-500 mt-6">
             Already have an account?{" "}
             <span
@@ -148,7 +140,9 @@ export default function Register() {
           </p>
 
         </form>
+
       </div>
+
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
-import Logo from '../../components/Logo'
+import Logo from "../../components/Logo";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -34,57 +34,61 @@ export default function CustomerLogin() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4">
 
-      {/* LEFT SIDE BRAND PANEL */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-black via-orange-800 to-gray-800 items-center justify-center p-10">
-        <div className="text-center text-white">
-          <h1 className="text-5xl font-extrabold tracking-tight"><Logo /> </h1>
-          <p className="mt-4 text-gray-300 text-lg">Shop smarter. Experience better.</p>
-        </div>
-      </div>
+      {/* BACK CARD GLOW */}
+      <div className="absolute w-[400px] h-[400px] bg-emerald-200 blur-[120px] opacity-40 top-10 left-10 rounded-full"></div>
+      <div className="absolute w-[400px] h-[400px] bg-blue-200 blur-[120px] opacity-40 bottom-10 right-10 rounded-full"></div>
 
-      {/* RIGHT SIDE LOGIN */}
-      <div className="flex w-full md:w-1/2 items-center justify-center bg-gray-50">
+      {/* LOGIN CARD */}
+      <div className="relative w-full max-w-md">
 
         <form
           onSubmit={handleLogin}
-          className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-8"
+          className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8"
         >
 
-          {/* Title */}
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-          <p className="text-gray-500 mt-1 mb-6">Login to continue to your account</p>
+          {/* LOGO */}
+          <div className="text-center text-3xl font-bold text-gray-900">
+            <Logo />
+          </div>
 
-          {/* Error */}
+          <p className="text-center text-gray-500 text-sm mt-2 mb-6">
+            Welcome back — sign in to continue shopping
+          </p>
+
+          {/* ERROR */}
           {error && (
-            <div className="mb-4 text-sm bg-red-50 text-red-600 border border-red-200 p-2 rounded">
+            <div className="mb-4 text-sm bg-red-50 text-red-600 border border-red-200 p-2 rounded-lg">
               {error}
             </div>
           )}
 
-          {/* Email */}
+          {/* EMAIL */}
           <div className="mb-4">
             <label className="text-sm text-gray-600">Email</label>
+
             <input
               type="email"
-              placeholder="you@example.com"
-              className="mt-1 w-full p-3 rounded-lg border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="mt-1 w-full p-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
               required
             />
           </div>
 
-          {/* Password */}
+          {/* PASSWORD */}
           <div className="mb-6">
             <label className="text-sm text-gray-600">Password</label>
 
             <div className="relative mt-1">
               <input
                 type={showPass ? "text" : "password"}
-                placeholder="••••••••"
-                className="w-full p-3 rounded-lg border border-gray-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
+                value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full p-3 rounded-xl border border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition"
                 required
               />
 
@@ -97,11 +101,11 @@ export default function CustomerLogin() {
             </div>
           </div>
 
-          {/* Button */}
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-3 rounded-xl font-semibold shadow-md hover:shadow-lg hover:scale-[1.01] transition flex items-center justify-center gap-2"
           >
             {loading && (
               <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
@@ -109,7 +113,7 @@ export default function CustomerLogin() {
             {loading ? "Signing in..." : "Sign In"}
           </button>
 
-          {/* Footer */}
+          {/* FOOTER */}
           <p className="text-center text-sm text-gray-500 mt-6">
             Don’t have an account?{" "}
             <span
@@ -119,11 +123,18 @@ export default function CustomerLogin() {
               Create one
             </span>
           </p>
-          <Link to="/admin/login" 
-          className="text-center text-xs text-gray-600 mt-6 bg-gradient-to-r from-red-200 to-red-50 text-red-800 px-2 py-1 rounded-xl">Admin Only</Link>
+
+          <Link
+            to="/admin/login"
+            className="block text-center text-xs mt-4 text-gray-500 hover:text-gray-900 transition"
+          >
+            Admin Login
+          </Link>
 
         </form>
+
       </div>
+
     </div>
   );
 }

@@ -27,20 +27,20 @@ export default function CategoryWithSubCategory() {
   }, []);
 
   return (
-    <div className="px-1 md:px-10 lg:px-20 py-6 space-y-10">
+    <div className="px-2 md:px-10 lg:px-20 py-6 space-y-12">
 
       {/* LOADING SKELETON */}
       {loading && (
-        <div className="space-y-8">
+        <div className="space-y-10">
           {[1, 2, 3].map((i) => (
             <div key={i}>
-              <div className="h-6 w-40 bg-gray-200 animate-pulse rounded mb-4"></div>
+              <div className="h-5 w-48 bg-gray-200 animate-pulse rounded mb-5"></div>
 
-              <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 gap-3">
+              <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
                 {[...Array(8)].map((_, j) => (
                   <div
                     key={j}
-                    className="h-24 bg-gray-200 animate-pulse rounded-lg"
+                    className="h-24 bg-gray-200 animate-pulse rounded-xl"
                   ></div>
                 ))}
               </div>
@@ -52,46 +52,52 @@ export default function CategoryWithSubCategory() {
       {/* CATEGORY LIST */}
       {!loading &&
         data.map((cat, index) => (
-          <div key={index} className="space-y-4">
+          <div key={index} className="space-y-5">
 
             {/* CATEGORY HEADER */}
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-6 bg-blue-600 rounded"></div>
+
+              <h2 className="text-xl font-semibold text-gray-900">
                 {cat.categoryName}
               </h2>
             </div>
 
             {/* SUBCATEGORY GRID */}
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-9 gap-4">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4">
 
-              {cat.subCategories.map((sub, i) => (
+              {cat.subCategories.map((sub) => (
                 <div
-                  key={i}
-                  onClick={() =>
-                    navigate(`/sub-category/${sub._id}`)
-                  }
+                  key={sub._id}
+                  onClick={() => navigate(`/sub-category/${sub._id}`)}
                   className="
-                    cursor-pointer bg-white border border-gray-100
-                    rounded-xl p-3 flex flex-col items-center
-                    shadow-sm hover:shadow-lg hover:-translate-y-1
-                    transition duration-200
+                    cursor-pointer group bg-white
+                    border border-gray-100 rounded-xl
+                    p-3 flex flex-col items-center
+                    shadow-sm hover:shadow-xl
+                    hover:-translate-y-1
+                    transition-all duration-300
                   "
                 >
                   {/* IMAGE */}
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 flex items-center justify-center">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center">
                     <img
                       src={sub.image}
                       alt={sub.name}
-                      className="w-full h-full object-contain"
+                      className="
+                        w-full h-full object-contain
+                        group-hover:scale-110 transition-transform duration-300
+                      "
                     />
                   </div>
 
                   {/* NAME */}
-                  <p className="text-[8px] sm:text-xs text-center mt-2 font-medium text-gray-700 line-clamp-2">
+                  <p className="text-[10px] sm:text-xs text-center mt-2 font-medium text-gray-700 line-clamp-2 group-hover:text-blue-600">
                     {sub.name}
                   </p>
                 </div>
               ))}
+
             </div>
           </div>
         ))}

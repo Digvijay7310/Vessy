@@ -74,7 +74,7 @@ export default function UserProfile() {
     label="Cart Items"
     value={data.cart.totalItems}
   />
-</div>
+       </div>
 
       <div className="w-full my-5">
   <div className="flex items-center justify-between">
