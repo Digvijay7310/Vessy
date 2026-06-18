@@ -1,3 +1,4 @@
+import './App'
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
@@ -27,6 +28,7 @@ import AllOrders from './pages/admins/Orders/AllOrders'
 import OrdersByStatus from './pages/admins/Orders/OrderByStatus'
 import Profile from './components/customers/ProfileCard'
 import UserProfile from './pages/customers/UserProfile'
+import WishlistPage from './pages/customers/WishlistPage'
 
 
 function App() {
@@ -62,6 +64,7 @@ function App() {
       <Route path='/customer/login' element={<CustomerLogin />} />
       <Route path='/customer/register' element={<Register />} />
       <Route path='/customer/profile' element={<UserProfile />} />
+      <Route path='/customer/wishlist' element={<WishlistPage />} />
       <Route path='/my-cart' element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/my-orders" element={<MyOrders />} />

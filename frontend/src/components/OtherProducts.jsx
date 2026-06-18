@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AddCart from "./AddCart";
 import AddWishList from "./AddWishList";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function OtherProducts({ otherProducts = [] }) {
   const navigate = useNavigate();
@@ -62,64 +63,48 @@ export default function OtherProducts({ otherProducts = [] }) {
 
 /* ================= CARD ================= */
 function Card({ product, navigate, isOutOfStock }) {
+
+  const handleWishList = async (e) => {
+    e.stopPropagation();
+
+    await axiosInstance.post(
+      `/wishlist/toggle/${product._id}`
+    );
+  };
+
   return (
     <div
       onClick={() => navigate(`/products/product/${product._id}`)}
-      className="
-        w-25 sm:w-30
-        bg-white border border-gray-100 rounded-xl
-        shadow-sm cursor-pointer overflow-hidden
-        flex flex-col flex-shrink-0
-        hover:shadow-md transition
-      "
+      className="w-25 bg-white border rounded-xl overflow-hidden relative"
     >
 
       {/* IMAGE */}
-      <div className="h-26 flex items-center justify-center bg-gray-50 relative">
+      <div className="h-26 bg-gray-50 flex items-center justify-center relative">
 
         <img
           src={product.image?.[0]}
-          alt={product.name}
-          className={`h-full object-contain ${
-            isOutOfStock ? "opacity-50" : ""
-          }`}
-          loading="lazy"
+          className="h-full object-contain"
         />
 
-        {/* WISHLIST */}
-        <div className="absolute top-2 left-2">
-          <AddWishList productId={product._id} />
-        </div>
-
-        {/* CART */}
-        <div
-          className="absolute top-18 right-0 left-0"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <AddCart productId={product._id} />
+        {/* ❤️ WISHLIST */}
+        <div className="absolute top-2 left-0">
+          <AddWishList
+            productId={product._id}
+            onClick={handleWishList}
+          />
         </div>
 
       </div>
 
-      {/* CONTENT */}
-      <div className="p-2">
-
-        <h3 className="text-[8px] sm:text-xs font-medium line-clamp-2">
+      {/* DETAILS */}
+      <div className="p-1">
+        <h3 className="text-[10px] font-semibold line-clamp-2">
           {product.name}
         </h3>
 
-        <div className="mt-2 flex justify-between items-center">
-
-          <p className="text-green-600 font-bold text-sm">
-            ₹{product.price}
-          </p>
-
-          <p className="text-[6px] md:text-xs text-gray-500">
-            Stock: {product.stock}
-          </p>
-
-        </div>
-
+        <p className="text-green-600 font-bold">
+          ₹{product.price}
+        </p>
       </div>
 
     </div>

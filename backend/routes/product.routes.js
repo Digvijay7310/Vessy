@@ -12,7 +12,7 @@ router.get("/product/:id", getProductById)
 router.get("/by-category", verifyAdmin, getProductsByCategoryName)
 
 router.get("/wishlist", verifyCustomer, getWishList)
-router.post("/wishlist/toggle", verifyCustomer, wishlistToggle)
+router.post("/wishlist/toggle/:productId", verifyCustomer, wishlistToggle)
 
 router.post("/create-product", verifyAdmin, upload.single("image"), createProduct)
 router.put("/product/:id", verifyAdmin, upload.single("image"), updateProduct);

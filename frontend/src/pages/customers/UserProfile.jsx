@@ -6,6 +6,7 @@ import StatCard from "../../components/customers/StatCard";
 import OrderCard from "../../components/customers/OrderCard";
 import AddressCard from "../../components/customers/AddressCard";
 import OrderCards from "../../components/customers/OrderCards";
+import NotFoundCard from "../../components/customers/NotFoundCard";
 
 export default function UserProfile() {
   const [data, setData] = useState(null);
@@ -37,14 +38,12 @@ export default function UserProfile() {
 
   if (!data) {
     return (
-      <div className="p-6 text-center text-red-500">
-        No user data found
-      </div>
+      <NotFoundCard />
     );
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto lg:px-8 space-y-8 overflow-x-hidden">
+    <div className="w-full max-w-6xl mx-auto lg:px-8 space-y-2 overflow-x-hidden">
 
       {/* PROFILE HEADER */}
       <div className="w-full overflow-hidden">
@@ -77,8 +76,8 @@ export default function UserProfile() {
   />
 </div>
 
-      <div className="w-full">
-  <div className="flex items-center justify-between mb-4">
+      <div className="w-full my-5">
+  <div className="flex items-center justify-between">
     <h2 className="text-lg font-semibold text-gray-900">
       Recent Orders
     </h2>

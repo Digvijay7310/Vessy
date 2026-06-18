@@ -9,9 +9,7 @@ import ProductRemoveButton from "../components/ProductRemoveButton";
 import { FiShoppingBag } from "react-icons/fi";
 
 export default function CartPage() {
-
   const { cart, totalPrice, loading } = useCart();
-
   const navigate = useNavigate();
 
   const formatPrice = (price) =>
@@ -24,29 +22,27 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="h-[60vh] flex items-center justify-center">
-        <p className="text-gray-500 animate-pulse">
-          Loading...
-        </p>
+        <p className="text-gray-500 animate-pulse">Loading...</p>
       </div>
     );
   }
 
   if (cart.length === 0) {
     return (
-      <div className="h-[70vh] flex flex-col items-center justify-center">
+      <div className="h-[70vh] flex flex-col items-center justify-center text-center px-4">
+        <FiShoppingBag className="text-7xl text-gray-300" />
 
-        <FiShoppingBag className="text-6xl text-gray-300" />
-
-        <h2 className="mt-4 text-2xl font-bold">
-          Cart is Empty
+        <h2 className="mt-4 text-2xl font-bold text-gray-800">
+          Your Cart is Empty
         </h2>
+
+        <p className="text-gray-500 mt-1">
+          Looks like you haven’t added anything yet
+        </p>
 
         <button
           onClick={() => navigate("/")}
-          className="
-            mt-5 bg-black text-white
-            px-5 py-2 rounded-full
-          "
+          className="mt-6 bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-xl transition"
         >
           Shop Now
         </button>
@@ -55,50 +51,49 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-2 py-5 pb-28">
+    <div className="max-w-4xl mx-auto px-4 pb-32">
 
       {/* HEADER */}
-      <div className="flex items-center justify-between mb-5">
-
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-3xl font-bold text-gray-900">
             My Cart
           </h1>
 
-          <p className="text-sm text-gray-500">
-            {cart.length} Items
+          <p className="text-sm text-gray-500 mt-1">
+            {cart.length} {cart.length === 1 ? "Item" : "Items"}
           </p>
         </div>
       </div>
 
-      {/* ITEMS */}
+      {/* CART ITEMS */}
       <div className="space-y-4">
-
         {cart.map((item) => (
-
           <div
             key={item.product._id}
             className="
-              flex gap-4 bg-gray-50
-              rounded-2xl p-2
+              flex gap-4
+              bg-white border
+              rounded-2xl p-4
+              shadow-sm
+              hover:shadow-md
+              transition
             "
           >
 
             {/* IMAGE */}
-            <img
-              src={item.product.image?.[0]}
-              alt={item.product.name}
-              className="
-                h-24 w-24
-                object-contain
-                rounded-xl p-2
-              "
-            />
+            <div className="bg-gray-50 rounded-xl">
+              <img
+                src={item.product.image?.[0]}
+                alt={item.product.name}
+                className="h-20 w-20 object-contain"
+              />
+            </div>
 
-            {/* INFO */}
+            {/* DETAILS */}
             <div className="flex-1">
 
-              <h2 className="font-semibold line-clamp-2">
+              <h2 className="font-semibold text-gray-800 line-clamp-2">
                 {item.product.name}
               </h2>
 
@@ -109,55 +104,33 @@ export default function CartPage() {
               {/* ACTIONS */}
               <div className="flex items-center justify-between mt-4">
 
-                <div
-                  className="
-                    flex items-center gap-3
-                    border rounded-full
-                    px-3 py-1
-                  "
-                >
+                {/* Quantity Controls */}
+                <div className="flex items-center border rounded-xl overflow-hidden">
+                  <ProductDecreaseButton productId={item.product._id} />
 
-                  <ProductDecreaseButton
-                    productId={item.product._id}
-                  />
-
-                  <span className="font-semibold">
+                  <span className="px-4 font-semibold text-gray-800">
                     {item.quantity}
                   </span>
 
-                  <ProductIncreaseButton
-                    productId={item.product._id}
-                  />
+                  <ProductIncreaseButton productId={item.product._id} />
                 </div>
 
-                <ProductRemoveButton
-                  productId={item.product._id}
-                />
+                {/* Remove */}
+                <ProductRemoveButton productId={item.product._id} />
               </div>
+
             </div>
           </div>
         ))}
       </div>
 
       {/* CHECKOUT BAR */}
-      <div
-        className="
-          fixed bottom-0 left-0 right-0
-          bg-white border-t
-          px-1 py-4
-        "
-      >
-
-        <div
-          className="
-            max-w-4xl mx-auto
-            flex items-center justify-between
-          "
-        >
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
 
           <div>
             <p className="text-xs text-gray-500">
-              Total
+              Total Amount
             </p>
 
             <h2 className="text-2xl font-bold text-green-600">
@@ -168,15 +141,18 @@ export default function CartPage() {
           <button
             onClick={() => navigate("/checkout")}
             className="
-              bg-black text-white
-              px-6 py-3 rounded-xl
-              font-semibold
+              bg-black hover:bg-gray-800
+              text-white px-6 py-3
+              rounded-xl font-semibold
+              transition
             "
           >
             Checkout
           </button>
+
         </div>
       </div>
+
     </div>
   );
 }

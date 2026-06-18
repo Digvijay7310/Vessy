@@ -75,7 +75,7 @@ export default function OrdersByStatus() {
 
   const getNextAllowedStatus = (current) => {
     const i = flow.indexOf(current);
-    return flow.slice(i + 1);
+    return i === -1 ? [] : flow.slice(i + 1, i + 2);
   };
 
   return (

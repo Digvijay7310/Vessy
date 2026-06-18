@@ -6,7 +6,7 @@ export default function AddWishList({ isWishlisted = false, onClick }) {
     <button
       onClick={onClick}
       className="
-        w-10 h-10 flex items-center justify-center
+        w-7 h-7 flex items-center justify-center
         rounded-full border border-gray-200
         bg-white
         active:scale-95

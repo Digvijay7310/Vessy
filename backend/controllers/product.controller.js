@@ -94,29 +94,53 @@ export const searchProducts = asyncHandler(async (req, res) => {
 });
 
 export const wishlistToggle = asyncHandler(async (req, res) => {
-    const customer = await Customer.findById(req.user.id)
+  const customer = await Customer.findById(req.user.id);
 
-    const index = customer.wishlist.indexOf(req.params.productId);
+  if (!customer) {
+    throw new apiError(404, "Customer not found");
+  }
 
-    if(index === -1){
-        customer.wishlist.push(req.params.productId);
-    } else {
-        customer.wishlist.splice(index, 1)
-    }
+  const productId = req.params.productId;
 
-    await customer.save()
-    res.status(200).json(
-        new apiResponse(200, {wishlist: customer.wishlist}, "toggle wishlist")
+  const exists = customer.wishlist.some(
+    (id) => id.toString() === productId
+  );
+
+  if (exists) {
+    customer.wishlist = customer.wishlist.filter(
+      (id) => id.toString() !== productId
+    );
+  } else {
+    customer.wishlist.push(productId);
+  }
+
+  await customer.save();
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      { wishlist: customer.wishlist },
+      "Wishlist updated successfully"
     )
-})
+  );
+});
 
 export const getWishList = asyncHandler(async (req, res) => {
-    const customer = await Customer.findById(req.user.id).populate("wishlist");
+  const customer = await Customer.findById(req.user.id)
+    .populate("wishlist");
 
-    res.status(200).json(
-        new apiResponse(200, customer, "get wishlist")
+  if (!customer) {
+    throw new apiError(404, "Customer not found");
+  }
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      { wishlist: customer.wishlist },
+      "Wishlist fetched successfully"
     )
-})
+  );
+});
 
 export const getProductById = asyncHandler(async (req, res) => {
     const {id} = req.params;

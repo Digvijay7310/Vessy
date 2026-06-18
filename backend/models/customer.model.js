@@ -59,20 +59,20 @@ const customerSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    wishlist: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        default: [],
-      },
-    ],
-
     isDefault: {
       type: Boolean,
       default: false
     }
   }
-],
+    ],
+    
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        index: true,
+      },
+    ],
     refreshToken: {
         type: String,
     },

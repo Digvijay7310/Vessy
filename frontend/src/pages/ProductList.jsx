@@ -7,10 +7,6 @@ import AddWishList from "../components/AddWishList";
 
 export default function ProductList({ product }) {
   const navigate = useNavigate();
-
-  console.log(product);
-  
-
   if (!product) return null;
 
   const isOutOfStock = product.stock <= 0;
@@ -27,7 +23,7 @@ export default function ProductList({ product }) {
     >
 
       {/* IMAGE SECTION */}
-      <div className="h-40 md:h-70 flex items-center justify-center bg-gray-50 relative">
+      <div className="h-40 md:h-60 flex items-center justify-center bg-gray-50 relative">
         <img
           src={product.image?.[0]}
           alt={product.name}
@@ -36,12 +32,12 @@ export default function ProductList({ product }) {
           }`}
         />
 
-        <div className="absolute top-2 left-2">
+        <div className="absolute top-2 left-1">
           <AddWishList />
         </div>
 
         <div
-          className="absolute top-2 right-2"
+          className="absolute top-40 right-0"
           onClick={(e) => e.stopPropagation()}
         >
           <AddCart productId={product._id} />
