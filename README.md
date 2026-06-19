@@ -7,11 +7,20 @@ It provides a smooth shopping experience with authentication, product browsing, 
 
 ## 🌐 Live Demo
 > (Add your deployed link here later)
+![Vessy Home](./frontend//src/assets/Screenshot%202026-06-19%20170843.png)
+
+![Vessy Home](./frontend//src/assets/Screenshot%202026-06-19%20170744.png)
+
+![Vessy Home](./frontend//src/assets/Screenshot%202026-06-19%20170810.png)
+
+![Vessy Home](./frontend//src/assets/Screenshot%202026-06-19%20170928.png)
+
+
 
 ---
 
 ## 📸 Preview
-> (Add screenshots / demo GIFs here)
+> 
 
 ---
 
