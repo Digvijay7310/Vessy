@@ -3,6 +3,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import Logo from "../../components/Logo";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 export default function CustomerLogin() {
   const [email, setEmail] = useState("");
@@ -12,22 +13,35 @@ export default function CustomerLogin() {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) return;
 
     try {
       setLoading(true);
       setError(null);
 
-      await axiosInstance.post("/customer/login", {
+      // 1. LOGIN API CALL
+      const res = await axiosInstance.post("/customer/login", {
         email,
         password,
       });
 
+      // 2. FETCH PROFILE (IMPORTANT FOR SYNC)
+      const me = await axiosInstance.get("/customer/me");
+
+      // 3. UPDATE GLOBAL AUTH STATE
+      login(me.data.customer);
+
+      // 4. REDIRECT
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials");
+      setError(
+        err.response?.data?.message || "Login failed. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -36,7 +50,7 @@ export default function CustomerLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 px-4">
 
-      {/* BACK CARD GLOW */}
+      {/* BACKGROUND GLOW */}
       <div className="absolute w-[400px] h-[400px] bg-emerald-200 blur-[120px] opacity-40 top-10 left-10 rounded-full"></div>
       <div className="absolute w-[400px] h-[400px] bg-blue-200 blur-[120px] opacity-40 bottom-10 right-10 rounded-full"></div>
 
@@ -67,7 +81,6 @@ export default function CustomerLogin() {
           {/* EMAIL */}
           <div className="mb-4">
             <label className="text-sm text-gray-600">Email</label>
-
             <input
               type="email"
               value={email}
@@ -132,9 +145,7 @@ export default function CustomerLogin() {
           </Link>
 
         </form>
-
       </div>
-
     </div>
   );
 }

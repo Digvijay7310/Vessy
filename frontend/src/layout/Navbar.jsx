@@ -33,8 +33,8 @@ export default function Navbar({ mobile = false }) {
 
               ${
                 isActive
-                  ? "bg-emerald-500 text-white"
-                  : "text-slate-700 hover:text-emerald-600"
+                  ? "bg-emerald-700 text-white"
+                  : "text-slate-700 hover:text-white"
               }
 
               ${mobile ? "py-2 px-2 rounded-md w-full hover:bg-emerald-700" : ""}

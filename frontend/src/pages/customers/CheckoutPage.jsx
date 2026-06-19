@@ -29,6 +29,8 @@ export default function CheckoutPage() {
         ]);
 
         setData(cartRes.data.data || null);
+        // console.log(cartRes.data);
+        
 
         const list = addrRes.data.data || [];
         setAddresses(list);

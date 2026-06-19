@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 export default function CartItems() {
   const { cart } = useCart();
   const navigate = useNavigate();
+  
 
   // ✅ FIXED: total quantity instead of array length
-  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = cart.length;
+  
 
   return (
     <div

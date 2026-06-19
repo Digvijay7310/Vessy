@@ -21,8 +21,8 @@ export const previewCheckout = asyncHandler(async (req, res) => {
         0
     );
 
-    const platformCharge = 10;
-    const deliveryCharge = totalPrice < 199 ? 60 : 0;
+    const platformCharge = 5;
+    const deliveryCharge = totalPrice < 99 ? 30 : 0;
     const finalAmount = totalPrice + platformCharge + deliveryCharge;
 
     return res.status(200).json(
@@ -71,8 +71,8 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
         0
     );
 
-    const platformCharge = 10;
-    const deliveryCharge = totalPrice < 199 ? 60 : 0;
+    const platformCharge = 5;
+    const deliveryCharge = totalPrice < 99 ? 30 : 0;
     const finalAmount = totalPrice + platformCharge + deliveryCharge;
 
     const orderItems = cart.items.map((item) => ({

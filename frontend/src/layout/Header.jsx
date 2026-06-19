@@ -78,11 +78,44 @@ export default function Header() {
       </div>
 
       {/* MOBILE SEARCH */}
-      {mobileSearch && (
-        <div className="md:hidden border-t px-4 py-3 bg-white">
-          <Searchbar />
-        </div>
-      )}
+      {
+  mobileSearch && (
+    <>
+      <div
+        className="fixed inset-0 bg-black/40 z-50"
+        onClick={() => setMobileSearch(false)}
+      />
+
+      <div
+        className="
+          fixed
+          top-0
+          left-0
+          right-0
+          z-[60]
+          bg-white
+          p-4
+          shadow-lg
+          animate-slideDown
+        "
+      >
+        <Searchbar />
+
+        <button
+          onClick={() => setMobileSearch(false)}
+          className="
+            absolute
+            top-4
+            right-4
+            p-2
+          "
+        >
+          <X size={20} />
+        </button>
+      </div>
+    </>
+  )
+}
 
       {/* DESKTOP NAV */}
       <div className="hidden md:block border-t border-slate-100">

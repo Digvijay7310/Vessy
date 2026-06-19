@@ -94,16 +94,6 @@ export const customerLogin = asyncHandler(async (req, res) => {
 });
 
 export const customerLogout = asyncHandler(async (req, res) => {
-
-    // console.log(req.user)
-
-    await Customer.findOneAndReplace(req.user._id, {
-        $unset: {
-            refreshToken: 1
-        }
-    }, {
-        new: true
-    })
     
     res.clearCookie("accessToken", {
         httpOnly: true,

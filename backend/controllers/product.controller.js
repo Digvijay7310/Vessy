@@ -93,6 +93,56 @@ export const searchProducts = asyncHandler(async (req, res) => {
     });
 });
 
+export const searchSuggestions = asyncHandler(async (req, res) => {
+  const { q = "" } = req.query;
+
+  if (!q.trim()) {
+    return res.json({
+      products: [],
+      categories: [],
+      subCategories: [],
+    });
+  }
+
+  const regex = new RegExp(`^${q}`, "i");
+
+  const [products, categories, subCategories] = await Promise.all([
+    Product.find(
+      {
+        name: regex,
+      },
+      {
+        name: 1,
+        image: 1,
+      }
+    ).limit(5),
+
+    Category.find(
+      {
+        name: regex,
+      },
+      {
+        name: 1,
+      }
+    ).limit(5),
+
+    SubCategory.find(
+      {
+        name: regex,
+      },
+      {
+        name: 1,
+      }
+    ).limit(5),
+  ]);
+
+  res.status(200).json({
+    products,
+    categories,
+    subCategories,
+  });
+});
+
 export const wishlistToggle = asyncHandler(async (req, res) => {
   const customer = await Customer.findById(req.user.id);
 
