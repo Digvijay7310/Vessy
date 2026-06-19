@@ -33,11 +33,11 @@ export default function ProductList({ product }) {
         />
 
         <div className="absolute top-2 left-1">
-          <AddWishList />
+          <AddWishList productId={product._id} />
         </div>
 
         <div
-          className="absolute top-40 right-0"
+          className="absolute bottom-3 right-0 z-10"
           onClick={(e) => e.stopPropagation()}
         >
           <AddCart productId={product._id} />

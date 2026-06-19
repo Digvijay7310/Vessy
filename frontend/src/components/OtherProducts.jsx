@@ -7,106 +7,105 @@ import axiosInstance from "../utils/axiosInstance";
 export default function OtherProducts({ otherProducts = [] }) {
   const navigate = useNavigate();
 
-  if (!otherProducts || otherProducts.length === 0) return null;
+  if (!otherProducts.length) return null;
 
   return (
-    <section className="mt-2">
+    <section className="mt-6">
 
-      {/* SCROLL CONTAINER */}
+      {/* SCROLL ROW */}
       <div className="overflow-x-auto scrollbar-hide">
+        <div className="flex gap-4 w-max pb-2">
 
-        <div className="flex flex-col gap-4 min-w-max">
-
-          {/* ROW 1 */}
-          <div className="flex gap-4">
-
-            {otherProducts.slice(0, Math.ceil(otherProducts.length / 2)).map((product) => {
-              const isOutOfStock = product.stock <= 0;
-
-              return (
-                <Card
-                  key={product._id}
-                  product={product}
-                  navigate={navigate}
-                  isOutOfStock={isOutOfStock}
-                />
-              );
-            })}
-
-          </div>
-
-          {/* ROW 2 */}
-          <div className="flex gap-4">
-
-            {otherProducts.slice(Math.ceil(otherProducts.length / 2)).map((product) => {
-              const isOutOfStock = product.stock <= 0;
-
-              return (
-                <Card
-                  key={product._id}
-                  product={product}
-                  navigate={navigate}
-                  isOutOfStock={isOutOfStock}
-                />
-              );
-            })}
-
-          </div>
+          {otherProducts.map((product) => (
+            <Card
+              key={product._id}
+              product={product}
+              navigate={navigate}
+            />
+          ))}
 
         </div>
-
       </div>
 
     </section>
   );
 }
 
-/* ================= CARD ================= */
-function Card({ product, navigate, isOutOfStock }) {
+/* ================= CARD (MATCH PRODUCTLIST STYLE) ================= */
+function Card({ product, navigate }) {
+
+  const isOutOfStock = product.stock <= 0;
 
   const handleWishList = async (e) => {
     e.stopPropagation();
-
-    await axiosInstance.post(
-      `/wishlist/toggle/${product._id}`
-    );
+    await axiosInstance.post(`/wishlist/toggle/${product._id}`);
   };
 
   return (
     <div
       onClick={() => navigate(`/products/product/${product._id}`)}
-      className="w-25 bg-white border rounded-xl overflow-hidden relative"
+      className="
+        w-40
+        bg-white
+        border border-gray-100
+        rounded-xl
+        shadow-sm
+        cursor-pointer
+        overflow-hidden
+        flex flex-col
+        h-full
+        hover:shadow-md
+        transition
+      "
     >
 
-      {/* IMAGE */}
-      <div className="h-26 bg-gray-50 flex items-center justify-center relative">
+      {/* IMAGE SECTION (same as ProductList) */}
+      <div className="h-40 flex items-center justify-center bg-gray-50 relative">
 
         <img
           src={product.image?.[0]}
-          className="h-full object-contain"
+          alt={product.name}
+          className={`h-full object-contain transition ${
+            isOutOfStock ? "opacity-50" : ""
+          }`}
         />
 
-        {/* ❤️ WISHLIST */}
-        <div className="absolute top-2 left-0">
-          <AddWishList
-            productId={product._id}
-            onClick={handleWishList}
-          />
+        {/* WISHLIST */}
+        <div
+          className="absolute top-2 left-1"
+          onClick={handleWishList}
+        >
+          <AddWishList productId={product._id} />
+        </div>
+
+        {/* CART (same pattern as ProductList) */}
+        <div
+          className="absolute bottom-2 right-2"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <AddCart productId={product._id} />
         </div>
 
       </div>
 
-      {/* DETAILS */}
-      <div className="p-1">
-        <h3 className="text-[10px] font-semibold line-clamp-2">
+      {/* CONTENT (same as ProductList) */}
+      <div className="p-2 flex flex-col flex-1 justify-between">
+
+        <h5 className="text-sm font-medium text-gray-800 line-clamp-2 min-h-[40px]">
           {product.name}
-        </h3>
+        </h5>
 
-        <p className="text-green-600 font-bold">
-          ₹{product.price}
-        </p>
+        <div className="mt-2 flex justify-between items-center">
+          <p className="text-green-600 font-bold text-sm md:text-lg">
+            ₹{product.price}
+          </p>
+
+          <p className="text-xs text-gray-500">
+            Stock: {product.stock}
+          </p>
+        </div>
+
       </div>
-
     </div>
   );
 }

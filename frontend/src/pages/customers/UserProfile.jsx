@@ -7,10 +7,13 @@ import OrderCard from "../../components/customers/OrderCard";
 import AddressCard from "../../components/customers/AddressCard";
 import OrderCards from "../../components/customers/OrderCards";
 import NotFoundCard from "../../components/customers/NotFoundCard";
+import WishlistStatCard from "../../components/customers/WishlistStatCard";
 
 export default function UserProfile() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  // console.log(data);
+  
 
   const fetchUser = async () => {
     try {
@@ -55,6 +58,7 @@ export default function UserProfile() {
 
       {/* STATS GRID (FIXED RESPONSIVE) */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+        <WishlistStatCard count={data.customer.wishlist.length} />
   <StatCard
     label="Total Orders"
     value={data.stats.totalOrders}

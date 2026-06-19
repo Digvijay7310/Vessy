@@ -33,21 +33,44 @@ export default function StatCard({ label, value }) {
   const Icon = current?.icon;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl p-1 shadow-sm">
-      <div className="flex items-center gap-3">
-        <div
-          className={`h-11 w-11 rounded-xl flex items-center justify-center ${current?.bg}`}
-        >
-          <Icon size={20} className={current?.color} />
-        </div>
+    <div
+      className="
+        bg-white/80 backdrop-blur-md
+        border border-slate-200
 
-          <p className="text-xs text-gray-500 font-medium">
-            {label}
-          </p>        
+        rounded-2xl
+        p-5
+
+        shadow-sm
+        hover:shadow-xl
+        hover:-translate-y-1
+
+        transition-all duration-300
+
+        flex items-center justify-between
+      "
+    >
+      {/* LEFT TEXT */}
+      <div className="flex flex-col gap-1">
+        <p className="text-xs font-medium text-slate-500">
+          {label}
+        </p>
+
+        <h3 className="text-2xl font-bold text-slate-900">
+          {value}
+        </h3>
       </div>
-         <h3 className="text-sm text-center font-bold text-gray-900 leading-none mt-1">
-            {value}
-          </h3>
+
+      {/* ICON TILE */}
+      <div
+        className={`
+          h-12 w-12 rounded-xl
+          flex items-center justify-center
+          ${current?.bg}
+        `}
+      >
+        {Icon && <Icon size={20} className={current?.color} />}
+      </div>
     </div>
   );
 }

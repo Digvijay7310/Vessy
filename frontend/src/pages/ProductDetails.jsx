@@ -34,30 +34,6 @@ export default function ProductDetails() {
     fetchProduct();
   }, [id]);
 
-  // ---------------- LOADING ----------------
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse">
-        <div className="h-[400px] bg-gray-200 rounded-xl"></div>
-        <div className="flex flex-col gap-4">
-          <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-          <div className="h-10 bg-gray-200 rounded w-1/3"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // ---------------- NOT FOUND ----------------
-  if (!product) {
-    return (
-      <div className="text-center mt-20 text-gray-500">
-        No Product Found
-      </div>
-    );
-  }
-
   const formatPrice = (p = 0) =>
     new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -65,93 +41,144 @@ export default function ProductDetails() {
       maximumFractionDigits: 0,
     }).format(p);
 
+  // ---------------- LOADING ----------------
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-2 gap-10 animate-pulse">
+        
+        <div className="h-[420px] bg-slate-200 rounded-2xl"></div>
+
+        <div className="flex flex-col gap-4">
+          <div className="h-8 bg-slate-200 rounded w-3/4"></div>
+          <div className="h-4 bg-slate-200 rounded w-full"></div>
+          <div className="h-4 bg-slate-200 rounded w-2/3"></div>
+          <div className="h-10 bg-slate-200 rounded w-1/3 mt-4"></div>
+        </div>
+
+      </div>
+    );
+  }
+
+  // ---------------- NOT FOUND ----------------
+  if (!product) {
+    return (
+      <div className="text-center mt-24 text-slate-500">
+        Product not found
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-14 max-w-7xl mx-auto px-4">
 
-      {/* ================= PRODUCT MAIN ================= */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      {/* ================= MAIN SECTION ================= */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
-        {/* IMAGE */}
-        <div className="bg-white rounded-xl p-4 shadow-sm border flex items-center justify-center relative">
-
+        {/* IMAGE SECTION */}
+        <div
+          className="
+            relative
+            bg-white
+            rounded-2xl
+            border border-slate-200
+            shadow-sm
+            p-6
+            flex items-center justify-center
+          "
+        >
           <img
             src={product.image?.[0]}
             alt={product.name}
-            width={400}
-            height={400}
-            loading="lazy"
-            className="max-w-sm object-contain"
+            className="max-h-[420px] object-contain"
           />
 
-          <div className="absolute top-3 left-3">
-            <AddWishList />
+          {/* wishlist */}
+          <div className="absolute top-4 left-4">
+            <AddWishList productId={product._id} />
           </div>
-
         </div>
 
         {/* DETAILS */}
-        <div className="flex flex-col gap-4 md:sticky md:top-24">
+        <div className="flex flex-col gap-5 md:sticky md:top-24">
 
-          {/* NAME */}
-          <h1 className="text-2xl font-semibold text-gray-900">
+          {/* TITLE */}
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
             {product.name}
           </h1>
 
           {/* STOCK */}
-          <p className="text-sm font-semibold text-red-600">
+          <p
+            className={
+              product.stock > 0
+                ? "text-emerald-600 text-sm font-semibold"
+                : "text-red-500 text-sm font-semibold"
+            }
+          >
             {product.stock > 0
-              ? `In Stock: ${product.stock}`
+              ? `In Stock (${product.stock})`
               : "Out of Stock"}
           </p>
 
           {/* DESCRIPTION */}
-          <p className="text-gray-600 text-sm leading-relaxed">
+          <p className="text-slate-600 text-sm leading-relaxed">
             {product.description}
           </p>
 
           {/* PRICE */}
-          <div className="text-2xl font-bold text-green-600">
+          <div className="text-3xl font-bold text-emerald-600 mt-2">
             {formatPrice(product.price)}
           </div>
 
           {/* ACTIONS */}
-          <div className="flex flex-wrap gap-3 mt-3">
+          <div className="flex flex-col sm:flex-row gap-3 mt-4">
+
             <AddCart productId={product._id} />
 
-            <button className="px-5 py-2 rounded-lg border border-black text-black hover:bg-black hover:text-white transition">
+            <button
+              className="
+                px-6 py-3
+                rounded-xl
+                bg-slate-900
+                text-white
+                font-medium
+                hover:bg-black
+                active:scale-95
+                transition
+              "
+            >
               Buy Now
             </button>
+
           </div>
 
-          {/* INFO */}
-          <div className="mt-6 text-xs text-gray-500 space-y-1">
+          {/* FEATURES */}
+          <div className="mt-6 space-y-2 text-sm text-slate-500">
             <p>✔ Secure payment</p>
             <p>✔ Fast delivery available</p>
-            <p>✔ Easy returns</p>
+            <p>✔ Easy returns & refund</p>
           </div>
 
         </div>
-
       </div>
 
-      {/* ================= RELATED ================= */}
+      {/* ================= RELATED PRODUCTS ================= */}
       {otherProducts.length > 0 && (
-        <div>
-          <h2 className="text-lg md:text-xl font-semibold">
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-slate-900">
             Related Products
           </h2>
           <OtherProducts otherProducts={otherProducts} />
-        </div>
+        </section>
       )}
 
-      {/* ================= CATEGORY ================= */}
+      {/* ================= CATEGORY PRODUCTS ================= */}
       {otherCategoryProducts.length > 0 && (
-        <div>
-          <h2 className="text-lg md:text-xl font-semibold">
-            Explore More in this Category
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-slate-900">
+            More in this Category
           </h2>
           <OtherProducts otherProducts={otherCategoryProducts} />
-        </div>
+        </section>
       )}
 
     </div>

@@ -1,30 +1,44 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
-
-      <div className="text-center bg-white/10 backdrop-blur-xl border border-white/20 p-10 rounded-2xl shadow-2xl max-w-md w-full text-white">
-
+    <div
+      className="
+        min-h-screen
+        flex items-center justify-center
+        bg-gradient-to-b from-white via-zinc-50 to-zinc-100
+        px-4
+      "
+    >
+      <div
+        className="
+          text-center
+          bg-white
+          border border-slate-200
+          shadow-xl
+          p-8 sm:p-10
+          rounded-2xl
+          max-w-md w-full
+        "
+      >
         {/* ICON */}
-        <div className="text-6xl mb-4">🚧</div>
+        <div className="text-5xl mb-3">🚧</div>
 
         {/* 404 */}
-        <h1 className="text-7xl font-extrabold text-red-400 tracking-tight">
+        <h1 className="text-6xl font-extrabold text-emerald-600 tracking-tight">
           404
         </h1>
 
         {/* TITLE */}
-        <h2 className="text-xl font-semibold mt-3">
+        <h2 className="text-xl font-semibold mt-3 text-slate-800">
           Page not found
         </h2>
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-gray-300 mt-3 mb-8">
-          The page you are looking for doesn’t exist, was removed, or the link is broken.
+        <p className="text-sm text-slate-500 mt-3 mb-8 leading-relaxed">
+          The page you’re looking for doesn’t exist, was moved, or the link is broken.
         </p>
 
         {/* BUTTONS */}
@@ -32,20 +46,37 @@ export default function NotFound() {
 
           <button
             onClick={() => navigate("/")}
-            className="bg-emerald-600 px-5 py-2 rounded-lg text-white font-medium hover:bg-emerald-700 transition"
+            className="
+              bg-emerald-600
+              hover:bg-emerald-700
+              text-white
+              px-5 py-2.5
+              rounded-xl
+              font-medium
+              transition
+              active:scale-95
+            "
           >
             Go Home
           </button>
 
           <button
             onClick={() => navigate(-1)}
-            className="bg-white/10 border border-white/20 px-5 py-2 rounded-lg text-white hover:bg-white/20 transition"
+            className="
+              bg-slate-100
+              hover:bg-slate-200
+              text-slate-700
+              px-5 py-2.5
+              rounded-xl
+              font-medium
+              transition
+              active:scale-95
+            "
           >
             Go Back
           </button>
 
         </div>
-
       </div>
     </div>
   );

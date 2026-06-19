@@ -33,18 +33,21 @@ export default function AddCart({ productId }) {
       <button
         onClick={handleAddToCart}
         className="
-          px-3 py-1.5
+          h-9
+          px-4
           text-sm font-semibold
-          bg-green-100 text-green-700
-          border border-green-600
-          rounded-lg
+          rounded-full
+          bg-emerald-50
+          text-emerald-700
+          border border-emerald-600
+          shadow-sm
 
           flex items-center justify-center
-          min-w-[60px]
+          min-w-[64px]
 
-          hover:bg-green-200
+          hover:bg-emerald-100
           active:scale-95
-          transition-all
+          transition-all duration-200
         "
       >
         Add
@@ -57,23 +60,33 @@ export default function AddCart({ productId }) {
     <div
       onClick={(e) => e.stopPropagation()}
       className="
+        h-9
         flex items-center
-        bg-green-100
-        border border-green-600
-        rounded-lg
+        bg-emerald-50
+        border border-emerald-600
+        rounded-full
 
-        px-1 py-0.5
-        min-w-[90px]
+        px-1
+        min-w-[96px]
         justify-between
+
+        shadow-sm
       "
     >
-      <ProductDecreaseButton productId={productId} />
+      {/* DECREASE */}
+      <div className="flex items-center justify-center w-8 h-8">
+        <ProductDecreaseButton productId={productId} />
+      </div>
 
-      <span className="text-sm font-semibold text-gray-800 px-2">
+      {/* QTY */}
+      <span className="text-sm font-semibold text-slate-800 px-2">
         {qty}
       </span>
 
-      <ProductIncreaseButton productId={productId} />
+      {/* INCREASE */}
+      <div className="flex items-center justify-center w-8 h-8">
+        <ProductIncreaseButton productId={productId} />
+      </div>
     </div>
   );
 }

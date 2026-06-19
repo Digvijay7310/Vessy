@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import axiosInstance from "../utils/axiosInstance";
+import { AiFillCrown } from "react-icons/ai";
 
 export default function Searchbar() {
   const [search, setSearch] = useState("");
@@ -13,7 +14,6 @@ export default function Searchbar() {
     e.preventDefault();
 
     const query = search.trim();
-
     if (!query || loading) return;
 
     try {
@@ -43,22 +43,24 @@ export default function Searchbar() {
     <form
       onSubmit={handleSearch}
       className="
-        w-full max-w-xl
-        h-12
+        group
+        w-full max-w-2xl
+        h-14
         flex items-center
-        bg-white
-        border border-gray-200
-        rounded-lg
-        overflow-hidden
-        transition
+        rounded-2xl
+        bg-slate-50/80
+        border border-slate-200
+        shadow-sm
+        backdrop-blur-xl
+        transition-all duration-300
+        focus-within:bg-white
         focus-within:border-emerald-500
-        focus-within:ring-2
-        focus-within:ring-emerald-100
+        focus-within:shadow-[0_0_0_6px_rgba(16,185,129,0.12)]
       "
     >
-      {/* SEARCH ICON */}
-      <div className="px-3 text-gray-400">
-        <Search size={18} strokeWidth={2.2} />
+      {/* ICON */}
+      <div className="pl-4 pr-2 text-slate-400 group-focus-within:text-emerald-600 transition">
+        <Search size={20} strokeWidth={2.2} />
       </div>
 
       {/* INPUT */}
@@ -66,55 +68,36 @@ export default function Searchbar() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Search products"
+        placeholder="Search for groceries, fruits, snacks..."
         className="
           flex-1
           h-full
-          text-sm
-          text-gray-700
-          placeholder:text-gray-400
+          bg-transparent
+          text-[15px]
+          font-medium
+          text-slate-700
+          placeholder:text-slate-400
           outline-none
         "
       />
 
-      {/* CLEAR BUTTON */}
+      {/* CLEAR */}
       {search && !loading && (
         <button
           type="button"
           onClick={() => setSearch("")}
           className="
             px-2
-            text-gray-400
-            hover:text-gray-700
+            text-slate-400
+            hover:text-slate-700
             transition
           "
         >
-          <X size={18} strokeWidth={2.2} />
+          <X size={18} />
         </button>
       )}
 
-      {/* SEARCH BUTTON */}
-      <button
-        type="submit"
-        disabled={loading}
-        className="
-          h-full
-          px-2
-          bg-emerald-600
-          hover:bg-emerald-700
-          text-white
-          text-sm
-          font-medium
-          transition
-          disabled:opacity-70
-        "
-      >
-        {loading ? (
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        ) : (
-          <p className="text-xs">Search</p>
-        )}
-      </button>
+    
     </form>
   );
 }

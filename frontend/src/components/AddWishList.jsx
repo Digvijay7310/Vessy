@@ -1,23 +1,30 @@
 import React from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useWishlist } from "../context/WishlistContext";
 
-export default function AddWishList({ isWishlisted = false, onClick }) {
+export default function AddWishList({ productId }) {
+  const { isWishlisted, toggleWishlist } = useWishlist();
+
+  const active = isWishlisted(productId);
+
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        toggleWishlist(productId);
+      }}
       className="
         w-7 h-7 flex items-center justify-center
         rounded-full border border-gray-200
         bg-white
         active:scale-95
-        transition-all duration-200
-        group
+        transition
       "
     >
-      {isWishlisted ? (
-        <AiFillHeart className="text-green-500 text-xl" />
+      {active ? (
+        <AiFillHeart className="text-red-500 text-xl" />
       ) : (
-        <AiOutlineHeart className="text-gray-500 text-xl group-hover:text-green-500" />
+        <AiOutlineHeart className="text-gray-500 text-xl hover:text-red-500" />
       )}
     </button>
   );

@@ -42,7 +42,7 @@ export default function CartPage() {
 
         <button
           onClick={() => navigate("/")}
-          className="mt-6 bg-gradient-to-r from-black to-gray-800 text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
+          className="mt-6 bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
         >
           Continue Shopping
         </button>
@@ -51,65 +51,78 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 pb-40">
+    <div className="max-w-3xl mx-auto px-3 pb-36 space-y-4">
 
       {/* HEADER */}
-      <div className="text-center">
-        <h1 className="text-xl font-bold text-gray-900">
-          My Cart
-        </h1>
-
+      <div className="text-center mb-4">
+        <h1 className="text-xl font-bold text-gray-900">My Cart</h1>
         <p className="text-sm text-gray-500 mt-1">
-          {cart.length} {cart.length === 1 ? "Item" : "Items"} in your cart
+          {cart.length} items in your cart
         </p>
       </div>
 
-      {/* CART LIST */}
-      <div className="space-y-4">
+      {/* CART ITEMS */}
+      <div className="space-y-3">
 
         {cart.map((item) => (
           <div
             key={item.product._id}
             className="
-              flex gap-4
+              flex items-center gap-3
+
               bg-white
-              border border-gray-100
+              border border-slate-200/60
               rounded-2xl
-              p-4
+
+              p-3
+
               shadow-sm
               hover:shadow-md
+
               transition
             "
           >
-
             {/* IMAGE */}
-            <div className="w-24 h-24 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden shrink-0">
+            <div
+              onClick={() =>
+                navigate(`/products/product/${item.product._id}`)
+              }
+              className="
+                w-20 h-20
+                bg-slate-50
+                rounded-xl
+                flex items-center justify-center
+                overflow-hidden
+                cursor-pointer
+                flex-shrink-0
+              "
+            >
               <img
                 src={item.product.image?.[0]}
                 alt={item.product.name}
-                className="w-full h-full object-contain"
+                className="h-full object-contain"
               />
             </div>
 
             {/* DETAILS */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
 
-              <h2 className="font-semibold text-gray-800 line-clamp-2">
+              <p className="text-sm font-semibold text-slate-800 line-clamp-2">
                 {item.product.name}
-              </h2>
+              </p>
 
-              <p className="text-green-600 font-bold mt-1">
+              <p className="text-emerald-600 font-bold mt-1">
                 {formatPrice(item.product.price)}
               </p>
 
               {/* ACTION ROW */}
-              <div className="flex items-center justify-between mt-5">
+              <div className="flex items-center justify-between mt-3">
 
                 {/* QUANTITY */}
-                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                <div className="flex items-center border border-slate-200 rounded-lg overflow-hidden">
                   <ProductDecreaseButton productId={item.product._id} />
 
-                  <span className="px-4 font-semibold text-gray-800">
+                  <span className="px-3 text-sm font-semibold">
                     {item.quantity}
                   </span>
 
@@ -120,7 +133,6 @@ export default function CartPage() {
                 <ProductRemoveButton productId={item.product._id} />
 
               </div>
-
             </div>
           </div>
         ))}
@@ -128,15 +140,12 @@ export default function CartPage() {
       </div>
 
       {/* STICKY CHECKOUT BAR */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t">
+        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
 
           <div>
-            <p className="text-xs text-gray-500">
-              Total Amount
-            </p>
-
-            <h2 className="text-2xl font-bold text-green-600">
+            <p className="text-xs text-gray-500">Total</p>
+            <h2 className="text-xl font-bold text-emerald-600">
               {formatPrice(totalPrice)}
             </h2>
           </div>
@@ -144,10 +153,12 @@ export default function CartPage() {
           <button
             onClick={() => navigate("/checkout")}
             className="
-              bg-gradient-to-r from-black to-gray-800
-              text-white px-8 py-3
-              rounded-xl font-semibold
-              hover:opacity-90 transition
+              bg-black text-white
+              px-6 py-3
+              rounded-xl
+              font-semibold
+              hover:opacity-90
+              transition
             "
           >
             Checkout

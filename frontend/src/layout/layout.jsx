@@ -6,19 +6,33 @@ import { CartProvider } from "../context/CartContext";
 export default function Layout() {
   return (
     <CartProvider>
-      <div className="min-h-screen flex flex-col bg-white">
-        
+      <div
+        className="
+          min-h-screen
+          flex flex-col
+          bg-gradient-to-b from-white via-zinc-50 to-zinc-100
+          text-slate-900
+        "
+      >
         {/* HEADER */}
         <Header />
 
         {/* MAIN */}
-        <main className="bg-zinc-50 flex-1 w-full max-w-7xl mx-auto px-3 sm:px-4 py-4">
+        <main
+          className="
+            flex-1
+            w-full
+            max-w-7xl
+            mx-auto
+            px-4 sm:px-6 lg:px-8
+            py-6
+          "
+        >
           <Outlet />
         </main>
 
         {/* FOOTER */}
         <Footer />
-        
       </div>
     </CartProvider>
   );
