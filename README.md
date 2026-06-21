@@ -57,34 +57,6 @@ It provides a smooth shopping experience with authentication, product browsing, 
 
 ---
 
-## 📁 Project Structure
-Vessy/
-│
-├── backend/
-│ ├── src/
-│ ├── models/
-│ ├── controllers/
-│ ├── routes/
-│ ├── middlewares/
-│ ├── utils/
-│ ├── app.js
-│ ├── server.js
-│ └── .env
-│
-├── frontend/
-│ ├── src/
-│ │ ├── pages/
-│ │ ├── components/
-│ │ ├── context/
-│ │ ├── utils/
-│ │ └── App.jsx
-│ └── package.json
-│
-├── .gitignore
-└── README.md
-
-
----
 
 ## ⚙️ Installation & Setup
 

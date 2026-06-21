@@ -8,7 +8,7 @@ return (
 <div
 onClick={() => navigate("/")}
 className="
-flex items-center gap-3
+flex items-center gap-0.5
 cursor-pointer
 select-none
 group

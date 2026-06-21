@@ -24,7 +24,7 @@ export default function Layout() {
             w-full
             max-w-7xl
             mx-auto
-            px-4 sm:px-6 lg:px-8
+            px-2 sm:px-4 lg:px-8
             py-6
           "
         >

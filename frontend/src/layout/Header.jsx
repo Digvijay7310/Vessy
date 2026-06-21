@@ -1,37 +1,42 @@
 import { useState } from "react";
-import { Menu, Search, User, X } from "lucide-react";
+import {
+  Menu,
+  Search,
+  User,
+  Heart,
+  X,
+} from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
 
 import Logo from "../components/Logo";
 import Searchbar from "../components/Searchbar";
 import Navbar from "./Navbar";
-import { useNavigate } from "react-router-dom";
-import CartItems from "../components/CartItems";
 
 export default function Header() {
+  const navigate = useNavigate();
+
   const [mobileMenu, setMobileMenu] = useState(false);
   const [mobileSearch, setMobileSearch] = useState(false);
 
-  const navigate = useNavigate();
-
   return (
-    <header
-      className="
-        sticky top-0 z-50
-        bg-white/80
-        backdrop-blur-xl
-        border-b border-slate-200/60
-        shadow-[0_8px_30px_rgb(0,0,0,0.04)]
-      "
-    >
-      {/* TOP BAR */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        <div className="h-[72px] flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+      {/* TOP HEADER */}
+      <div className="max-w-7xl mx-auto lg:px-8">
+        <div className="h-[72px] flex items-center justify-between gap-2">
 
           {/* LEFT */}
           <div className="flex items-center gap-3">
+
             <button
               onClick={() => setMobileMenu(true)}
-              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition"
+              className="
+                lg:hidden
+                p-2
+                rounded-xl
+                hover:bg-slate-100
+                transition
+              "
             >
               <Menu size={22} />
             </button>
@@ -39,123 +44,181 @@ export default function Header() {
             <Logo />
           </div>
 
-          {/* CENTER (DESKTOP SEARCH) */}
-          <div className="hidden md:flex flex-1 justify-center px-6">
+          {/* DESKTOP SEARCH */}
+          <div className="hidden md:flex flex-1 max-w-2xl mx-auto">
             <Searchbar />
           </div>
 
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
+          {/* RIGHT ACTIONS */}
+          <div className="flex items-center gap-2">
 
-            {/* MOBILE SEARCH ICON */}
+            {/* MOBILE SEARCH */}
             <button
-              onClick={() => setMobileSearch((p) => !p)}
-              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition"
+              onClick={() => setMobileSearch(true)}
+              className="
+                md:hidden
+                h-10
+                w-10
+                rounded-xl
+                hover:bg-slate-100
+                flex
+                items-center
+                justify-center
+                transition
+              "
             >
               <Search size={20} />
             </button>
 
+            {/* WISHLIST */}
+            <button
+              onClick={() =>
+                navigate("/customer/wishlist")
+              }
+              className="
+                hidden sm:flex
+                h-10
+                w-10
+                rounded-xl
+                hover:bg-slate-100
+                items-center
+                justify-center
+                transition
+              "
+            >
+              <Heart size={20} />
+            </button>
+
             {/* PROFILE */}
             <button
-              onClick={() => navigate("/customer/profile")}
+              onClick={() =>
+                navigate("/customer/profile")
+              }
               className="
-                w-10 h-10
-                rounded-full
-                bg-slate-100
-                hover:bg-emerald-50
-                hover:text-emerald-600
-                flex items-center justify-center
+                h-10
+                w-10
+                rounded-xl
+                hover:bg-slate-100
+                flex
+                items-center
+                justify-center
                 transition
               "
             >
               <User size={20} />
             </button>
 
-            {/* CART */}
-            <CartItems />
           </div>
         </div>
       </div>
 
-      {/* MOBILE SEARCH */}
-      {
-  mobileSearch && (
-    <>
-      <div
-        className="fixed inset-0 bg-black/40 z-50"
-        onClick={() => setMobileSearch(false)}
-      />
-
-      <div
-        className="
-          fixed
-          top-0
-          left-0
-          right-0
-          z-[60]
-          bg-white
-          p-4
-          shadow-lg
-          animate-slideDown
-        "
-      >
-        <Searchbar />
-
-        <button
-          onClick={() => setMobileSearch(false)}
-          className="
-            absolute
-            top-4
-            right-4
-            p-2
-          "
-        >
-          <X size={20} />
-        </button>
-      </div>
-    </>
-  )
-}
-
-      {/* DESKTOP NAV */}
-      <div className="hidden md:block border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* DESKTOP NAVBAR */}
+      <div className="hidden lg:block border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-2 lg:px-8">
           <Navbar />
         </div>
       </div>
 
-      {/* MOBILE SIDEBAR */}
-      {mobileMenu && (
+      {/* MOBILE SEARCH */}
+      {mobileSearch && (
         <>
-          {/* OVERLAY */}
-          <div
-            className="fixed inset-0 bg-black/40 z-40"
-            onClick={() => setMobileMenu(false)}
-          />
-
-          {/* SIDEBAR */}
           <div
             className="
-              fixed top-0 left-0
-              h-full w-full
+              fixed
+              inset-0
+              bg-black/40
+              z-40
+            "
+            onClick={() =>
+              setMobileSearch(false)
+            }
+          />
+
+          <div
+            className="
+              fixed
+              top-0
+              left-0
+              right-0
               bg-white
-              shadow-2xl
               z-50
+              p-4
+              border-b
+              shadow-lg
+            "
+          >
+            <div className="relative">
+              <Searchbar />
+
+              <button
+                onClick={() =>
+                  setMobileSearch(false)
+                }
+                className="
+                  absolute
+                  -top-1
+                  right-0
+                  p-2
+                "
+              >
+                <X size={20} />
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* MOBILE DRAWER */}
+      {mobileMenu && (
+        <>
+          <div
+            className="
+              fixed
+              inset-0
+              bg-black/40
+              z-40
+            "
+            onClick={() =>
+              setMobileMenu(false)
+            }
+          />
+
+          <div
+            className="
+              fixed
+              top-0
+              left-0
+              h-screen
+              w-[320px]
+              max-w-[85vw]
+              bg-white
+              z-50
+              shadow-2xl
+              border-r
               p-5
               animate-slideIn
             "
           >
-            <div className="flex items-center justify-between mb-2">
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-6">
+
               <Logo />
 
               <button
-                onClick={() => setMobileMenu(false)}
-                className="p-2 rounded-lg hover:bg-slate-100 transition"
+                onClick={() =>
+                  setMobileMenu(false)
+                }
+                className="
+                  p-2
+                  rounded-xl
+                  hover:bg-slate-100
+                "
               >
                 <X size={20} />
               </button>
             </div>
 
+            {/* MOBILE NAV */}
             <Navbar mobile />
           </div>
         </>

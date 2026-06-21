@@ -1,24 +1,32 @@
 import { NavLink } from "react-router-dom";
 import Logout from "../components/customers/Logout";
 
-export default function Navbar({ mobile = false }) {
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/products" },
-    { name: "Categories", path: "/categories" },
-    { name: "Orders", path: "/my-orders" },
-    { name: "Cart", path: "/my-cart" },
-    { name: "Login", path: "/customer/login" },
-    { name: "Profile", path: "/customer/profile" },
-    { name: "Wishlist", path: "/customer/wishlist" },
-  ];
+const navLinks = [
+  {
+    name: "Home",
+    path: "/",
+  },
+  {
+    name: "Shop",
+    path: "/products",
+  },
+  {
+    name: "Categories",
+    path: "/categories",
+  },
+  {
+    name: "Orders",
+    path: "/my-orders",
+  },
+];
 
+export default function Navbar({ mobile = false }) {
   return (
     <nav
       className={
         mobile
-          ? "flex flex-col gap-3 bg-slate-50"
-          : "flex items-center gap-6 h-14"
+          ? "flex flex-col gap-1"
+          : "flex items-center gap-2 h-10"
       }
     >
       {navLinks.map((link) => (
@@ -27,34 +35,69 @@ export default function Navbar({ mobile = false }) {
           to={link.path}
           className={({ isActive }) =>
             `
-              relative
-              text-sm font-medium
-              transition-all duration-200
+            px-4
+            py-2.5
+            rounded-xl
+            text-sm
+            font-semibold
+            transition-all
+            duration-200
 
-              ${
-                isActive
-                  ? "bg-emerald-700 text-white"
-                  : "text-slate-700 hover:text-white"
-              }
+            ${
+              isActive
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "text-slate-700 hover:bg-slate-100"
+            }
 
-              ${mobile ? "py-2 px-2 rounded-md w-full hover:bg-emerald-700" : ""}
-            `
+            ${mobile ? "w-full" : ""}
+          `
           }
         >
           {link.name}
         </NavLink>
       ))}
 
-      {/* Logout section */}
-      <div
-        className={
-          mobile
-            ? "mt-4 pt-4 border-t border-slate-200 w-full"
-            : ""
-        }
-      >
-        <Logout />
-      </div>
+      {mobile && (
+        <>
+          <div className="h-px bg-slate-200 my-3" />
+
+          <NavLink
+            to="/customer/profile"
+            className="
+              px-4
+              py-2.5
+              rounded-xl
+              text-sm
+              font-semibold
+              text-slate-700
+              hover:bg-slate-100
+              transition
+            "
+          >
+            My Profile
+          </NavLink>
+
+          <NavLink
+            to="/customer/wishlist"
+            className="
+              px-4
+              py-2.5
+              rounded-xl
+              text-sm
+              font-semibold
+              text-slate-700
+              hover:bg-slate-100
+              transition
+            "
+          >
+            Wishlist
+          </NavLink>
+
+          <div className="mt-4 pt-4 border-t border-slate-200">
+            <Logout />
+          </div>
+        </>
+      )}
     </nav>
   );
 }

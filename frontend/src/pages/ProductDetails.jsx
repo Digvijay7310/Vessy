@@ -4,6 +4,7 @@ import axiosInstance from "../utils/axiosInstance";
 import AddCart from "../components/AddCart";
 import AddWishList from "../components/AddWishList";
 import OtherProducts from "../components/OtherProducts";
+import CartItems from '../components/CartItems'
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -69,7 +70,7 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="space-y-14 max-w-7xl mx-auto px-4">
+    <div className="space-y-14 max-w-7xl mx-auto px-4 relative">
 
       {/* ================= MAIN SECTION ================= */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -181,6 +182,21 @@ export default function ProductDetails() {
         </section>
       )}
 
+      <div
+  className="
+    fixed
+    bottom-6
+    right-2
+    z-50
+  "
+>
+  <CartItems />
+  
+</div>
+
+
     </div>
+
+    
   );
 }

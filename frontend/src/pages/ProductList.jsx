@@ -56,7 +56,7 @@ export default function ProductList({ product }) {
             ₹{product.price}
           </p>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-[8px] md:text-xs text-gray-500">
             Stock: {product.stock}
           </p>
         </div>
