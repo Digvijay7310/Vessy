@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../../utils/axiosInstance";
+import { socket } from "../../../utils/socket";
 
 export default function OrdersByStatus() {
   const { status } = useParams();
@@ -31,8 +32,16 @@ export default function OrdersByStatus() {
   };
 
   useEffect(() => {
-    fetchOrders();
-  }, [status]);
+  fetchOrders();
+
+  socket.on("order-status-updated", () => {
+    fetchOrders(); // 🔥 safest & production way
+  });
+
+  return () => {
+    socket.off("order-status-updated");
+  };
+}, [status]);;
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -190,7 +199,7 @@ export default function OrdersByStatus() {
                       className="w-full mt-2 border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-black outline-none"
                     >
 
-                      <option>
+                      <option value={selectedOrder.orderStatus}>
                         {selectedOrder.orderStatus}
                       </option>
 

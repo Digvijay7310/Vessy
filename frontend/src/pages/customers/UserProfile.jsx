@@ -8,6 +8,7 @@ import AddressCard from "../../components/customers/AddressCard";
 import OrderCards from "../../components/customers/OrderCards";
 import NotFoundCard from "../../components/customers/NotFoundCard";
 import WishlistStatCard from "../../components/customers/WishlistStatCard";
+import { socket } from "../../utils/socket";
 
 export default function UserProfile() {
   const [data, setData] = useState(null);
@@ -28,7 +29,14 @@ export default function UserProfile() {
   };
 
   useEffect(() => {
-    fetchUser();
+    const handler = (data) => {
+      fetchUser()
+    }
+    socket.on('order-status-updated', handler)
+
+    return () => {
+      socket.off("order-status-updated", handler)
+    }
   }, []);
 
   if (loading) {
@@ -81,7 +89,7 @@ export default function UserProfile() {
        </div>
 
       <div className="w-full my-5">
-  <div className="flex items-center justify-between">
+     <div className="flex items-center justify-between">
     <h2 className="text-lg font-semibold text-gray-900">
       Recent Orders
     </h2>

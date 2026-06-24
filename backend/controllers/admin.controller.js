@@ -5,6 +5,7 @@ import { Admin } from '../models/admin.model.js';
 import { Category, SubCategory } from '../models/category.model.js'
 import { Product } from '../models/product.model.js'
 import {Order} from '../models/order.model.js'
+import { getIo } from '../utils/socket.js';
 
 export const adminRegistration = asyncHandler(async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -131,8 +132,6 @@ export const getAllData = asyncHandler(async (req, res) => {
 
 // Orders
 
-
-
 export const getAllOrderStats = asyncHandler(async (req, res) => {
   try {
     const normalize = (status) => status;
@@ -145,7 +144,7 @@ export const getAllOrderStats = asyncHandler(async (req, res) => {
       processingOrders: await Order.countDocuments({ orderStatus: "Processing" }),
       shippedOrders: await Order.countDocuments({ orderStatus: "Shipped" }),
 
-      // ✅ FIXED THIS LINE (MOST IMPORTANT)
+      //  FIXED THIS LINE (MOST IMPORTANT)
       outForDelivery: await Order.countDocuments({
         orderStatus: "Out for Delivery",
       }),
@@ -211,6 +210,8 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   const { orderId } = req.params;
   const { status } = req.body;
 
+  const io = getIo();
+
   const allowedStatuses = [
     "Pending",
     "Processing",
@@ -219,7 +220,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     "Delivered",
   ];
 
-  // ❌ reject invalid status
+  //  reject invalid status
   if (!allowedStatuses.includes(status)) {
     return res.status(400).json(
       new apiResponse(400, null, "Invalid status")
@@ -234,7 +235,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
-  // 🔥 define flow order
+  //  define flow order
   const flow = [
     "Pending",
     "Processing",
@@ -246,7 +247,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   const currentIndex = flow.indexOf(order.orderStatus);
   const newIndex = flow.indexOf(status);
 
-  // ❌ prevent going backwards or jumping
+  //  prevent going backwards or jumping
   if (newIndex < currentIndex) {
     return res.status(400).json(
       new apiResponse(
@@ -257,7 +258,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
-  // ❌ prevent skipping steps (optional strict mode)
+  //  prevent skipping steps (optional strict mode)
   if (newIndex - currentIndex > 1) {
     return res.status(400).json(
       new apiResponse(
@@ -268,7 +269,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
-  // ❌ once delivered, no change allowed
+  //  once delivered, no change allowed
   if (order.orderStatus === "Delivered") {
     return res.status(400).json(
       new apiResponse(
@@ -279,14 +280,21 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
-  // ✅ update status
+  //  update status
   order.orderStatus = status;
 
   if (status === "Delivered") {
+    order.paymentStatus = "Paid";
     order.deliveredAt = new Date();
   }
 
   await order.save();
+
+  // Real time event
+  io.emit("order-status-updated", {
+    orderId: order._id,
+    status: order.orderStatus,
+  });
 
   return res.status(200).json(
     new apiResponse(200, order, "Order status updated successfully")

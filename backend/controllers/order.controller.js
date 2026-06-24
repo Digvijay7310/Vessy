@@ -6,6 +6,7 @@ import { Order } from "../models/order.model.js";
 import { Customer } from "../models/customer.model.js";
 import { Product } from "../models/product.model.js";
 import apiError from "../utils/apiError.js";
+import { getIo } from "../utils/socket.js";
 
 // Preview Checkout
 export const previewCheckout = asyncHandler(async (req, res) => {
@@ -84,6 +85,7 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
     const expectedDelivery = new Date();
     expectedDelivery.setDate(expectedDelivery.getDate() + 7);
 
+    const io = getIo();
     const order = await Order.create({
         customer: req.user._id,
         shippingAddress: defaultAddress,
@@ -113,6 +115,13 @@ export const checkoutOrder = asyncHandler(async (req, res) => {
 
     const populatedOrder = await Order.findById(order._id)
         .populate("items.product");
+
+    io.emit("new-order-notification", {
+        orderId: order._id,
+        customerName: customer.fullName,
+        totalAmount: finalAmount,
+        createdAt: new Date(),
+    });
 
     return res.status(201).json(
         new apiResponse(201, populatedOrder, "Order placed successfully")

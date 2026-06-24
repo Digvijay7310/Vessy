@@ -1,125 +1,100 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FolderArchive } from "lucide-react";
-import axiosInstance from "../utils/axiosInstance";
 
 export default function SearchSuggestions({
-  search,
+  data,
   show,
-  setShow,
+  activeIndex,
+  onSelect,
 }) {
-  const navigate = useNavigate();
-
-  const [data, setData] = useState({
-    products: [],
-    categories: [],
-    subCategories: [],
-  });
-
-  // FETCH SUGGESTIONS
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      const query = search.trim();
-
-      if (!query) {
-        setData({
-          products: [],
-          categories: [],
-          subCategories: [],
-        });
-        return;
-      }
-
-      try {
-        const { data } = await axiosInstance.get(
-          "/products/search-suggestion",
-          {
-            params: { q: query },
-          }
-        );
-
-        setData(data);
-      } catch (err) {
-        console.log(err);
-      }
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [search]);
-
-  const hasData =
-    data.products.length ||
-    data.categories.length ||
-    data.subCategories.length;
-
   if (!show) return null;
+
+  const items = [
+    ...data.products.map((item) => ({
+      ...item,
+      type: "product",
+    })),
+    ...data.categories.map((item) => ({
+      ...item,
+      type: "category",
+    })),
+    ...data.subCategories.map((item) => ({
+      ...item,
+      type: "subcategory",
+    })),
+  ];
 
   return (
     <div
       className="
-        absolute top-[calc(100%+8px)]
-        left-0 right-0
-        bg-white border border-slate-200
-        rounded-2xl shadow-xl
-        z-50 overflow-hidden
+        absolute
+        top-[calc(100%+8px)]
+        left-0
+        right-0
+        bg-white
+        border
+        border-slate-200
+        rounded-2xl
+        shadow-xl
+        overflow-hidden
+        z-50
+        max-h-96
+        overflow-y-auto
       "
     >
-      {!hasData ? (
-        <div className="p-6 text-sm text-slate-400 text-center">
-          Type to search products...
+      {!items.length ? (
+        <div className="p-5 text-center text-sm text-slate-400">
+          Type to search...
         </div>
       ) : (
-        <>
-          {/* PRODUCTS */}
-          {data.products.map((p) => (
-            <button
-              key={p._id}
-              onClick={() => {
-                navigate(`/products/product/${p._id}`);
-                setShow(false);
-              }}
-              className="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50"
-            >
-              <img
-                src={p.image?.[0]}
-                className="w-10 h-10 rounded-lg object-cover border"
-              />
-              <span className="text-sm font-medium">
-                {p.name}
-              </span>
-            </button>
-          ))}
+        items.map((item, index) => (
+          <button
+            key={`${item.type}-${item._id}`}
+            onClick={() => onSelect(item)}
+            className={`
+              w-full
+              flex
+              items-center
+              gap-3
+              p-2
+              text-left
+              transition
 
-          {/* CATEGORIES */}
-          {data.categories.map((c) => (
-            <button
-              key={c._id}
-              onClick={() => {
-                navigate(`/category/${c._id}`);
-                setShow(false);
-              }}
-              className="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50"
-            >
-              <FolderArchive size={16} />
-              {c.name}
-            </button>
-          ))}
+              ${
+                activeIndex === index
+                  ? "bg-emerald-50"
+                  : "hover:bg-slate-50"
+              }
+            `}
+          >
+            {item.type === "product" ? (
+              <>
+                <img
+                  src={item.image?.[0]}
+                  alt={item.name}
+                  className="
+                    w-10
+                    h-10
+                    rounded-lg
+                    object-cover
+                    border
+                  "
+                />
 
-          {/* SUBCATEGORIES */}
-          {data.subCategories.map((s) => (
-            <button
-              key={s._id}
-              onClick={() => {
-                navigate(`/sub-category/${s._id}`);
-                setShow(false);
-              }}
-              className="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50"
-            >
-              <FolderArchive size={16} />
-              {s.name}
-            </button>
-          ))}
-        </>
+                <span className="text-sm font-medium">
+                  {item.name}
+                </span>
+              </>
+            ) : (
+              <>
+                <FolderArchive size={16} />
+
+                <span className="text-sm">
+                  {item.name}
+                </span>
+              </>
+            )}
+          </button>
+        ))
       )}
     </div>
   );

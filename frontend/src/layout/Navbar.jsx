@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
 import Logout from "../components/customers/Logout";
+import { useAuth } from "../context/AuthContext";
 
-const navLinks = [
+export default function Navbar({ mobile = false }) {
+  const { user } = useAuth();
+  const navLinks = [
   {
     name: "Home",
     path: "/",
@@ -20,7 +23,6 @@ const navLinks = [
   },
 ];
 
-export default function Navbar({ mobile = false }) {
   return (
     <nav
       className={
@@ -35,20 +37,13 @@ export default function Navbar({ mobile = false }) {
           to={link.path}
           className={({ isActive }) =>
             `
-            px-4
-            py-2.5
-            rounded-xl
-            text-sm
-            font-semibold
-            transition-all
-            duration-200
-
+            px-4 py-2.5 rounded-xl text-sm font-semibold
+            transition-all duration-200
             ${
               isActive
                 ? "bg-emerald-600 text-white shadow-sm"
                 : "text-slate-700 hover:bg-slate-100"
             }
-
             ${mobile ? "w-full" : ""}
           `
           }
@@ -57,21 +52,29 @@ export default function Navbar({ mobile = false }) {
         </NavLink>
       ))}
 
-      {mobile && (
+      {/* USER NOT LOGGED IN */}
+      {!user && (
+        <NavLink
+          to="/customer/login"
+          className="
+            px-4 py-2.5 rounded-xl text-sm font-semibold
+            text-slate-700 hover:bg-slate-100 transition
+          "
+        >
+          Login
+        </NavLink>
+      )}
+
+      {/* USER LOGGED IN */}
+      {user && mobile && (
         <>
           <div className="h-px bg-slate-200 my-3" />
 
           <NavLink
             to="/customer/profile"
             className="
-              px-4
-              py-2.5
-              rounded-xl
-              text-sm
-              font-semibold
-              text-slate-700
-              hover:bg-slate-100
-              transition
+              px-4 py-2.5 rounded-xl text-sm font-semibold
+              text-slate-700 hover:bg-slate-100 transition
             "
           >
             My Profile
@@ -80,14 +83,8 @@ export default function Navbar({ mobile = false }) {
           <NavLink
             to="/customer/wishlist"
             className="
-              px-4
-              py-2.5
-              rounded-xl
-              text-sm
-              font-semibold
-              text-slate-700
-              hover:bg-slate-100
-              transition
+              px-4 py-2.5 rounded-xl text-sm font-semibold
+              text-slate-700 hover:bg-slate-100 transition
             "
           >
             Wishlist
@@ -98,6 +95,9 @@ export default function Navbar({ mobile = false }) {
           </div>
         </>
       )}
+
+      {/* Desktop Logout */}
+      {user && !mobile && <Logout />}
     </nav>
   );
 }
